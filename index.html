@@ -8,213 +8,114 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #050807;
-      font-family: Georgia, serif;
-      color: #d4d8cc;
-      min-height: 100vh;
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      overflow-x: hidden;
     }
 
+    /* HERO */
     .hero {
+      position: relative;
       width: 100%;
       height: 100vh;
-      position: relative;
+      overflow: hidden;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
     }
 
-    .bg-photo {
+    .hero-bg {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center bottom;
-      opacity: 0.85;
+      inset: 0;
+      background-image: url('img/hero.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.5);
+      transform: scale(1.05);
+      transition: transform 8s ease;
     }
 
-    .moon {
+    .hero:hover .hero-bg {
+      transform: scale(1);
+    }
+
+    .hero-overlay {
       position: absolute;
-      width: 60px;
-      height: 60px;
-      top: 12%;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, #080808 100%);
+    }
+
+    .firma {
+      position: relative;
+      z-index: 2;
+      width: min(320px, 70vw);
+      mix-blend-mode: screen;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 1.4s ease forwards 0.4s;
+    }
+
+    /* NAV */
+    nav {
+      position: absolute;
+      bottom: 2.8rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 3.5rem;
+      z-index: 3;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+    }
+
+    nav a {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #444;
+      text-decoration: none;
+      transition: color 0.4s ease;
+    }
+
+    nav a:hover { color: #ccc; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 1rem;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 2;
-    }
-
-    .content {
-      position: relative;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: #2a2a2a;
       z-index: 3;
-      padding: 2rem 1.5rem;
-      background: transparent;
+      animation: pulse 2.5s ease-in-out infinite;
     }
 
-    .name {
-      font-family: Georgia, serif;
-      font-size: 32px;
-      font-weight: normal;
-      color: #eef0e6;
-      letter-spacing: 0.02em;
-      margin-bottom: 4px;
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .tagline {
-      font-family: Arial, sans-serif;
-      font-size: 10px;
-      color: #2e4030;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
+    @keyframes pulse {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.7; }
     }
-
-    .links {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 1.4rem;
-    }
-
-    .link-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      border: 0.5px solid #122016;
-      border-radius: 8px;
-      background: rgba(8, 13, 9, 0.85);
-      color: #98b090;
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-      text-decoration: none;
-    }
-
-    .dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #4a8a52;
-      flex-shrink: 0;
-    }
-
-    .arrow { color: #2a5a32; margin-left: auto; }
-
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0;
-      border-top: 0.5px solid #0e160f;
-      padding-top: 1rem;
-      font-family: Arial, sans-serif;
-    }
-
-    .nav a {
-      font-size: 10px;
-      color: #1e2e20;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 3px 7px 3px 0;
-      text-decoration: none;
-    }
-
-    .nav a.active { color: #4a8a52; }
-    .nav-sep { color: #111811; font-size: 10px; padding: 3px 4px 3px 0; }
   </style>
 </head>
 <body>
 
-<div class="hero">
-
-  <picture>
-  <source media="(min-width: 768px)" srcset="img/CieloH.jpg">
-  <img class="bg-photo" src="img/cielo.jpg" alt="">
-</picture>
-
-  <svg class="moon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <clipPath id="mc">
-        <circle cx="30" cy="30" r="22"/>
-      </clipPath>
-    </defs>
-    <circle cx="30" cy="30" r="32" fill="#c8dca8" opacity="0.05"/>
-    <circle id="moonB" cx="30" cy="30" r="22" fill="#d8e8c0" opacity="0.88"/>
-    <circle id="moonS" cx="30" cy="30" r="22" fill="#050807" clip-path="url(#mc)"/>
-  </svg>
-
-  <div class="content">
-    <p class="name">Tobal Blu</p>
-    <p class="tagline">Ingeniero · Músico · productor · alquimista</p>
-
-    <div class="links">
-      <a class="link-btn" href="https://open.spotify.com/intl-es/artist/7yn8ZILVwbXPJGReR802LM?si=Yc07WMXvRj6gDrNDDyE30w" target="_blank">
-        <div class="dot"></div>
-        <span>Escuchar en Spotify</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="link-btn" href="https://www.youtube.com/channel/UCoNsdLVdSgMBNHZs-EUtGag" target="_blank">
-        <div class="dot"></div>
-        <span>Ver en YouTube</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="link-btn" href="https://tiktok.com/@tobal.blu" target="_blank">
-        <div class="dot"></div>
-        <span>TikTok</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="link-btn" href="https://instagram.com/tobal.blu" target="_blank">
-        <div class="dot"></div>
-        <span>Instagram</span>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-
-    <nav class="nav">
-      <a href="#" class="active">Inicio</a>
-      <span class="nav-sep">·</span>
-      <a href="#">Música</a>
-      <span class="nav-sep">·</span>
-      <a href="#">Acordes</a>
-      <span class="nav-sep">·</span>
-      <a href="#">Plantas</a>
-      <span class="nav-sep">·</span>
-      <a href="#">Licencias</a>
-    </nav>
-  </div>
-
-</div>
-
-<script>
-(function() {
-  function getMoonPhase(date) {
-    const known = new Date(2000, 0, 6, 18, 14, 0);
-    const diff = date - known;
-    const days = diff / (1000 * 60 * 60 * 24);
-    const cycle = 29.53058867;
-    return ((days % cycle) + cycle) % cycle;
-  }
-  function drawMoon(phase) {
-    const r = 22;
-    const moonB = document.getElementById('moonB');
-    const moonS = document.getElementById('moonS');
-    const illum = phase / 29.53;
-    if (illum < 0.03) {
-      moonB.setAttribute('opacity', '0.07');
-      moonS.setAttribute('r', r + 1);
-    } else if (illum > 0.97) {
-      moonB.setAttribute('opacity', '0.92');
-      moonS.setAttribute('r', '0');
-    } else {
-      moonB.setAttribute('opacity', '0.88');
-      const isWax = phase < 14.77;
-      const lit = isWax ? illum * 2 : 2 - illum * 2;
-      const offset = r * (1 - Math.min(lit, 1));
-      const sx = isWax ? 30 - offset : 30 + offset;
-      moonS.setAttribute('cx', sx);
-      moonS.setAttribute('r', r);
-    }
-  }
-  drawMoon(getMoonPhase(new Date()));
-})();
-</script>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <img class="firma" src="img/firma.png" alt="Tobal Blu">
+  <nav>
+    <a href="#">música</a>
+    <a href="#">gallery</a>
+    <a href="#">me</a>
+  </nav>
+  <div class="scroll-hint">scroll</div>
+</section>
 
 </body>
 </html>
-

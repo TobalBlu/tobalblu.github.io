@@ -235,6 +235,7 @@
     }
 
     .home-link:hover { color: #888; }
+    .proyecto.expandido { flex: 2.5; }
   </style>
 </head>
 <body>
@@ -385,15 +386,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelectorAll('.proyecto').forEach(function(el) {
     el.addEventListener('click', function() {
-      var id = this.getAttribute('data-id');
-      document.getElementById('selector').style.display = 'none';
-      document.querySelectorAll('.proyecto-page').forEach(function(p) {
-        p.classList.remove('active');
-      });
-      document.getElementById('page-' + id).classList.add('active');
-      mostrarCancion(id);
+  var id = this.getAttribute('data-id');
+  if (this.classList.contains('expandido')) {
+    document.getElementById('selector').style.display = 'none';
+    document.querySelectorAll('.proyecto-page').forEach(function(p) {
+      p.classList.remove('active');
     });
-  });
+    document.getElementById('page-' + id).classList.add('active');
+    mostrarCancion(id);
+  } else {
+    document.querySelectorAll('.proyecto').forEach(function(p) {
+      p.classList.remove('expandido');
+    });
+    this.classList.add('expandido');
+  }
+});
 
   document.querySelectorAll('[data-back]').forEach(function(el) {
     el.addEventListener('click', function() {

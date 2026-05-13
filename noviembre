@@ -14,7 +14,6 @@
       min-height: 100vh;
     }
 
-    /* SELECTOR DE PROYECTOS */
     .selector {
       display: flex;
       width: 100%;
@@ -80,7 +79,7 @@
       color: #333;
       opacity: 0;
       transform: translateY(8px);
-      transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s, color 0.4s ease;
+      transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
     }
 
     .proyecto:hover .proyecto-enter {
@@ -98,7 +97,6 @@
       background: #1a1a1a;
     }
 
-    /* PÁGINA DE PROYECTO */
     .proyecto-page {
       display: none;
       min-height: 100vh;
@@ -122,9 +120,7 @@
 
     .back:hover { color: #aaa; }
 
-    .proyecto-header {
-      margin-bottom: 2.5rem;
-    }
+    .proyecto-header { margin-bottom: 2.5rem; }
 
     .proyecto-header img {
       width: 100%;
@@ -162,7 +158,6 @@
 
     .plataformas a:hover { color: #ccc; border-color: #555; }
 
-    /* CARRUSEL DE CANCIONES */
     .songs-section { margin-top: 2rem; }
 
     .songs-label {
@@ -177,10 +172,7 @@
 
     .songs-label:hover { color: #888; }
 
-    .carrusel {
-      display: none;
-    }
-
+    .carrusel { display: none; }
     .carrusel.active { display: block; }
 
     .cancion-actual {
@@ -220,7 +212,6 @@
     }
 
     .flecha:hover { color: #aaa; }
-
     .flecha.disabled { color: #1a1a1a; pointer-events: none; }
 
     .cancion-counter {
@@ -230,7 +221,6 @@
       margin-top: 0.8rem;
     }
 
-    /* BACK HOME */
     .home-link {
       position: fixed;
       top: 1.5rem;
@@ -251,10 +241,9 @@
 
 <a class="home-link" href="index.html">← inicio</a>
 
-<!-- SELECTOR -->
 <div class="selector" id="selector">
 
-  <div class="proyecto" onclick="abrirProyecto('tobalblu')" ontouchend="abrirProyecto('tobalblu')">
+  <div class="proyecto" data-id="tobalblu">
     <div class="proyecto-bg" style="background-image: url('img/tobalbluproject.jpg')"></div>
     <div class="proyecto-overlay"></div>
     <div class="proyecto-info">
@@ -264,7 +253,7 @@
     <div class="divider"></div>
   </div>
 
-  <div class="proyecto" onclick="abrirProyecto('resonancia')" ontouchend="abrirProyecto('resonancia')">
+  <div class="proyecto" data-id="resonancia">
     <div class="proyecto-bg" style="background-image: url('img/resonanciaetereaproject.jpg')"></div>
     <div class="proyecto-overlay"></div>
     <div class="proyecto-info">
@@ -274,7 +263,7 @@
     <div class="divider"></div>
   </div>
 
-  <div class="proyecto" onclick="abrirProyecto('kiddvoodoo')"ontouchend="abrirProyecto('kiddvoodoo')">
+  <div class="proyecto" data-id="kiddvoodoo">
     <div class="proyecto-bg" style="background-image: url('img/kiddvoodooproject.jpeg')"></div>
     <div class="proyecto-overlay"></div>
     <div class="proyecto-info">
@@ -285,9 +274,8 @@
 
 </div>
 
-<!-- PÁGINA TOBAL BLU -->
 <div class="proyecto-page" id="page-tobalblu">
-  <span class="back" onclick="volverSelector()">← música</span>
+  <span class="back" data-back="true">← música</span>
   <div class="proyecto-header">
     <img src="img/tobalbluproject.jpg" alt="Tobal Blu">
     <div class="proyecto-titulo">Tobal Blu</div>
@@ -298,14 +286,14 @@
     </div>
   </div>
   <div class="songs-section">
-    <div class="songs-label" onclick="toggleCarrusel('carrusel-tobalblu')">songs</div>
+    <div class="songs-label" data-carrusel="carrusel-tobalblu">songs</div>
     <div class="carrusel" id="carrusel-tobalblu">
       <div class="cancion-actual">
         <div class="cancion-nombre" id="nombre-tobalblu"></div>
         <div class="cancion-meta" id="meta-tobalblu"></div>
         <div class="flechas">
-          <span class="flecha" id="up-tobalblu" onclick="navegarCancion('tobalblu', -1)">↑ anterior</span>
-          <span class="flecha" id="down-tobalblu" onclick="navegarCancion('tobalblu', 1)">↓ siguiente</span>
+          <span class="flecha" id="up-tobalblu" data-proyecto="tobalblu" data-dir="-1">↑ anterior</span>
+          <span class="flecha" id="down-tobalblu" data-proyecto="tobalblu" data-dir="1">↓ siguiente</span>
         </div>
         <div class="cancion-counter" id="counter-tobalblu"></div>
       </div>
@@ -313,9 +301,8 @@
   </div>
 </div>
 
-<!-- PÁGINA RESONANCIA ETÉREA -->
 <div class="proyecto-page" id="page-resonancia">
-  <span class="back" onclick="volverSelector()">← música</span>
+  <span class="back" data-back="true">← música</span>
   <div class="proyecto-header">
     <img src="img/resonanciaetereaproject.jpg" alt="Resonancia Etérea">
     <div class="proyecto-titulo">Resonancia Etérea</div>
@@ -327,14 +314,14 @@
     </div>
   </div>
   <div class="songs-section">
-    <div class="songs-label" onclick="toggleCarrusel('carrusel-resonancia')">songs</div>
+    <div class="songs-label" data-carrusel="carrusel-resonancia">songs</div>
     <div class="carrusel" id="carrusel-resonancia">
       <div class="cancion-actual">
         <div class="cancion-nombre" id="nombre-resonancia"></div>
         <div class="cancion-meta" id="meta-resonancia"></div>
         <div class="flechas">
-          <span class="flecha" id="up-resonancia" onclick="navegarCancion('resonancia', -1)">↑ anterior</span>
-          <span class="flecha" id="down-resonancia" onclick="navegarCancion('resonancia', 1)">↓ siguiente</span>
+          <span class="flecha" id="up-resonancia" data-proyecto="resonancia" data-dir="-1">↑ anterior</span>
+          <span class="flecha" id="down-resonancia" data-proyecto="resonancia" data-dir="1">↓ siguiente</span>
         </div>
         <div class="cancion-counter" id="counter-resonancia"></div>
       </div>
@@ -342,9 +329,8 @@
   </div>
 </div>
 
-<!-- PÁGINA KIDD VOODOO -->
 <div class="proyecto-page" id="page-kiddvoodoo">
-  <span class="back" onclick="volverSelector()">← música</span>
+  <span class="back" data-back="true">← música</span>
   <div class="proyecto-header">
     <img src="img/kiddvoodooproject.jpeg" alt="Kidd Voodoo">
     <div class="proyecto-titulo">Kidd Voodoo</div>
@@ -356,14 +342,14 @@
     </div>
   </div>
   <div class="songs-section">
-    <div class="songs-label" onclick="toggleCarrusel('carrusel-kiddvoodoo')">songs</div>
+    <div class="songs-label" data-carrusel="carrusel-kiddvoodoo">songs</div>
     <div class="carrusel" id="carrusel-kiddvoodoo">
       <div class="cancion-actual">
         <div class="cancion-nombre" id="nombre-kiddvoodoo"></div>
         <div class="cancion-meta" id="meta-kiddvoodoo"></div>
         <div class="flechas">
-          <span class="flecha" id="up-kiddvoodoo" onclick="navegarCancion('kiddvoodoo', -1)">↑ anterior</span>
-          <span class="flecha" id="down-kiddvoodoo" onclick="navegarCancion('kiddvoodoo', 1)">↓ siguiente</span>
+          <span class="flecha" id="up-kiddvoodoo" data-proyecto="kiddvoodoo" data-dir="-1">↑ anterior</span>
+          <span class="flecha" id="down-kiddvoodoo" data-proyecto="kiddvoodoo" data-dir="1">↓ siguiente</span>
         </div>
         <div class="cancion-counter" id="counter-kiddvoodoo"></div>
       </div>
@@ -372,56 +358,55 @@
 </div>
 
 <script>
-const canciones = {
+var canciones = {
   tobalblu: [
-    { nombre: "Sorbo de valentía", album: "Single", fecha: "dic 2023" },
-    { nombre: "No espero!", album: "Single", fecha: "feb 2024" },
-    { nombre: "Dime dime dime (Acoustic)", album: "Dime dime dime", fecha: "abr 2024" },
-    { nombre: "Dime dime dime", album: "Single", fecha: "abr 2024" },
-    { nombre: "Dime dime dime", album: "Imaginación y Pausa", fecha: "may 2025" },
-    { nombre: "Diamantes en el camino", album: "Imaginación y Pausa", fecha: "may 2025" },
-    { nombre: "Tanto cariño", album: "Imaginación y Pausa", fecha: "may 2025" },
-    { nombre: "Erizas mi piel", album: "Imaginación y Pausa", fecha: "may 2025" },
-    { nombre: "Creo que me equivoqué", album: "Imaginación y Pausa", fecha: "may 2025" },
-    { nombre: "Vives en mí", album: "Imaginación y Pausa", fecha: "may 2025" },
-    { nombre: "Barcos varados", album: "Single", fecha: "mar 2026" }
+    { nombre: "Sorbo de valentía", album: "Single", fecha: "nov 2023" },
+    { nombre: "No espero!", album: "Single", fecha: "ene 2024" },
+    { nombre: "Dime dime dime (Acoustic)", album: "Dime dime dime", fecha: "mar 2024" },
+    { nombre: "Dime dime dime", album: "Single", fecha: "mar 2024" },
+    { nombre: "Dime dime dime", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Diamantes en el camino", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Tanto cariño", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Erizas mi piel", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Creo que me equivoqué", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Vives en mí", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Barcos varados", album: "Single", fecha: "abr 2026" }
   ],
   resonancia: [
     { nombre: "Jamás", album: "Single", fecha: "jul 2019" },
-    { nombre: "Cuervo", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Árbol", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Y podría", album: "Luces", fecha: "jul 2020" },
-    { nombre: "A lo que haría yo", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Hawaiiana", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Sombra", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Quema las estrellas", album: "Single", fecha: "jun 2022" },
-    { nombre: "Al borde", album: "Single", fecha: "oct 2022" },
-    { nombre: "Confortas pero dañas", album: "Single", fecha: "feb 2023" },
-    { nombre: "Me quedo en esa vez", album: "Single", fecha: "dic 2025" },
-    { nombre: "perdámonos", album: "Satirología, Vol 3", fecha: "mar 2025" },
-    { nombre: "Frío", album: "Satirología, Vol 3", fecha: "mar 2025" },
-    { nombre: "La Verdad", album: "Satirología, Vol 3", fecha: "mar 2025" }
+    { nombre: "Cuervo", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Árbol", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Y podría", album: "Luces", fecha: "sep 2020" },
+    { nombre: "A lo que haría yo", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Hawaiiana", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Sombra", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Quema las estrellas", album: "Single", fecha: "sep 2022" },
+    { nombre: "Al borde", album: "Single", fecha: "dic 2022" },
+    { nombre: "Confortas pero dañas", album: "Single", fecha: "abr 2023" },
+    { nombre: "Me quedo en esa vez", album: "Single", fecha: "jun 2025" },
+    { nombre: "perdámonos", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Frío", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "La Verdad", album: "Satirología, Vol 3", fecha: "sep 2025" }
     { nombre: "Noviembre", album: "Satirología, Deluxe Edition", fecha: "Ago 2025" }
   ],
   kiddvoodoo: [
-    { nombre: "Me quedo en esa vez", album: "Single", fecha: "dic 2024" },
-    { nombre: "perdámonos", album: "Satirología, Vol 3", fecha: "mar 2025" },
-    { nombre: "Debo Aterrizar", album: "Satirología, Vol 3", fecha: "mar 2025" },
-    { nombre: "Frío", album: "Satirología, Vol 3", fecha: "mar 2025" },
-    { nombre: "La Verdad", album: "Satirología, Vol 3", fecha: "mar 2025" },
+    { nombre: "Me quedo en esa vez", album: "Single", fecha: "jun 2025" },
+    { nombre: "perdámonos", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Debo Aterrizar", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Frío", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "La Verdad", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Noviembre", album: "Satirología, Deluxe Edition", fecha: "Ago 2025" }
     { nombre: "Poder quererme", album: "Euforia", fecha: "feb 2026" },
-    { nombre: "En el suelo", album: "Euforia", fecha: "may 2026" }
+    { nombre: "En el suelo", album: "Euforia", fecha: "abr 2026" }
   ]
 };
 
-const indices = { tobalblu: 0, resonancia: 0, kiddvoodoo: 0 };
-
-function excelFecha(n) { return n; }
+var indices = { tobalblu: 0, resonancia: 0, kiddvoodoo: 0 };
 
 function mostrarCancion(proyecto) {
-  const lista = canciones[proyecto];
-  const i = indices[proyecto];
-  const c = lista[i];
+  var lista = canciones[proyecto];
+  var i = indices[proyecto];
+  var c = lista[i];
   document.getElementById('nombre-' + proyecto).textContent = c.nombre;
   document.getElementById('meta-' + proyecto).textContent = c.album + ' · ' + c.fecha;
   document.getElementById('counter-' + proyecto).textContent = (i + 1) + ' / ' + lista.length;
@@ -429,33 +414,51 @@ function mostrarCancion(proyecto) {
   document.getElementById('down-' + proyecto).className = 'flecha' + (i === lista.length - 1 ? ' disabled' : '');
 }
 
-function navegarCancion(proyecto, dir) {
-  const lista = canciones[proyecto];
-  const nuevo = indices[proyecto] + dir;
-  if (nuevo >= 0 && nuevo < lista.length) {
-    indices[proyecto] = nuevo;
-    mostrarCancion(proyecto);
-  }
-}
+document.addEventListener('DOMContentLoaded', function() {
 
-function toggleCarrusel(id) {
-  const c = document.getElementById(id);
-  c.classList.toggle('active');
-  const proyecto = id.replace('carrusel-', '');
-  if (c.classList.contains('active')) mostrarCancion(proyecto);
-}
+  document.querySelectorAll('.proyecto').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      document.getElementById('selector').style.display = 'none';
+      document.querySelectorAll('.proyecto-page').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      document.getElementById('page-' + id).classList.add('active');
+      mostrarCancion(id);
+    });
+  });
 
-function abrirProyecto(id) {
-  alert('abriendo: ' + id);
-  document.getElementById('selector').style.display = 'none';
-  document.querySelectorAll('.proyecto-page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-}
+  document.querySelectorAll('[data-back]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      document.getElementById('selector').style.display = 'flex';
+      document.querySelectorAll('.proyecto-page').forEach(function(p) {
+        p.classList.remove('active');
+      });
+    });
+  });
 
-function volverSelector() {
-  document.getElementById('selector').style.display = 'flex';
-  document.querySelectorAll('.proyecto-page').forEach(p => p.classList.remove('active'));
-}
+  document.querySelectorAll('.songs-label').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var id = this.getAttribute('data-carrusel');
+      var c = document.getElementById(id);
+      c.classList.toggle('active');
+    });
+  });
+
+  document.querySelectorAll('.flecha').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var proyecto = this.getAttribute('data-proyecto');
+      var dir = parseInt(this.getAttribute('data-dir'));
+      var lista = canciones[proyecto];
+      var nuevo = indices[proyecto] + dir;
+      if (nuevo >= 0 && nuevo < lista.length) {
+        indices[proyecto] = nuevo;
+        mostrarCancion(proyecto);
+      }
+    });
+  });
+
+});
 </script>
 
 </body>

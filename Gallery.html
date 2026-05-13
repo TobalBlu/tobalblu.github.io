@@ -1,1 +1,421 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — Tobal Blu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .home-link {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      text-decoration: none;
+      transition: color 0.3s;
+      z-index: 100;
+    }
+    .home-link:hover { color: #888; }
+
+    /* SELECTOR DE EVENTOS */
+    .selector {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .evento {
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .evento:hover { flex: 2.5; }
+    .evento.expandido { flex: 2.5; }
+
+    .evento-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.35);
+      transition: filter 0.6s ease, transform 0.6s ease;
+      transform: scale(1.05);
+    }
+
+    .evento:hover .evento-bg,
+    .evento.expandido .evento-bg {
+      filter: brightness(0.6);
+      transform: scale(1);
+    }
+
+    .evento-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, #080808 0%, transparent 60%);
+    }
+
+    .evento-info {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .evento-nombre {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #777;
+      margin-bottom: 0.4rem;
+      transition: color 0.4s;
+    }
+
+    .evento:hover .evento-nombre,
+    .evento.expandido .evento-nombre { color: #fff; }
+
+    .evento-fecha {
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      color: #333;
+      transition: color 0.4s;
+    }
+
+    .evento:hover .evento-fecha,
+    .evento.expandido .evento-fecha { color: #666; }
+
+    .divider {
+      position: absolute;
+      top: 0; right: 0;
+      width: 0.5px;
+      height: 100%;
+      background: #1a1a1a;
+    }
+
+    /* GALERÍA DE FOTOS */
+    .galeria {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #080808;
+      z-index: 50;
+      flex-direction: column;
+    }
+
+    .galeria.active { display: flex; }
+
+    .galeria-header {
+      position: absolute;
+      top: 1.5rem;
+      left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      gap: 2rem;
+    }
+
+    .galeria-titulo {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    .back-gallery {
+      position: absolute;
+      left: 1.5rem;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .back-gallery:hover { color: #aaa; }
+
+    .foto-contador {
+      position: absolute;
+      right: 1.5rem;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: #2a2a2a;
+    }
+
+    .foto-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .foto-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .foto-wrap img.loaded { opacity: 1; }
+
+    .flecha-foto {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s;
+      z-index: 5;
+      padding: 2rem;
+      user-select: none;
+    }
+
+    .flecha-foto:hover { color: #aaa; }
+    .flecha-foto.disabled { color: #1a1a1a; pointer-events: none; }
+    .flecha-foto.izq { left: 0; }
+    .flecha-foto.der { right: 0; }
+
+    .galeria-footer {
+      padding: 1.5rem 2rem;
+      border-top: 0.5px solid #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .texto-evento {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: #2a2a2a;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .texto-evento:hover { color: #666; }
+
+    /* MODAL TEXTO */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,8,8,0.95);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-content {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .modal-titulo {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #444;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-texto {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+    }
+
+    .modal-close {
+      margin-top: 2rem;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s;
+      display: inline-block;
+    }
+
+    .modal-close:hover { color: #aaa; }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<!-- SELECTOR -->
+<div class="selector" id="selector">
+
+  <div class="evento" data-id="lolla25">
+    <div class="evento-bg" style="background-image: url('img/lolla25-1.jpg')"></div>
+    <div class="evento-overlay"></div>
+    <div class="evento-info">
+      <div class="evento-nombre">Lollapalooza 2025</div>
+      <div class="evento-fecha">mar 2025</div>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="evento" data-id="movistar">
+    <div class="evento-bg" style="background-image: url('img/movistar-1.jpg')"></div>
+    <div class="evento-overlay"></div>
+    <div class="evento-info">
+      <div class="evento-nombre">Movistar · Kidd Voodoo</div>
+      <div class="evento-fecha">jul 2025</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- GALERIA -->
+<div class="galeria" id="galeria">
+  <div class="galeria-header">
+    <span class="back-gallery" id="back-gallery">← gallery</span>
+    <span class="galeria-titulo" id="galeria-titulo"></span>
+    <span class="foto-contador" id="foto-contador"></span>
+  </div>
+
+  <div class="foto-wrap">
+    <span class="flecha-foto izq disabled" id="flecha-izq">←</span>
+    <img id="foto-actual" src="" alt="">
+    <span class="flecha-foto der" id="flecha-der">→</span>
+  </div>
+
+  <div class="galeria-footer">
+    <span class="texto-evento" id="texto-btn">leer más</span>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="modal-titulo" id="modal-titulo"></div>
+    <div class="modal-texto" id="modal-texto">...</div>
+    <span class="modal-close" id="modal-close">cerrar</span>
+  </div>
+</div>
+
+<script>
+var eventos = {
+  lolla25: {
+    nombre: "Lollapalooza 2025",
+    fecha: "mar 2025",
+    total: 11,
+    prefix: "img/lolla25-",
+    ext: ".jpg",
+    texto: "..."
+  },
+  movistar: {
+    nombre: "Movistar · Kidd Voodoo",
+    fecha: "jul 2025",
+    total: 23,
+    prefix: "img/movistar-",
+    ext: ".jpg",
+    texto: "..."
+  }
+};
+
+var eventoActual = null;
+var fotoActual = 1;
+
+function cargarFoto(n) {
+  var e = eventos[eventoActual];
+  var img = document.getElementById('foto-actual');
+  img.classList.remove('loaded');
+  img.src = e.prefix + n + e.ext;
+  img.onload = function() { img.classList.add('loaded'); };
+  document.getElementById('foto-contador').textContent = n + ' / ' + e.total;
+  document.getElementById('flecha-izq').className = 'flecha-foto izq' + (n === 1 ? ' disabled' : '');
+  document.getElementById('flecha-der').className = 'flecha-foto der' + (n === e.total ? ' disabled' : '');
+}
+
+function abrirGaleria(id) {
+  eventoActual = id;
+  fotoActual = 1;
+  var e = eventos[id];
+  document.getElementById('galeria-titulo').textContent = e.nombre;
+  document.getElementById('selector').style.display = 'none';
+  document.getElementById('galeria').classList.add('active');
+  cargarFoto(1);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.querySelectorAll('.evento').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      if (this.classList.contains('expandido')) {
+        abrirGaleria(id);
+      } else {
+        document.querySelectorAll('.evento').forEach(function(e) {
+          e.classList.remove('expandido');
+        });
+        this.classList.add('expandido');
+      }
+    });
+  });
+
+  document.getElementById('back-gallery').addEventListener('click', function() {
+    document.getElementById('galeria').classList.remove('active');
+    document.getElementById('selector').style.display = 'flex';
+    eventoActual = null;
+  });
+
+  document.getElementById('flecha-izq').addEventListener('click', function() {
+    if (fotoActual > 1) {
+      fotoActual--;
+      cargarFoto(fotoActual);
+    }
+  });
+
+  document.getElementById('flecha-der').addEventListener('click', function() {
+    var e = eventos[eventoActual];
+    if (fotoActual < e.total) {
+      fotoActual++;
+      cargarFoto(fotoActual);
+    }
+  });
+
+  document.getElementById('texto-btn').addEventListener('click', function() {
+    var e = eventos[eventoActual];
+    document.getElementById('modal-titulo').textContent = e.nombre;
+    document.getElementById('modal-texto').textContent = e.texto;
+    document.getElementById('modal').classList.add('active');
+  });
+
+  document.getElementById('modal-close').addEventListener('click', function() {
+    document.getElementById('modal').classList.remove('active');
+  });
+
+});
+</script>
+
+</body>
+</html>

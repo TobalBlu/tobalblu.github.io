@@ -446,6 +446,7 @@ function toggleCarrusel(id) {
 }
 
 function abrirProyecto(id) {
+  alert('abriendo: ' + id);
   document.getElementById('selector').style.display = 'none';
   document.querySelectorAll('.proyecto-page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');

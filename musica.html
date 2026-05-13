@@ -1,1 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Música — Tobal Blu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      min-height: 100vh;
+    }
+
+    /* SELECTOR DE PROYECTOS */
+    .selector {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .proyecto {
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .proyecto:hover { flex: 2.5; }
+
+    .proyecto-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.4);
+      transition: filter 0.6s ease, transform 0.6s ease;
+      transform: scale(1.05);
+    }
+
+    .proyecto:hover .proyecto-bg {
+      filter: brightness(0.65);
+      transform: scale(1);
+    }
+
+    .proyecto-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, #080808 0%, transparent 60%);
+    }
+
+    .proyecto-info {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 2rem;
+      right: 2rem;
+      z-index: 2;
+    }
+
+    .proyecto-nombre {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.5rem;
+      transition: color 0.4s ease;
+    }
+
+    .proyecto:hover .proyecto-nombre { color: #fff; }
+
+    .proyecto-enter {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s, color 0.4s ease;
+    }
+
+    .proyecto:hover .proyecto-enter {
+      opacity: 1;
+      transform: translateY(0);
+      color: #555;
+    }
+
+    .divider {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0.5px;
+      height: 100%;
+      background: #1a1a1a;
+    }
+
+    /* PÁGINA DE PROYECTO */
+    .proyecto-page {
+      display: none;
+      min-height: 100vh;
+      padding: 3rem 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .proyecto-page.active { display: block; }
+
+    .back {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #444;
+      cursor: pointer;
+      transition: color 0.3s;
+      margin-bottom: 3rem;
+      display: inline-block;
+    }
+
+    .back:hover { color: #aaa; }
+
+    .proyecto-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .proyecto-header img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      filter: brightness(0.8);
+      margin-bottom: 1.5rem;
+    }
+
+    .proyecto-titulo {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 1.2rem;
+    }
+
+    .plataformas {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .plataformas a {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #444;
+      text-decoration: none;
+      transition: color 0.3s;
+      border-bottom: 0.5px solid #222;
+      padding-bottom: 2px;
+    }
+
+    .plataformas a:hover { color: #ccc; border-color: #555; }
+
+    /* CARRUSEL DE CANCIONES */
+    .songs-section { margin-top: 2rem; }
+
+    .songs-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .songs-label:hover { color: #888; }
+
+    .carrusel {
+      display: none;
+    }
+
+    .carrusel.active { display: block; }
+
+    .cancion-actual {
+      padding: 1.5rem 0;
+      border-top: 0.5px solid #1a1a1a;
+      border-bottom: 0.5px solid #1a1a1a;
+    }
+
+    .cancion-nombre {
+      font-size: 15px;
+      color: #ddd;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .cancion-meta {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    .flechas {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .flecha {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s;
+      user-select: none;
+    }
+
+    .flecha:hover { color: #aaa; }
+
+    .flecha.disabled { color: #1a1a1a; pointer-events: none; }
+
+    .cancion-counter {
+      font-size: 9px;
+      color: #2a2a2a;
+      letter-spacing: 0.15em;
+      margin-top: 0.8rem;
+    }
+
+    /* BACK HOME */
+    .home-link {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      text-decoration: none;
+      transition: color 0.3s;
+      z-index: 10;
+    }
+
+    .home-link:hover { color: #888; }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<!-- SELECTOR -->
+<div class="selector" id="selector">
+
+  <div class="proyecto" onclick="abrirProyecto('tobalblu')">
+    <div class="proyecto-bg" style="background-image: url('img/tobalbluproyect.jpg')"></div>
+    <div class="proyecto-overlay"></div>
+    <div class="proyecto-info">
+      <div class="proyecto-nombre">Tobal Blu</div>
+      <div class="proyecto-enter">entrar →</div>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="proyecto" onclick="abrirProyecto('resonancia')">
+    <div class="proyecto-bg" style="background-image: url('img/resonanciaetereaproject.jpg')"></div>
+    <div class="proyecto-overlay"></div>
+    <div class="proyecto-info">
+      <div class="proyecto-nombre">Resonancia Etérea</div>
+      <div class="proyecto-enter">entrar →</div>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="proyecto" onclick="abrirProyecto('kiddvoodoo')">
+    <div class="proyecto-bg" style="background-image: url('img/kiddvoodooproject.jpg')"></div>
+    <div class="proyecto-overlay"></div>
+    <div class="proyecto-info">
+      <div class="proyecto-nombre">Kidd Voodoo</div>
+      <div class="proyecto-enter">entrar →</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PÁGINA TOBAL BLU -->
+<div class="proyecto-page" id="page-tobalblu">
+  <span class="back" onclick="volverSelector()">← música</span>
+  <div class="proyecto-header">
+    <img src="img/tobalbluproyect.jpg" alt="Tobal Blu">
+    <div class="proyecto-titulo">Tobal Blu</div>
+    <div class="plataformas">
+      <a href="https://open.spotify.com/intl-es/artist/7yn8ZILVwbXPJGReR802LM" target="_blank">Spotify</a>
+      <a href="https://music.apple.com/cl/artist/tobal-blu/1723087834" target="_blank">Apple Music</a>
+      <a href="https://www.youtube.com/@TobalBlu" target="_blank">YouTube</a>
+    </div>
+  </div>
+  <div class="songs-section">
+    <div class="songs-label" onclick="toggleCarrusel('carrusel-tobalblu')">songs</div>
+    <div class="carrusel" id="carrusel-tobalblu">
+      <div class="cancion-actual">
+        <div class="cancion-nombre" id="nombre-tobalblu"></div>
+        <div class="cancion-meta" id="meta-tobalblu"></div>
+        <div class="flechas">
+          <span class="flecha" id="up-tobalblu" onclick="navegarCancion('tobalblu', -1)">↑ anterior</span>
+          <span class="flecha" id="down-tobalblu" onclick="navegarCancion('tobalblu', 1)">↓ siguiente</span>
+        </div>
+        <div class="cancion-counter" id="counter-tobalblu"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PÁGINA RESONANCIA ETÉREA -->
+<div class="proyecto-page" id="page-resonancia">
+  <span class="back" onclick="volverSelector()">← música</span>
+  <div class="proyecto-header">
+    <img src="img/resonanciaetereaproject.jpg" alt="Resonancia Etérea">
+    <div class="proyecto-titulo">Resonancia Etérea</div>
+    <div class="plataformas">
+      <a href="https://open.spotify.com/intl-es/artist/7cD8IM5x8k0vTOgY4kQzuB" target="_blank">Spotify</a>
+      <a href="https://stage.tidal.com/artist/15794288" target="_blank">Tidal</a>
+      <a href="https://music.apple.com/cl/artist/resonancia-etérea/1463912586" target="_blank">Apple Music</a>
+      <a href="https://www.youtube.com/@ResonanciaEtérea" target="_blank">YouTube</a>
+    </div>
+  </div>
+  <div class="songs-section">
+    <div class="songs-label" onclick="toggleCarrusel('carrusel-resonancia')">songs</div>
+    <div class="carrusel" id="carrusel-resonancia">
+      <div class="cancion-actual">
+        <div class="cancion-nombre" id="nombre-resonancia"></div>
+        <div class="cancion-meta" id="meta-resonancia"></div>
+        <div class="flechas">
+          <span class="flecha" id="up-resonancia" onclick="navegarCancion('resonancia', -1)">↑ anterior</span>
+          <span class="flecha" id="down-resonancia" onclick="navegarCancion('resonancia', 1)">↓ siguiente</span>
+        </div>
+        <div class="cancion-counter" id="counter-resonancia"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PÁGINA KIDD VOODOO -->
+<div class="proyecto-page" id="page-kiddvoodoo">
+  <span class="back" onclick="volverSelector()">← música</span>
+  <div class="proyecto-header">
+    <img src="img/kiddvoodooproject.jpg" alt="Kidd Voodoo">
+    <div class="proyecto-titulo">Kidd Voodoo</div>
+    <div class="plataformas">
+      <a href="https://open.spotify.com/intl-es/artist/10VBp06W8NIgMW4JruLCC4" target="_blank">Spotify</a>
+      <a href="https://tidal.com/artist/17896230/" target="_blank">Tidal</a>
+      <a href="https://music.apple.com/cl/artist/kidd-voodoo/1493258622" target="_blank">Apple Music</a>
+      <a href="https://www.youtube.com/@KiddVoodoo" target="_blank">YouTube</a>
+    </div>
+  </div>
+  <div class="songs-section">
+    <div class="songs-label" onclick="toggleCarrusel('carrusel-kiddvoodoo')">songs</div>
+    <div class="carrusel" id="carrusel-kiddvoodoo">
+      <div class="cancion-actual">
+        <div class="cancion-nombre" id="nombre-kiddvoodoo"></div>
+        <div class="cancion-meta" id="meta-kiddvoodoo"></div>
+        <div class="flechas">
+          <span class="flecha" id="up-kiddvoodoo" onclick="navegarCancion('kiddvoodoo', -1)">↑ anterior</span>
+          <span class="flecha" id="down-kiddvoodoo" onclick="navegarCancion('kiddvoodoo', 1)">↓ siguiente</span>
+        </div>
+        <div class="cancion-counter" id="counter-kiddvoodoo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const canciones = {
+  tobalblu: [
+    { nombre: "Sorbo de valentía", album: "Single", fecha: "nov 2023" },
+    { nombre: "No espero!", album: "Single", fecha: "ene 2024" },
+    { nombre: "Dime dime dime (Acoustic)", album: "Dime dime dime", fecha: "mar 2024" },
+    { nombre: "Dime dime dime", album: "Single", fecha: "mar 2024" },
+    { nombre: "Dime dime dime", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Diamantes en el camino", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Tanto cariño", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Erizas mi piel", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Creo que me equivoqué", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Vives en mí", album: "Imaginación y Pausa", fecha: "mar 2025" },
+    { nombre: "Barcos varados", album: "Single", fecha: "abr 2026" }
+  ],
+  resonancia: [
+    { nombre: "Jamás", album: "Single", fecha: "jul 2019" },
+    { nombre: "Cuervo", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Árbol", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Y podría", album: "Luces", fecha: "sep 2020" },
+    { nombre: "A lo que haría yo", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Hawaiiana", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Sombra", album: "Luces", fecha: "sep 2020" },
+    { nombre: "Quema las estrellas", album: "Single", fecha: "sep 2022" },
+    { nombre: "Al borde", album: "Single", fecha: "dic 2022" },
+    { nombre: "Confortas pero dañas", album: "Single", fecha: "abr 2023" },
+    { nombre: "Me quedo en esa vez", album: "Single", fecha: "jun 2025" },
+    { nombre: "perdámonos", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Frío", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "La Verdad", album: "Satirología, Vol 3", fecha: "sep 2025" }
+  ],
+  kiddvoodoo: [
+    { nombre: "Me quedo en esa vez", album: "Single", fecha: "jun 2025" },
+    { nombre: "perdámonos", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Debo Aterrizar", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Frío", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "La Verdad", album: "Satirología, Vol 3", fecha: "sep 2025" },
+    { nombre: "Poder quererme", album: "Euforia", fecha: "feb 2026" },
+    { nombre: "En el suelo", album: "Euforia", fecha: "abr 2026" }
+  ]
+};
+
+const indices = { tobalblu: 0, resonancia: 0, kiddvoodoo: 0 };
+
+function excelFecha(n) { return n; }
+
+function mostrarCancion(proyecto) {
+  const lista = canciones[proyecto];
+  const i = indices[proyecto];
+  const c = lista[i];
+  document.getElementById('nombre-' + proyecto).textContent = c.nombre;
+  document.getElementById('meta-' + proyecto).textContent = c.album + ' · ' + c.fecha;
+  document.getElementById('counter-' + proyecto).textContent = (i + 1) + ' / ' + lista.length;
+  document.getElementById('up-' + proyecto).className = 'flecha' + (i === 0 ? ' disabled' : '');
+  document.getElementById('down-' + proyecto).className = 'flecha' + (i === lista.length - 1 ? ' disabled' : '');
+}
+
+function navegarCancion(proyecto, dir) {
+  const lista = canciones[proyecto];
+  const nuevo = indices[proyecto] + dir;
+  if (nuevo >= 0 && nuevo < lista.length) {
+    indices[proyecto] = nuevo;
+    mostrarCancion(proyecto);
+  }
+}
+
+function toggleCarrusel(id) {
+  const c = document.getElementById(id);
+  c.classList.toggle('active');
+  const proyecto = id.replace('carrusel-', '');
+  if (c.classList.contains('active')) mostrarCancion(proyecto);
+}
+
+function abrirProyecto(id) {
+  document.getElementById('selector').style.display = 'none';
+  document.querySelectorAll('.proyecto-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+}
+
+function volverSelector() {
+  document.getElementById('selector').style.display = 'flex';
+  document.querySelectorAll('.proyecto-page').forEach(p => p.classList.remove('active'));
+}
+</script>
+
+</body>
+</html>

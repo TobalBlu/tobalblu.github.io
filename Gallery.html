@@ -181,19 +181,17 @@
     .foto-wrap img.loaded { opacity: 1; }
 
     .flecha-foto {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #333;
-      cursor: pointer;
-      transition: color 0.3s;
-      z-index: 5;
-      padding: 2rem;
-      user-select: none;
-    }
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.3s;
+  z-index: 5;
+  padding: 2rem;
+  user-select: none;
+}
 
     .flecha-foto:hover { color: #aaa; }
     .flecha-foto.disabled { color: #1a1a1a; pointer-events: none; }
@@ -414,6 +412,34 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('modal').classList.remove('active');
   });
 
+});
+  document.addEventListener('keydown', function(e) {
+  if (!eventoActual) return;
+  if (e.key === 'ArrowRight' && fotoActual < eventos[eventoActual].total) {
+    fotoActual++;
+    cargarFoto(fotoActual);
+  }
+  if (e.key === 'ArrowLeft' && fotoActual > 1) {
+    fotoActual--;
+    cargarFoto(fotoActual);
+  }
+});
+
+var touchStartX = 0;
+document.getElementById('foto-wrap') && document.querySelector('.foto-wrap').addEventListener('touchstart', function(e) {
+  touchStartX = e.touches[0].clientX;
+});
+document.querySelector('.foto-wrap').addEventListener('touchend', function(e) {
+  if (!eventoActual) return;
+  var diff = touchStartX - e.changedTouches[0].clientX;
+  if (diff > 50 && fotoActual < eventos[eventoActual].total) {
+    fotoActual++;
+    cargarFoto(fotoActual);
+  }
+  if (diff < -50 && fotoActual > 1) {
+    fotoActual--;
+    cargarFoto(fotoActual);
+  }
 });
 </script>
 

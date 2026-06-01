@@ -393,12 +393,42 @@ async function loadSamples(){ensureAC();
   for(const k in DRUM_SAMPLES){
     try{const r=await fetch(DRUM_SAMPLES[k]);if(!r.ok)throw 0;const ab=await r.arrayBuffer();samples[k]=await AC.decodeAudioData(ab);}
     catch(e){samples[k]=null;}}}
-function songTime(){if(mode==="element")return audioEl?audioEl.currentTime:0;return AC.currentTime-T0;}
-function startMusic(){
-  if(mode==="buffer"){if(srcNode){try{srcNode.stop();}catch(e){}}srcNode=AC.createBufferSource();srcNode.buffer=musicBuf;srcNode.connect(master);T0=AC.currentTime+0.18;srcNode.start(T0);}
-  else if(mode==="element"){audioEl.pause();audioEl.currentTime=0;audioEl.volume=muted?0:0.9;audioEl.play();T0=AC.currentTime;}
-  else{T0=AC.currentTime+0.9;}}
-function stopMusic(){if(mode==="buffer"&&srcNode){try{srcNode.stop();}catch(e){}}if(mode==="element"&&audioEl)audioEl.pause();}
+/* Reloj único basado en el AudioContext, válido para todos los modos.
+   No depende de audioEl.currentTime (que no resetea fiable en móvil al repetir). */
+function songTime(){ if(!AC) return 0; const t=AC.currentTime-T0; return isFinite(t)?t:0; }
+/* Desbloqueo/resume explícito de audio dentro del gesto. Espera a "running". */
+async function unlockAudio(){
+  ensureAC();
+  if(AC.state!=="running"){ try{ await AC.resume(); }catch(e){ console.error("[ciclos] AudioContext.resume() falló:",e); } }
+  try{ const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource(); s.buffer=b; s.connect(AC.destination); s.start(0); }catch(e){}
+  return AC.state;
+}
+/* Arranca la música. Devuelve true sólo si realmente partió. */
+async function startMusic(){
+  await unlockAudio();
+  if(AC.state!=="running"){ console.error("[ciclos] no se pudo iniciar audio: AudioContext en estado",AC.state); return false; }
+  if(mode==="buffer"&&musicBuf){
+    if(srcNode){ try{ srcNode.onended=null; srcNode.stop(); srcNode.disconnect(); }catch(e){} srcNode=null; }
+    srcNode=AC.createBufferSource(); srcNode.buffer=musicBuf; srcNode.connect(master);
+    T0=AC.currentTime+0.25; srcNode.start(T0);
+    console.log("[ciclos] música ▸ buffer · T0="+T0.toFixed(3)+" · AC="+AC.state);
+    return true;
+  }
+  if(mode==="element"&&audioEl){
+    try{ audioEl.pause(); audioEl.currentTime=0; }catch(e){}
+    audioEl.volume=muted?0:0.9; T0=AC.currentTime;
+    const p=audioEl.play();
+    if(p&&p.catch) p.catch(err=>console.error("[ciclos] audioEl.play() rechazado:",err));
+    console.log("[ciclos] música ▸ element · AC="+AC.state);
+    return true;
+  }
+  console.error("[ciclos] sin pista reproducible (modo="+mode+")");
+  return false;
+}
+function stopMusic(){
+  if(srcNode){ try{ srcNode.onended=null; srcNode.stop(); srcNode.disconnect(); }catch(e){} srcNode=null; }
+  if(audioEl){ try{ audioEl.pause(); }catch(e){} }
+}
 function playSample(name){if(!AC||muted)return false;const b=samples[name];if(!b)return false;
   const s=AC.createBufferSource();s.buffer=b;const gn=AC.createGain();gn.gain.value=0.5;s.connect(gn).connect(master);s.start();return true;}
 function synthTick(name){if(!AC||muted)return;const t=AC.currentTime,o=AC.createOscillator(),gn=AC.createGain();
@@ -511,14 +541,47 @@ document.getElementById("diffBack").onclick=()=>document.getElementById("diffwra
 document.querySelectorAll("#diffboxes .dbox").forEach(b=>{
   b.onclick=()=>{selDiff=b.dataset.d;document.getElementById("diffwrap").classList.remove("on");startGame();};});
 function ensureName(){if(!cfg.name){const n=prompt("Tu nombre (para tu avatar):","")||"PLAYER";cfg.name=n.toUpperCase().slice(0,12);}}
+/* Reset TOTAL de una partida: como recargar la página, sin refrescar. */
+function resetRound(){
+  lives=DIFF[selDiff].lives; score=0; combo=0; maxCombo=0; padMoveI=0;
+  knight={hop:0,hopV:0,move:null,headT:-9,stumbleT:-9};
+  lastJudge={txt:"",col:"",t:-999};                 // evita "fallo" fantasma al reiniciar
+  laneFlash={hat:-999,kick:-999,snare:-999};
+  T0=0;
+  buildChart();                                     // notas nuevas (judged=false), cursor limpio
+  document.getElementById("diffwrap").classList.remove("on");
+  document.getElementById("perspwrap").classList.remove("on");
+  const jt=document.getElementById("judge"); jt.style.opacity=0; jt.textContent="";
+  document.getElementById("count").style.opacity=0;
+  renderLives();
+}
+function showAudioError(){
+  document.getElementById("seedot").textContent="no se pudo iniciar el audio — toca Jugar de nuevo";
+}
 async function startGame(){
-  ensureAC(); show(""); state="run"; padMoveI=0;
-  if(mode==="synth"&&!musicBuf&&!audioEl)await loadMusic();
-  lives=DIFF[selDiff].lives;score=0;combo=0;maxCombo=0;knight={hop:0,hopV:0,move:null,headT:-9,stumbleT:-9};
-  buildChart();renderLives();
+  /* 1 · estado limpio total */
+  resetRound();
+  state="loading"; show("");
+  document.getElementById("hud").classList.remove("on");
+  document.getElementById("muteBtn").style.display="none";
+  /* 2 · desbloquear/resumir audio DENTRO del gesto y esperar a running */
+  await unlockAudio();
+  if(mode==="synth"&&!musicBuf&&!audioEl) await loadMusic();
+  if(AC.state!=="running"){
+    console.error("[ciclos] AudioContext no está running ("+AC.state+") — no entro a partida muda");
+    state="select"; show("selectScreen"); showAudioError(); return;
+  }
+  /* 3 · arrancar música ANTES de fijar el estado (garantiza T0 correcto) */
+  const ok=await startMusic();
+  if(!ok){
+    console.error("[ciclos] la música no arrancó — abortando partida (no muda)");
+    state="select"; show("selectScreen"); showAudioError(); return;
+  }
+  /* 4 · ahora sí: HUD + estado de juego, con T0 ya fijado */
   document.getElementById("hud").classList.add("on");
   document.getElementById("muteBtn").style.display="block";
-  startMusic();}
+  state="run";
+}
 function gameOver(win){
   state="over";stopMusic();
   document.getElementById("hud").classList.remove("on");
@@ -646,7 +709,7 @@ const readingLayer={
   },
   hatNotes(time,x,hitY){
     for(const n of hatNotes){const dt=n.t-time;if(dt>TRAVEL+0.1||dt<-0.5)continue;const y=fallY(dt);
-      if(!n.judged&&(n.t+WIN)<time){n.judged=true;n.res="miss";}
+      if(state==="play"&&time>0&&!n.judged&&(n.t+WIN)<time){n.judged=true;n.res="miss";}
       const r=H*0.011*((n.judged&&n.res!=="miss"&&time-n.t<0.14)?1.8:1);
       let col=n.res==="perfecto"?"#bfeafa":n.res==="bien"?"#9fcfe0":n.res==="miss"?"#2f3d44":"#cfeaf6";
       ctx.globalAlpha=n.judged?(n.res==="miss"?0.2:0.55):0.95;
@@ -656,7 +719,7 @@ const readingLayer={
   },
   snareNotes(time,x,hitY){
     for(const n of snareNotes){const dt=n.t-time;if(dt>TRAVEL+0.15||dt<-0.55)continue;const y=fallY(dt);
-      if(!n.judged&&(n.t+WIN)<time){n.judged=true;n.res="fallo";loseLife();}
+      if(state==="play"&&time>0&&!n.judged&&(n.t+WIN)<time){n.judged=true;n.res="fallo";loseLife();}
       const pop=(n.judged&&time-n.t<0.16)?1+(0.16-(time-n.t))*2.2:1;const s=H*0.025*pop;
       let col=n.res==="perfecto"?"#fff0c2":n.res==="bien"?"#e8cf8b":n.res==="fallo"?"#e0876f":"#f0d99a";
       ctx.globalAlpha=n.judged?0.16:0.35;ctx.strokeStyle=col;ctx.lineWidth=2;
@@ -667,7 +730,7 @@ const readingLayer={
   },
   kickNotes(time,x,hitY){
     for(const n of kickNotes){const dt=n.t-time;if(dt>TRAVEL+0.15||dt<-0.55)continue;const y=fallY(dt);
-      if(!n.judged&&(n.t+WIN)<time){n.judged=true;n.res="fallo";loseLife();}
+      if(state==="play"&&time>0&&!n.judged&&(n.t+WIN)<time){n.judged=true;n.res="fallo";loseLife();}
       const pop=(n.judged&&time-n.t<0.16)?1+(0.16-(time-n.t))*2:1;const rw=H*0.040*pop,rh=H*0.030*pop;
       let col=n.res==="perfecto"?"#c4d3a3":n.res==="bien"?"#aebb8e":n.res==="fallo"?"#9c6b5a":"#b9c29c";
       ctx.globalAlpha=n.judged?0.4:1;
@@ -686,7 +749,7 @@ function draw(){
   requestAnimationFrame(draw);
   ctx.clearRect(0,0,W,H);
   if(state==="select"){renderChar();}
-  if(state==="landing"||state==="select"||state==="over"){ dioramaLayer.draw(performance.now()/1000); return; }
+  if(state==="landing"||state==="select"||state==="over"||state==="loading"){ dioramaLayer.draw(performance.now()/1000); return; }
 
   const time=songTime();
   updateKnight();
@@ -703,7 +766,8 @@ function draw(){
   if(state==="run"&&time>=0)state="play";
   if(state==="play"&&time>bt(DRUM_END_BAR,4)+1.2)gameOver(true);
   const jt=document.getElementById("judge");
-  if(time-lastJudge.t<0.5){jt.textContent=lastJudge.txt;jt.style.color=lastJudge.col;jt.style.opacity=Math.max(0,1-(time-lastJudge.t)/0.5);}
+  const jd=time-lastJudge.t;
+  if(jd>=0&&jd<0.5){jt.textContent=lastJudge.txt;jt.style.color=lastJudge.col;jt.style.opacity=Math.max(0,1-jd/0.5);}
   else jt.style.opacity=0;
 }
 

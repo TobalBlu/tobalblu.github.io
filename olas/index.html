@@ -1,1 +1,532 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Olas — el viento se lleva las palabras</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..500,70..100&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   OLAS — interactive lyric experience (prototype, EASY mode)
+   "words becoming memories carried away by the wind"
+   Mobile-first: one stanza at a time, input centered, the active
+   block always rides above the on-screen keyboard.
+   ============================================================ */
+:root{
+  --sea-0:#04070b;
+  --ink:#ece8df;
+  --ember:#f6dca0;
+  --paper:#efe7d6;
+  --paper-ink:#221f1a;
+  --u:6.1cqi;               /* current verse size, fluid to the frame */
+}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ height:100%; background:#03050a; overscroll-behavior:none; }
+body{ font-family:"Fraunces", "Cormorant Garamond", Georgia, serif; color:var(--ink); overflow:hidden; }
+
+#stage{ position:fixed; inset:0; display:grid; place-items:center; background:#03050a; }
+
+#scene{
+  position:relative;
+  width:min(100vw, 540px);
+  height:100dvh;                 /* fills the visible screen on mobile */
+  overflow:hidden;
+  container-type:size;
+  background:linear-gradient(180deg,#04070b,#143140);   /* fallback under the photo */
+  box-shadow:0 0 90px rgba(0,0,0,.7) inset;
+  isolation:isolate;
+}
+.layer{ position:absolute; inset:0; pointer-events:none; }
+
+/* External background: replace background.jpg without touching the HTML. */
+#photo{
+  z-index:0;
+  background-image:url("background.jpg");
+  background-size:cover; background-position:center 40%;
+  transform:scale(1.06);
+  animation:driftPhoto 46s ease-in-out infinite alternate;
+}
+@keyframes driftPhoto{ from{transform:scale(1.06) translateY(0)} to{transform:scale(1.11) translateY(-1.6%)} }
+
+/* Scrim: just enough darkness for white lyrics to read over the sky */
+#scrim{
+  z-index:1;
+  background:
+    linear-gradient(180deg, rgba(4,7,12,.5) 0%, rgba(4,7,12,.08) 30%,
+      rgba(4,7,12,.22) 58%, rgba(4,7,12,.6) 84%, rgba(4,7,12,.85) 100%),
+    radial-gradient(80% 46% at 50% 42%, rgba(0,0,0,.36), transparent 72%);
+}
+#fx{ position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; z-index:2; }
+#vignette{ z-index:6; background:radial-gradient(120% 100% at 50% 42%, transparent 54%, rgba(0,0,0,.5) 100%); }
+#grain{
+  z-index:7; opacity:.06; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:220px 220px; animation:grain .5s steps(3) infinite;
+}
+@keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-4%,3%)}66%{transform:translate(3%,-2%)}100%{transform:translate(-2%,-3%)}}
+
+/* -------- The living core: current stanza + the place you type --------
+   Positioned by JS so its centre sits in the visible area, above the keyboard. */
+#core{
+  position:absolute; left:0; right:0; z-index:5;
+  transform:translateY(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:1.35em;
+  padding:0 9%;
+  transition:top .45s cubic-bezier(.22,.61,.31,1), gap .45s ease;
+}
+#scene.keyboard-open #core{ gap:.85em; }
+
+#lyrics{
+  max-width:92%;
+  text-align:center; font-size:var(--u); font-weight:360;
+  line-height:1.33; letter-spacing:.004em;
+  font-variation-settings:"SOFT" 95;
+  opacity:0; transition:opacity 1.4s ease, transform 1s ease;
+  transform-origin:center;
+}
+#lyrics.show{ opacity:1; }
+
+.line{
+  opacity:.42; transition:opacity 1.3s ease, filter 1.3s ease, transform 1.3s ease;
+  text-shadow:0 1px 2px rgba(0,0,0,.9), 0 2px 22px rgba(0,0,0,.7);
+}
+.line.active{ opacity:.95; }
+.line.spent{ opacity:.2; transform:translateY(-.05em); }
+
+.w{ display:inline-block; white-space:pre; transition:opacity .6s ease; }
+.w.active{
+  color:var(--ember); transform:scale(1.08);
+  text-shadow:0 0 2px rgba(255,248,230,.9),0 0 14px rgba(246,220,160,.55),
+    0 0 30px rgba(246,220,160,.3),0 0 60px rgba(246,220,160,.16);
+  animation:breathe 4.2s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{filter:brightness(1);transform:scale(1.06)}50%{filter:brightness(1.18);transform:scale(1.11)}}
+.w.shake{ animation:shiver .42s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shiver{10%,90%{transform:translateX(-1px) scale(1.07)}30%,70%{transform:translateX(2px) scale(1.07)}50%{transform:translateX(-3px) scale(1.07)}}
+.w.ghost{ color:var(--ink); opacity:.13; text-shadow:none; transform:none; animation:none; }
+
+/* The place you type — centred, right under the words */
+#field{
+  width:min(82%, 380px);
+  background:rgba(4,7,12,.08); border:none; outline:none;
+  color:var(--ink); text-align:center; font-family:inherit; font-weight:360;
+  font-size:max(16px, 4.3cqi);          /* >=16px so iOS never zooms */
+  letter-spacing:.13em; padding:.28em 0 .38em;
+  border-bottom:1px solid rgba(236,232,223,.24);
+  border-radius:999px 999px 0 0;
+  caret-color:var(--ember);
+  text-shadow:0 1px 12px rgba(0,0,0,.85);
+  transition:border-color .6s ease, box-shadow .6s ease, opacity .8s ease, background .6s ease;
+}
+#field:focus{ border-color:rgba(246,220,160,.5); box-shadow:0 12px 30px -18px rgba(246,220,160,.6); }
+#field.wrong{ animation:fieldShake .42s ease; }
+@keyframes fieldShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.fragment{
+  position:absolute; z-index:8; pointer-events:none;
+  color:var(--paper); font-family:inherit; font-weight:360; line-height:1.1;
+  text-shadow:0 1px 1px rgba(0,0,0,.35);
+  transform-origin:center; will-change:transform, opacity, filter;
+}
+
+#hint{
+  position:absolute; left:50%; bottom:calc(env(safe-area-inset-bottom) + 4.2%); z-index:9;
+  transform:translateX(-50%); width:84%; text-align:center;
+  color:rgba(236,232,223,.52); font-size:max(12px, 2.8cqi); font-weight:320;
+  letter-spacing:.04em; text-shadow:0 1px 12px rgba(0,0,0,.8);
+  transition:opacity .45s ease, transform .45s ease;
+  pointer-events:none;
+}
+#scene.keyboard-open #hint{ opacity:.06; transform:translateX(-50%) translateY(12px); }
+#scene.keyboard-open #tools{ opacity:.45; }
+
+#tools{ position:absolute; top:3.2%; right:5%; z-index:10; display:flex; gap:1.1em; }
+.tool{ pointer-events:auto; cursor:pointer; font-size:3.4cqi; color:rgba(236,232,223,.42);
+  background:none; border:none; font-family:inherit; transition:color .5s ease; }
+.tool:hover{ color:rgba(246,220,160,.85); }
+
+#closing{
+  position:absolute; inset:0; z-index:11; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:0 12%; font-size:4.4cqi; font-style:italic; font-weight:300;
+  color:rgba(236,232,223,0); letter-spacing:.04em; pointer-events:none;
+  transition:color 3s ease; text-shadow:0 0 30px rgba(0,0,0,.8);
+}
+#closing.show{ color:rgba(236,232,223,.8); }
+
+@media (prefers-reduced-motion: reduce){ #grain,.w.active,#photo{ animation:none; } }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="scene">
+    <div class="layer" id="photo"></div>
+    <div class="layer" id="scrim"></div>
+    <canvas id="fx" class="layer"></canvas>
+    <div class="layer" id="vignette"></div>
+    <div class="layer" id="grain"></div>
+
+    <div id="closing"></div>
+    <div id="tools">
+      <button class="tool" id="mute" title="sonido">♪</button>
+      <button class="tool" id="restart" title="volver a empezar">↻</button>
+    </div>
+    <div id="hint">escribe la palabra iluminada + enter</div>
+
+    <!-- current verse/block + the centred input -->
+    <div id="core">
+      <div id="lyrics" aria-live="polite"></div>
+      <input id="field" type="text" inputmode="text"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </div>
+
+    <!-- AUDIO. Your song plays on the first tap; wind atmosphere fills under it.
+         FUTURE BPM SYNC: read document.getElementById('track').currentTime. -->
+    <audio id="track" preload="auto" loop>
+      <!-- Sube tu canción con EXACTAMENTE este nombre, junto al index.html. -->
+      <source src="olas.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+
+<script>
+/* ===== MODES (only EASY implemented) =====
+   EASY    : one word glows per moment; type it + Enter.          ← current
+   HARD    : every word must be typed. (future)
+   SYNCHRO : type on the musical beat — perfect/good/miss. (future) */
+const MODE = "EASY";
+
+/*
+   Editable lyric blocks. Next iteration: paste your timed verses here.
+   Each object can include target; if target is omitted, the code picks
+   a soft anchor word automatically.
+*/
+const VERSES = [
+  { start:0.0,  text:"Yo",                                     target:null },
+  { start:4.2,  text:"He llorado muchas lágrimas",             target:"lágrimas" },
+  { start:8.5,  text:"Hace tiempo el tiempo",                  target:"tiempo" },
+  { start:12.0, text:"No se torna azul",                       target:"azul" },
+  { start:16.0, text:"Y la oscuridad nostálgica",              target:"oscuridad" },
+  { start:20.0, text:"Si pudiera volver",                      target:"volver" },
+  { start:24.0, text:"No te soltaría nunca más",               target:"soltaría" },
+  { start:28.0, text:"Quiero bailar contigo",                  target:"bailar" },
+  { start:32.0, text:"Aunque sea solo una vez",                target:"vez" },
+  { start:36.0, text:"Saber que este es tu lugar",             target:"lugar" },
+  { start:40.0, text:"Si pudiera retroceder",                  target:"retroceder" },
+  { start:44.0, text:"No arrancaría la página",                target:"página" },
+  { start:48.0, text:"Las olas son testigo de que me enamoré", target:"enamoré" },
+  { start:52.0, text:"Esa danza nostálgica",                   target:"danza" },
+];
+
+const AUTO_SYNC = false; // ready for timed lyric blocks; keep false for this easy prototype.
+
+/* FUTURE: beat / BPM engine for SYNCHRO mode */
+const RHYTHM = { bpm:0, offsetMs:0, windows:{perfect:55,good:130},
+  beatLengthMs(){ return this.bpm?60000/this.bpm:0; },
+  beatAt(i){ return this.offsetMs + i*this.beatLengthMs(); } };
+
+/* One visible block at a time: each verse becomes its own screen block. */
+const STANZAS = VERSES.map(v => [v]);
+
+function pickTarget(text){
+  const words = text.split(/\s+/).filter(Boolean);
+  const softSkip = new Set(['yo','y','o','a','de','del','la','el','los','las','un','una','que','se','te','me','no','si','es','este','tu','mi']);
+  return [...words].sort((a,b)=>b.length-a.length).find(w=>!softSkip.has(norm(w))) || words[0] || null;
+}
+
+function verseIndexForTime(seconds){
+  let idx = 0;
+  for(let i=0;i<VERSES.length;i++){ if(seconds >= VERSES[i].start) idx = i; else break; }
+  return idx;
+}
+
+const scene   = document.getElementById('scene');
+const core    = document.getElementById('core');
+const lyricsEl= document.getElementById('lyrics');
+const field   = document.getElementById('field');
+const closing = document.getElementById('closing');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const vv      = window.visualViewport;
+
+let stanzaIdx=0, targets=[], cursor=-1, finished=false, switching=false, lyricScale=1;
+
+function norm(s){
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+          .replace(/[^a-z0-9ñ]/g,'').trim();
+}
+
+/* ---- Render ONE stanza ---- */
+function renderStanza(i){
+  lyricsEl.innerHTML=''; targets=[]; cursor=-1;
+  STANZAS[i].forEach(line=>{
+    const lineEl=document.createElement('div'); lineEl.className='line';
+    const target = line.target === undefined ? pickTarget(line.text) : line.target;
+    const words=line.text.split(' '); let claimed=false;
+    words.forEach((word,wi)=>{
+      const w=document.createElement('span'); w.className='w'; w.textContent=word;
+      if(target && !claimed && norm(word)===norm(target)){
+        claimed=true; targets.push({wordEl:w,lineEl,target});
+      }
+      lineEl.appendChild(w);
+      if(wi<words.length-1) lineEl.appendChild(document.createTextNode(' '));
+    });
+    lyricsEl.appendChild(lineEl);
+  });
+  placeCore();
+  lyricsEl.classList.remove('show'); void lyricsEl.offsetWidth; lyricsEl.classList.add('show');
+}
+
+/* ---- Keep the core centred in the VISIBLE area (above the keyboard) ---- */
+function placeCore(){
+  const vh = vv ? vv.height : window.innerHeight;
+  const off = vv ? vv.offsetTop : 0;
+  const keyboardOpen = vv ? vh < window.innerHeight * 0.78 : false;
+  scene.classList.toggle('keyboard-open', keyboardOpen);
+
+  // Keep current verse + input inside the visible area when the keyboard opens.
+  lyricScale = 1; lyricsEl.style.transform = 'scale(1)';
+  const avail = keyboardOpen ? vh * 0.42 : vh * 0.46;
+  if(lyricsEl.scrollHeight > avail){
+    lyricScale = Math.max(0.72, avail / lyricsEl.scrollHeight);
+    lyricsEl.style.transform = `scale(${lyricScale})`;
+  }
+
+  const anchor = keyboardOpen ? 0.42 : 0.48;
+  core.style.top = (off + vh*anchor) + 'px';
+}
+if(vv){ vv.addEventListener('resize', placeCore); vv.addEventListener('scroll', placeCore); }
+
+/* ---- Focus the active word; earlier lines recede ---- */
+function refocus(){
+  const activeLine = targets[cursor] ? targets[cursor].lineEl : null;
+  let passed=false;
+  [...lyricsEl.children].forEach(lineEl=>{
+    lineEl.classList.remove('active');
+    if(lineEl===activeLine){ lineEl.classList.add('active'); lineEl.classList.remove('spent'); passed=true; }
+    else if(!passed) lineEl.classList.add('spent');
+  });
+}
+
+/* ---- Illuminate next word (or move to next stanza) ---- */
+function illuminate(){
+  if(cursor>=0 && targets[cursor]) targets[cursor].wordEl.classList.remove('active');
+  cursor++;
+  if(cursor>=targets.length){ nextStanza(); return; }
+  targets[cursor].wordEl.classList.add('active');
+  refocus();
+  field.value='';
+  // FUTURE (SYNCHRO): schedule this on RHYTHM.beatAt(n) instead of immediately.
+}
+
+function nextStanza(){
+  switching=true;
+  lyricsEl.classList.remove('show');               // fade the stanza out
+  setTimeout(()=>{
+    stanzaIdx++;
+    if(stanzaIdx>=STANZAS.length){ endSequence(); return; }
+    renderStanza(stanzaIdx);
+    switching=false;
+    setTimeout(illuminate, 700);
+  }, 1200);
+}
+
+/* ---- Correct ---- */
+function solve(){
+  const t=targets[cursor];
+  t.wordEl.classList.remove('active','shake');
+  tearAway(t.wordEl);
+  t.wordEl.classList.add('ghost');
+  t.lineEl.classList.add('spent');
+  whoosh();
+  field.value='';
+  setTimeout(illuminate, 1150);          // a breath before the next word
+}
+
+/* ---- Wrong: a gentle shiver, no penalty ---- */
+function miss(){
+  if(cursor<0 || cursor>=targets.length) return;
+  targets[cursor].wordEl.classList.add('shake');
+  field.classList.add('wrong');
+  setTimeout(()=>{ targets[cursor] && targets[cursor].wordEl.classList.remove('shake'); field.classList.remove('wrong'); }, 460);
+}
+
+field.addEventListener('keydown', e=>{
+  if(e.key!=='Enter') return; e.preventDefault();
+  if(finished||switching||cursor<0||cursor>=targets.length) return;
+  if(norm(field.value)===norm(targets[cursor].target)) solve(); else miss();
+});
+
+/* tap anywhere -> keyboard (and wake the atmosphere) */
+scene.addEventListener('pointerdown', e=>{
+  if(e.target.closest('#tools')) return;
+  startAudio();
+  if(!finished) field.focus();
+});
+
+/* =================== TORN PAPER + WIND =================== */
+function tearAway(wordEl){
+  const sRect=scene.getBoundingClientRect();
+  const r=wordEl.getBoundingClientRect();
+  const x=r.left-sRect.left, y=r.top-sRect.top, w=r.width, h=r.height;
+  const fontPx=parseFloat(getComputedStyle(wordEl).fontSize)*lyricScale;
+  const word=wordEl.textContent;
+
+  const seg=9, pts=[];
+  for(let i=0;i<=seg;i++) pts.push([(i/seg)*100, 48+(Math.random()*12-6)]);
+  const tear=[...pts].reverse().map(p=>`${p[0]}% ${p[1]}%`).join(',');
+  const topClip=`polygon(0% 0%, 100% 0%, ${tear})`;
+  const bottomClip=`polygon(0% 100%, 100% 100%, ${tear})`;
+  const wind=windNow();
+
+  [['top',topClip,-1],['bottom',bottomClip,1]].forEach(([id,clip,dir])=>{
+    const frag=document.createElement('div'); frag.className='fragment'; frag.textContent=word;
+    Object.assign(frag.style,{ left:x+'px',top:y+'px',width:w+'px',height:h+'px',
+      fontSize:fontPx+'px', clipPath:clip, webkitClipPath:clip });
+    scene.appendChild(frag);
+    if(reduced){
+      frag.animate([{opacity:1},{opacity:0}],{duration:1300,fill:'forwards'});
+      setTimeout(()=>frag.remove(),1400); return;
+    }
+    const driftX=(60+Math.random()*75)*(0.75+wind*0.35);
+    const rise=46+Math.random()*58;
+    const sink=10+Math.random()*22;
+    const rot=(5+Math.random()*10)*(dir<0?-1:1);
+    const sway=(Math.random()*26-13);
+    frag.animate([
+      {transform:'translate(0,0) rotate(0)',filter:'blur(0)',opacity:1,offset:0},
+      {transform:`translate(${driftX*0.10}px,${dir*3 + sink*0.12}px) rotate(${rot*0.12}deg)`,opacity:.98,offset:0.18},
+      {transform:`translate(${driftX*0.42 + sway}px,${-rise*0.28 + sink}px) rotate(${rot*0.46}deg)`,filter:'blur(.25px)',opacity:.9,offset:0.56},
+      {transform:`translate(${driftX}px,${-rise + sink}px) rotate(${rot}deg)`,filter:'blur(1px)',opacity:0,offset:1}
+    ],{duration:3600+Math.random()*900,easing:'cubic-bezier(.18,.72,.18,1)',fill:'forwards'});
+    setTimeout(()=>frag.remove(),4700);
+  });
+  spawnPaper(x+w/2, y+h/2, Math.min(12, Math.round(w/6)));
+}
+
+function endSequence(){
+  finished=true; field.blur(); field.style.opacity='0';
+  lyricsEl.classList.remove('show');
+  closing.textContent='el viento se llevó las palabras';
+  setTimeout(()=>closing.classList.add('show'), 900);
+}
+
+/* =================== CANVAS: spray + paper + wind =================== */
+const cv=document.getElementById('fx'), ctx=cv.getContext('2d');
+let W=0,H=0,dpr=1,tms=0; const motes=[], paper=[];
+function sizeCanvas(){
+  dpr=Math.min(2,window.devicePixelRatio||1);
+  W=scene.clientWidth; H=scene.clientHeight;
+  cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(motes.length===0){ const n=reduced?8:20; for(let i=0;i<n;i++) motes.push(newMote(true)); }
+}
+function newMote(spread){ return { x:Math.random()*W, y:spread?Math.random()*H:H+10,
+  r:.6+Math.random()*1.5, a:.04+Math.random()*.1, vy:.08+Math.random()*.16, ph:Math.random()*6.28 }; }
+function spawnPaper(x,y,count){ for(let i=0;i<count;i++) paper.push({ x,y,
+  vx:(Math.random()*0.55+0.12), vy:-(Math.random()*0.42+0.06), g:0.0025+Math.random()*0.0035,
+  wob:Math.random()*6.28, rot:Math.random()*Math.PI, vr:(Math.random()-.5)*0.035, size:2.0+Math.random()*3.2, a:.82 }); }
+
+/* Global gentle wind, mostly rightward — drives paper, spray and drift */
+function windNow(){ return 0.55+0.35*Math.sin(tms*0.00045)+0.12*Math.sin(tms*0.0011+1.2); }
+
+function frame(ts){
+  tms=ts; const wind=windNow();
+  ctx.clearRect(0,0,W,H);
+  // faint sea spray drifting up on the wind
+  ctx.fillStyle='#dfeaee';
+  motes.forEach(m=>{
+    m.y-=m.vy; m.x+=Math.sin(m.ph+ts*0.0006)*0.18+wind*0.25; m.ph+=0.01;
+    if(m.y<-8||m.x>W+8){ Object.assign(m,newMote(false)); m.x=-8; }
+    ctx.globalAlpha=m.a; ctx.beginPath(); ctx.arc(m.x,m.y,m.r,0,6.283); ctx.fill();
+  });
+  ctx.globalAlpha=1;
+  // torn paper flecks
+  for(let i=paper.length-1;i>=0;i--){ const p=paper[i];
+    p.vy+=p.g; p.vx+=wind*0.006; p.wob+=0.025;
+    p.x+=p.vx + Math.sin(p.wob)*0.18; p.y+=p.vy + Math.cos(p.wob*0.7)*0.05;
+    p.rot+=p.vr; p.a-=0.0028;
+    if(p.a<=0||p.x>W+28||p.y<-28){ paper.splice(i,1); continue; }
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=Math.max(0,p.a);
+    ctx.fillStyle='#efe7d6'; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.7); ctx.restore();
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(frame);
+}
+
+/* =================== AUDIO (song + procedural wind) =================== */
+let actx=null,master=null,audioOn=true,audioStarted=false;
+function hasSong(){ const s=document.querySelector('#track source'); return !!(s&&s.getAttribute('src')); }
+function startAudio(){
+  if(audioStarted||!audioOn) return; audioStarted=true;
+  const track=document.getElementById('track');
+  if(hasSong()){ track.volume=0.9; track.play().catch(()=>{}); }   // THE SONG, on first gesture
+  try{
+    actx=new (window.AudioContext||window.webkitAudioContext)();
+    master=actx.createGain(); master.gain.value=0.0; master.connect(actx.destination);
+    const buf=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate); const d=buf.getChannelData(0);
+    let last=0; for(let i=0;i<d.length;i++){ const wn=Math.random()*2-1; d[i]=(last+0.02*wn)/1.02; last=d[i]; d[i]*=3.2; }
+    const noise=actx.createBufferSource(); noise.buffer=buf; noise.loop=true;
+    const bp=actx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=420; bp.Q.value=0.7;
+    const lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900;
+    const wg=actx.createGain(); wg.gain.value=0.5;
+    noise.connect(bp); bp.connect(lp); lp.connect(wg); wg.connect(master);
+    const lfo=actx.createOscillator(); lfo.frequency.value=0.05;
+    const lg=actx.createGain(); lg.gain.value=260; lfo.connect(lg); lg.connect(bp.frequency);
+    const o1=actx.createOscillator(); o1.frequency.value=58;
+    const o2=actx.createOscillator(); o2.frequency.value=58.6;
+    const dg=actx.createGain(); dg.gain.value=0.06; o1.connect(dg); o2.connect(dg); dg.connect(master);
+    noise.start(); lfo.start(); o1.start(); o2.start();
+    master.gain.linearRampToValueAtTime(hasSong()?0.05:0.22, actx.currentTime+4);
+  }catch(e){}
+}
+function whoosh(){
+  if(!actx||!audioOn) return;
+  try{
+    const b=actx.createBuffer(1,actx.sampleRate*0.9,actx.sampleRate); const d=b.getChannelData(0);
+    for(let i=0;i<d.length;i++){ const t=i/d.length; d[i]=(Math.random()*2-1)*(1-t)*(1-t); }
+    const s=actx.createBufferSource(); s.buffer=b;
+    const f=actx.createBiquadFilter(); f.type='highpass'; f.frequency.value=600;
+    const g=actx.createGain(); g.gain.value=0; s.connect(f); f.connect(g); g.connect(master);
+    const now=actx.currentTime;
+    g.gain.linearRampToValueAtTime(0.18,now+0.05); g.gain.exponentialRampToValueAtTime(0.001,now+0.8);
+    s.start();
+  }catch(e){}
+}
+
+document.getElementById('mute').addEventListener('click', e=>{
+  audioOn=!audioOn; e.target.textContent=audioOn?'♪':'⊘';
+  const track=document.getElementById('track');
+  if(master) master.gain.linearRampToValueAtTime(audioOn?(hasSong()?0.05:0.22):0.0,(actx?actx.currentTime:0)+0.6);
+  if(track){ audioOn ? (audioStarted&&track.play().catch(()=>{})) : track.pause(); }
+  if(audioOn&&!audioStarted) startAudio();
+});
+document.getElementById('restart').addEventListener('click', ()=>start());
+
+document.getElementById('track').addEventListener('timeupdate', e=>{
+  if(!AUTO_SYNC || finished || switching) return;
+  const idx = verseIndexForTime(e.target.currentTime);
+  if(idx !== stanzaIdx && idx < STANZAS.length){
+    stanzaIdx = idx; renderStanza(stanzaIdx); illuminate();
+  }
+});
+
+/* =================== BOOT =================== */
+function start(){
+  finished=false; switching=false; stanzaIdx=0;
+  closing.classList.remove('show'); closing.textContent='';
+  field.value=''; field.style.opacity='1';
+  renderStanza(0); placeCore();
+  setTimeout(illuminate, reduced?500:1700);
+  setTimeout(()=>{ if(!finished) field.focus(); }, 250);
+  const t=document.getElementById('track'); if(t&&audioStarted&&audioOn){ t.currentTime=0; t.play().catch(()=>{}); }
+}
+window.addEventListener('resize', ()=>{ sizeCanvas(); placeCore(); });
+sizeCanvas();
+requestAnimationFrame(frame);
+start();
+</script>
+</body>
+</html>

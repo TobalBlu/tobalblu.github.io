@@ -14,6 +14,7 @@
       min-height: 100vh;
     }
 
+    /* ===== SELECTOR DE PROYECTOS (sin cambios) ===== */
     .selector {
       display: flex;
       width: 100%;
@@ -30,6 +31,7 @@
     }
 
     .proyecto:hover { flex: 2.5; }
+    .proyecto.expandido { flex: 2.5; }
 
     .proyecto-bg {
       position: absolute;
@@ -97,11 +99,12 @@
       background: #1a1a1a;
     }
 
+    /* ===== PÁGINA DE PROYECTO ===== */
     .proyecto-page {
       display: none;
       min-height: 100vh;
       padding: 3rem 2rem;
-      max-width: 600px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
@@ -120,16 +123,6 @@
 
     .back:hover { color: #aaa; }
 
-    .proyecto-header { margin-bottom: 2.5rem; }
-
-    .proyecto-header img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      filter: brightness(0.8);
-      margin-bottom: 1.5rem;
-    }
-
     .proyecto-titulo {
       font-size: 11px;
       letter-spacing: 0.25em;
@@ -142,7 +135,7 @@
       display: flex;
       gap: 1.5rem;
       flex-wrap: wrap;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
     }
 
     .plataformas a {
@@ -158,67 +151,80 @@
 
     .plataformas a:hover { color: #ccc; border-color: #555; }
 
-    .songs-section { margin-top: 2rem; }
+    /* ===== CAJONES POR AÑO ===== */
+    .crates {
+      display: flex;
+      gap: 3rem;
+      overflow-x: auto;
+      padding: 4rem 1rem 2rem 1rem;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+    }
 
-    .songs-label {
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #333;
-      margin-bottom: 1.5rem;
+    .crates::-webkit-scrollbar { height: 4px; }
+    .crates::-webkit-scrollbar-track { background: #0f0f0f; }
+    .crates::-webkit-scrollbar-thumb { background: #222; }
+
+    .year-col {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .crate {
+      position: relative;
+      width: 220px;
+      perspective: 900px;
+      /* altura la fija JS según cantidad de discos */
+    }
+
+    .disco {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 220px;
+      height: 220px;
+      transform-style: preserve-3d;
+      transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.3, 1),
+                  filter 0.45s ease;
       cursor: pointer;
-      transition: color 0.3s;
     }
 
-    .songs-label:hover { color: #888; }
-
-    .carrusel { display: none; }
-    .carrusel.active { display: block; }
-
-    .cancion-actual {
-      padding: 1.5rem 0;
-      border-top: 0.5px solid #1a1a1a;
-      border-bottom: 0.5px solid #1a1a1a;
+    .disco img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border: 0.5px solid #1e1e1e;
+      background: #111;
     }
 
-    .cancion-nombre {
-      font-size: 15px;
-      color: #ddd;
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.05em;
+    .year-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: #555;
+      margin-top: 1.4rem;
     }
 
-    .cancion-meta {
+    .disco-caption {
       font-size: 9px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: #444;
+      margin-top: 0.6rem;
+      text-align: center;
+      min-height: 2.2em;
+      max-width: 220px;
     }
 
-    .flechas {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 1.2rem;
-    }
-
-    .flecha {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #333;
-      cursor: pointer;
-      transition: color 0.3s;
-      user-select: none;
-    }
-
-    .flecha:hover { color: #aaa; }
-    .flecha.disabled { color: #1a1a1a; pointer-events: none; }
-
-    .cancion-counter {
-      font-size: 9px;
-      color: #2a2a2a;
-      letter-spacing: 0.15em;
-      margin-top: 0.8rem;
+    @media (max-width: 600px) {
+      .crate, .disco { width: 160px; }
+      .disco { height: 160px; }
+      .disco-caption { max-width: 160px; }
+      .crates { gap: 2rem; }
+      .proyecto-page { padding: 2.5rem 1.2rem; }
     }
 
     .home-link {
@@ -235,7 +241,6 @@
     }
 
     .home-link:hover { color: #888; }
-    .proyecto.expandido { flex: 2.5; }
   </style>
 </head>
 <body>
@@ -243,7 +248,6 @@
 <a class="home-link" href="index.html">← inicio</a>
 
 <div class="selector" id="selector">
-
   <div class="proyecto" data-id="tobalblu">
     <div class="proyecto-bg" style="background-image: url('img/tobalbluproject.jpg')"></div>
     <div class="proyecto-overlay"></div>
@@ -253,7 +257,6 @@
     </div>
     <div class="divider"></div>
   </div>
-
   <div class="proyecto" data-id="resonancia">
     <div class="proyecto-bg" style="background-image: url('img/resonanciaetereaproject.jpg')"></div>
     <div class="proyecto-overlay"></div>
@@ -263,7 +266,6 @@
     </div>
     <div class="divider"></div>
   </div>
-
   <div class="proyecto" data-id="kiddvoodoo">
     <div class="proyecto-bg" style="background-image: url('img/kiddvoodooproject.jpeg')"></div>
     <div class="proyecto-overlay"></div>
@@ -272,149 +274,258 @@
       <div class="proyecto-enter">entrar →</div>
     </div>
   </div>
-
 </div>
 
 <div class="proyecto-page" id="page-tobalblu">
   <span class="back" data-back="true">← música</span>
-  <div class="proyecto-header">
-    <img src="img/tobalbluproject.jpg" alt="Tobal Blu">
-    <div class="proyecto-titulo">Tobal Blu</div>
-    <div class="plataformas">
-      <a href="https://open.spotify.com/intl-es/artist/7yn8ZILVwbXPJGReR802LM" target="_blank">Spotify</a>
-      <a href="https://music.apple.com/cl/artist/tobal-blu/1723087834" target="_blank">Apple Music</a>
-      <a href="https://www.youtube.com/@TobalBlu" target="_blank">YouTube</a>
-    </div>
+  <div class="proyecto-titulo">Tobal Blu</div>
+  <div class="plataformas">
+    <a href="https://open.spotify.com/intl-es/artist/7yn8ZILVwbXPJGReR802LM" target="_blank">Spotify</a>
+    <a href="https://music.apple.com/cl/artist/tobal-blu/1723087834" target="_blank">Apple Music</a>
+    <a href="https://www.youtube.com/@TobalBlu" target="_blank">YouTube</a>
   </div>
-  <div class="songs-section">
-    <div class="songs-label" data-carrusel="carrusel-tobalblu">songs</div>
-    <div class="carrusel" id="carrusel-tobalblu">
-      <div class="cancion-actual">
-        <div class="cancion-nombre" id="nombre-tobalblu"></div>
-        <div class="cancion-meta" id="meta-tobalblu"></div>
-        <div class="flechas">
-          <span class="flecha" id="up-tobalblu" data-proyecto="tobalblu" data-dir="-1">↑ anterior</span>
-          <span class="flecha" id="down-tobalblu" data-proyecto="tobalblu" data-dir="1">↓ siguiente</span>
-        </div>
-        <div class="cancion-counter" id="counter-tobalblu"></div>
-      </div>
-    </div>
-  </div>
+  <div class="crates" id="crates-tobalblu"></div>
 </div>
 
 <div class="proyecto-page" id="page-resonancia">
   <span class="back" data-back="true">← música</span>
-  <div class="proyecto-header">
-    <img src="img/resonanciaetereaproject.jpg" alt="Resonancia Etérea">
-    <div class="proyecto-titulo">Resonancia Etérea</div>
-    <div class="plataformas">
-      <a href="https://open.spotify.com/intl-es/artist/7cD8IM5x8k0vTOgY4kQzuB" target="_blank">Spotify</a>
-      <a href="https://stage.tidal.com/artist/15794288" target="_blank">Tidal</a>
-      <a href="https://music.apple.com/cl/artist/resonancia-etérea/1463912586" target="_blank">Apple Music</a>
-      <a href="https://www.youtube.com/@ResonanciaEtérea" target="_blank">YouTube</a>
-    </div>
+  <div class="proyecto-titulo">Resonancia Etérea</div>
+  <div class="plataformas">
+    <a href="https://open.spotify.com/intl-es/artist/7cD8IM5x8k0vTOgY4kQzuB" target="_blank">Spotify</a>
+    <a href="https://stage.tidal.com/artist/15794288" target="_blank">Tidal</a>
+    <a href="https://music.apple.com/cl/artist/resonancia-etérea/1463912586" target="_blank">Apple Music</a>
+    <a href="https://www.youtube.com/@ResonanciaEtérea" target="_blank">YouTube</a>
   </div>
-  <div class="songs-section">
-    <div class="songs-label" data-carrusel="carrusel-resonancia">songs</div>
-    <div class="carrusel" id="carrusel-resonancia">
-      <div class="cancion-actual">
-        <div class="cancion-nombre" id="nombre-resonancia"></div>
-        <div class="cancion-meta" id="meta-resonancia"></div>
-        <div class="flechas">
-          <span class="flecha" id="up-resonancia" data-proyecto="resonancia" data-dir="-1">↑ anterior</span>
-          <span class="flecha" id="down-resonancia" data-proyecto="resonancia" data-dir="1">↓ siguiente</span>
-        </div>
-        <div class="cancion-counter" id="counter-resonancia"></div>
-      </div>
-    </div>
-  </div>
+  <div class="crates" id="crates-resonancia"></div>
 </div>
 
 <div class="proyecto-page" id="page-kiddvoodoo">
   <span class="back" data-back="true">← música</span>
-  <div class="proyecto-header">
-    <img src="img/kiddvoodooproject.jpeg" alt="Kidd Voodoo">
-    <div class="proyecto-titulo">Kidd Voodoo</div>
-    <div class="plataformas">
-      <a href="https://open.spotify.com/intl-es/artist/10VBp06W8NIgMW4JruLCC4" target="_blank">Spotify</a>
-      <a href="https://tidal.com/artist/17896230/" target="_blank">Tidal</a>
-      <a href="https://music.apple.com/cl/artist/kidd-voodoo/1493258622" target="_blank">Apple Music</a>
-      <a href="https://www.youtube.com/@KiddVoodoo" target="_blank">YouTube</a>
-    </div>
+  <div class="proyecto-titulo">Kidd Voodoo</div>
+  <div class="plataformas">
+    <a href="https://open.spotify.com/intl-es/artist/10VBp06W8NIgMW4JruLCC4" target="_blank">Spotify</a>
+    <a href="https://tidal.com/artist/17896230/" target="_blank">Tidal</a>
+    <a href="https://music.apple.com/cl/artist/kidd-voodoo/1493258622" target="_blank">Apple Music</a>
+    <a href="https://www.youtube.com/@KiddVoodoo" target="_blank">YouTube</a>
   </div>
-  <div class="songs-section">
-    <div class="songs-label" data-carrusel="carrusel-kiddvoodoo">songs</div>
-    <div class="carrusel" id="carrusel-kiddvoodoo">
-      <div class="cancion-actual">
-        <div class="cancion-nombre" id="nombre-kiddvoodoo"></div>
-        <div class="cancion-meta" id="meta-kiddvoodoo"></div>
-        <div class="flechas">
-          <span class="flecha" id="up-kiddvoodoo" data-proyecto="kiddvoodoo" data-dir="-1">↑ anterior</span>
-          <span class="flecha" id="down-kiddvoodoo" data-proyecto="kiddvoodoo" data-dir="1">↓ siguiente</span>
-        </div>
-        <div class="cancion-counter" id="counter-kiddvoodoo"></div>
-      </div>
-    </div>
-  </div>
+  <div class="crates" id="crates-kiddvoodoo"></div>
 </div>
 
 <script>
-var canciones = {
+/* ===== DATOS ===== */
+var lanzamientos = {
   tobalblu: [
-    { nombre: "Sorbo de valentia", album: "Single", fecha: "dic 2023" },
-    { nombre: "No espero!", album: "Single", fecha: "feb 2024" },
-    { nombre: "Dime dime dime (Acoustic)", album: "Dime dime dime", fecha: "abr 2024" },
-    { nombre: "Dime dime dime", album: "Single", fecha: "abr 2024" },
-    { nombre: "Dime dime dime", album: "Imaginacion y Pausa", fecha: "abr 2025" },
-    { nombre: "Diamantes en el camino", album: "Imaginacion y Pausa", fecha: "may 2025" },
-    { nombre: "Tanto carino", album: "Imaginacion y Pausa", fecha: "may 2025" },
-    { nombre: "Erizas mi piel", album: "Imaginacion y Pausa", fecha: "may 2025" },
-    { nombre: "Creo que me equivoque", album: "Imaginacion y Pausa", fecha: "may 2025" },
-    { nombre: "Vives en mi", album: "Imaginacion y Pausa", fecha: "may 2025" },
-    { nombre: "Barcos varados", album: "Single", fecha: "mar 2026" }
+    { titulo: "Sorbo de valentía", tipo: "single", fecha: "2023-12", display: "dic 2023",
+      portada: "img/sorbo-de-valentia.jpg", destacado: true,
+      canciones: ["Sorbo de valentía"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/track/5umg6ITTfC1cAV6gxD6tvT?si=3a9606bad29949ee",
+               "Tidal": "https://tidal.com/album/337298490",
+               "Apple Music": "https://music.apple.com/cl/album/sorbo-de-valent%C3%ADa-single/1723212570" } },
+    { titulo: "No espero!", tipo: "single", fecha: "2024-02", display: "feb 2024",
+      portada: "img/no-espero.png", destacado: true,
+      canciones: ["No espero!"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/track/38n8ATbvxcOWNRsoXUSrk9?si=dd83ed1407104223",
+               "Tidal": "https://tidal.com/track/347593279/",
+               "Apple Music": "https://music.apple.com/cl/album/no-espero-single/1733040095" } },
+    { titulo: "Dime dime dime", tipo: "single", fecha: "2024-04", display: "abr 2024",
+      portada: "img/dime-dime-dime.jpg", destacado: false,
+      canciones: ["Dime dime dime", "Dime dime dime (acoustic)"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/2ELaLpYZmNM3kBX62jwKOO?si=pEjZmSk1SNGTv9kwWe5qWA",
+               "Tidal": "https://tidal.com/track/360325875/",
+               "Apple Music": "https://music.apple.com/cl/album/dime-dime-dime-single/1743900753" } },
+    { titulo: "Imaginación y Pausa", tipo: "álbum", fecha: "2025-05", display: "may 2025",
+      portada: "img/imaginacion-y-pausa.jpg", destacado: true,
+      canciones: ["Dime dime dime", "Diamantes en el camino", "Tanto cariño", "Erizas mi piel", "Creo que me equivoqué", "Vives en mí"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/0cyrbPLHz8h8bgz0ygHhiM?si=e04d66588a844d46",
+               "Tidal": "https://tidal.com/album/365677197/u",
+               "Apple Music": "https://music.apple.com/cl/album/imaginaci%C3%B3n-y-pausa-ep/1748558454" } },
+    { titulo: "Barcos varados", tipo: "single", fecha: "2026-03", display: "mar 2026",
+      portada: "img/barcos-varados.jpeg", destacado: true,
+      canciones: ["Barcos varados"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/track/5OcO4VTl53YfkZ2XRnfN8p?si=78674394ee0e4955",
+               "Tidal": "https://tidal.com/album/498760002/u",
+               "Apple Music": "https://music.apple.com/cl/album/barcos-varados-single/1877097045" } }
   ],
   resonancia: [
-    { nombre: "Jamas", album: "Single", fecha: "jun 2019" },
-    { nombre: "Cuervo", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Arbol", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Y podria", album: "Luces", fecha: "jul 2020" },
-    { nombre: "A lo que haria yo", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Hawaiiana", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Sombra", album: "Luces", fecha: "jul 2020" },
-    { nombre: "Quema las estrellas", album: "Single", fecha: "ago 2022" },
-    { nombre: "Al borde", album: "Single", fecha: "oct 2022" },
-    { nombre: "Confortas pero danas", album: "Single", fecha: "feb 2023" },
-    { nombre: "Me quedo en esa vez", album: "Single", fecha: "dic 2024" },
-    { nombre: "perdamonos", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "Frio", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "La Verdad", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "Noviembre", album: "Satirologia Deluxe", fecha: "ago 2025" }
+    { titulo: "Jamás", tipo: "single", fecha: "2019-06", display: "jun 2019",
+      portada: "img/jamas.jpg", destacado: true,
+      canciones: ["Jamás"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/1Pp3OKZKswHCXjg3TuuBWq?si=f3abf3b81f2e4513",
+               "Tidal": "https://tidal.com/album/109535340/u",
+               "Apple Music": "https://music.apple.com/cl/album/jam%C3%A1s-single/1464088505" } },
+    { titulo: "Árbol", tipo: "single", fecha: "2020-05", display: "may 2020",
+      portada: "img/arbol.jpg", destacado: false,
+      canciones: ["Árbol"],
+      links: { "Spotify": "https://open.spotify.com/album/1mLnrSTKqWKRrIOypWYmsz",
+               "Apple Music": "https://music.apple.com/us/album/%C3%A1rbol-single/1512022155?uo=4&app=music&at=1001lry3&ct=dashboard",
+               "Tidal": "https://tidal.com/album/140241898/u" } },
+    { titulo: "Sombra", tipo: "single", fecha: "2020-05", display: "may 2020",
+      portada: "img/sombra.jpg", destacado: false,
+      canciones: ["Sombra"],
+      links: { "Spotify": "https://open.spotify.com/album/2gTggZGHJkn4GCice40Zhq",
+               "Apple Music": "https://music.apple.com/us/album/sombra-feat-valen-single/1514317251?uo=4&app=music&at=1001lry3&ct=dashboard",
+               "Tidal": "https://tidal.com/album/252992616/u" } },
+    { titulo: "Y podría", tipo: "single", fecha: "2020-06", display: "jun 2020",
+      portada: "img/y-podria.jpg", destacado: true,
+      canciones: ["Y podría"],
+      links: { "Spotify": "https://open.spotify.com/album/2cmmKyOAj6m4xNT9ajAQUi",
+               "Apple Music": "https://music.apple.com/us/album/y-podr%C3%ADa-single/1517923816?uo=4&app=music&at=1001lry3&ct=dashboard",
+               "Tidal": "https://tidal.com/album/144688459/" } },
+    { titulo: "Luces", tipo: "álbum", fecha: "2020-07", display: "jul 2020",
+      portada: "img/luces.jpg", destacado: false,
+      canciones: ["Cuervo", "Árbol", "Y podría", "A lo que haría yo", "Hawaiiana", "Sombra"],
+      links: { "Apple Music": "https://music.apple.com/cl/album/luces/1522187928",
+               "Spotify": "https://open.spotify.com/intl-es/album/0fQL7rlOvHNaSCVKudDDae?si=b0f20df2dc0d4680",
+               "Tidal": "https://tidal.com/album/147580818/" } },
+    { titulo: "Quema las estrellas", tipo: "single", fecha: "2022-07", display: "jul 2022",
+      portada: "img/quema-las-estrellas.jpg", destacado: true,
+      canciones: ["Quema las estrellas"],
+      links: { "Spotify": "https://open.spotify.com/album/3jJSZ03dxbChLZU2Hsuxxp",
+               "Apple Music": "https://music.apple.com/us/album/quema-las-estrellas-single/1635011707?uo=4&app=music&at=1001lry3&ct=dashboard",
+               "Tidal": "https://tidal.com/track/238348667/" } },
+    { titulo: "Al borde", tipo: "single", fecha: "2022-10", display: "oct 2022",
+      portada: "img/al-borde.jpeg", destacado: false,
+      canciones: ["Al borde"],
+      links: { "Spotify": "https://open.spotify.com/album/6Wq3QLZYwed7ckVxZPrFo2",
+               "Apple Music": "https://music.apple.com/us/album/al-borde-single/1649000808?uo=4&app=music&at=1001lry3&ct=dashboard",
+               "Tidal": "https://tidal.com/track/252992618/" } },
+    { titulo: "Confortas pero dañas", tipo: "single", fecha: "2023-02", display: "feb 2023",
+      portada: "img/confortas-pero-danas.jpeg", destacado: true,
+      canciones: ["Confortas pero dañas"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/track/72PMAMYZYL060JML0S3khc?si=2bd9bae6515d463b",
+               "Apple Music": "https://music.apple.com/cl/album/confortas-pero-da%C3%B1as-single/1730515006",
+               "Tidal": "https://tidal.com/album/345083202/" } },
+    { titulo: "Me quedo en esa vez", tipo: "single", fecha: "2024-12", display: "dic 2024",
+      portada: "img/me-quedo-en-esa-vez.jpeg", destacado: true,
+      canciones: ["Me quedo en esa vez"],
+      links: { "Apple Music": "https://music.apple.com/cl/album/me-quedo-en-esa-vez-single/1783188103",
+               "Spotify": "https://open.spotify.com/intl-es/track/0k5042F1mNvzivmbM0HgsR?si=a4faedf396284f3b" } },
+    { titulo: "Satirología Vol 3", tipo: "álbum", fecha: "2025-06", display: "jun 2025",
+      portada: "img/satirologia.jpeg", destacado: false,
+      canciones: ["perdámonos", "Frío", "La Verdad"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/6n3yGfhOtfklDdHxcGYsel?si=T__MVHePQXy7cr2W0-JWVA",
+               "Tidal": "https://tidal.com/album/422337125/",
+               "Apple Music": "https://music.apple.com/cl/album/satirolog%C3%ADa-vol-3/1797811349" } },
+    { titulo: "Noviembre", tipo: "track · Satirología Deluxe", fecha: "2025-08", display: "ago 2025",
+      portada: "img/noviembre.jpeg", destacado: true,
+      canciones: ["Noviembre"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/6n3yGfhOtfklDdHxcGYsel?si=T__MVHePQXy7cr2W0-JWVA",
+               "Tidal": "https://tidal.com/album/452899912/",
+               "Apple Music": "https://music.apple.com/cl/album/satirolog%C3%ADa-deluxe-edition/1829998955" } }
   ],
   kiddvoodoo: [
-    { nombre: "Me quedo en esa vez", album: "Single", fecha: "dic 2024" },
-    { nombre: "perdamonos", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "Debo Aterrizar", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "Frio", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "La Verdad", album: "Satirologia Vol 3", fecha: "mar 2025" },
-    { nombre: "Noviembre", album: "Satirologia Deluxe", fecha: "ago 2025" },
-    { nombre: "Poder quererme", album: "Euforia", fecha: "feb 2026" },
-    { nombre: "En el suelo", album: "Euforia", fecha: "may 2026" }
+    { titulo: "Confortas pero dañas", tipo: "single", fecha: "2023-02", display: "feb 2023",
+      portada: "img/confortas-pero-danas.jpeg", destacado: true,
+      canciones: ["Confortas pero dañas"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/track/72PMAMYZYL060JML0S3khc?si=2bd9bae6515d463b",
+               "Apple Music": "https://music.apple.com/cl/album/confortas-pero-da%C3%B1as-single/1730515006",
+               "Tidal": "https://tidal.com/album/345083202/" } },
+    { titulo: "Me quedo en esa vez", tipo: "single", fecha: "2024-12", display: "dic 2024",
+      portada: "img/me-quedo-en-esa-vez.jpeg", destacado: true,
+      canciones: ["Me quedo en esa vez"],
+      links: { "Apple Music": "https://music.apple.com/cl/album/me-quedo-en-esa-vez-single/1783188103",
+               "Spotify": "https://open.spotify.com/intl-es/track/0k5042F1mNvzivmbM0HgsR?si=a4faedf396284f3b" } },
+    { titulo: "Satirología Vol 3", tipo: "álbum", fecha: "2025-06", display: "jun 2025",
+      portada: "img/satirologia.jpeg", destacado: true,
+      canciones: ["perdámonos", "Frío", "La Verdad"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/6n3yGfhOtfklDdHxcGYsel?si=T__MVHePQXy7cr2W0-JWVA",
+               "Tidal": "https://tidal.com/album/422337125/",
+               "Apple Music": "https://music.apple.com/cl/album/satirolog%C3%ADa-vol-3/1797811349" } },
+    { titulo: "Noviembre", tipo: "track · Satirología Deluxe", fecha: "2025-08", display: "ago 2025",
+      portada: "img/noviembre.jpeg", destacado: false,
+      canciones: ["Noviembre"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/6n3yGfhOtfklDdHxcGYsel?si=T__MVHePQXy7cr2W0-JWVA",
+               "Tidal": "https://tidal.com/album/452899912/",
+               "Apple Music": "https://music.apple.com/cl/album/satirolog%C3%ADa-deluxe-edition/1829998955" } },
+    { titulo: "Poder quererme", tipo: "single", fecha: "2026-02", display: "feb 2026",
+      portada: "img/poder-quererme.jpg", destacado: true,
+      canciones: ["Poder quererme"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/4DxyXoUaJ7fYUAC0FyShHI?si=79ff17ad7d004bbc",
+               "Apple Music": "https://music.apple.com/cl/album/euforia/1896074751",
+               "Tidal": "https://tidal.com/album/523559168/" } },
+    { titulo: "Euforia", tipo: "álbum", fecha: "2026-05", display: "may 2026",
+      portada: "img/euforia.jpeg", destacado: false,
+      canciones: ["Poder quererme", "En el suelo"],
+      links: { "Spotify": "https://open.spotify.com/intl-es/album/4DxyXoUaJ7fYUAC0FyShHI?si=79ff17ad7d004bbc",
+               "Apple Music": "https://music.apple.com/cl/album/euforia/1896074751",
+               "Tidal": "https://tidal.com/album/523559168/" } }
   ]
 };
 
-var indices = { tobalblu: 0, resonancia: 0, kiddvoodoo: 0 };
+/* ===== RENDER DE CAJONES ===== */
+var PEEK = 46;    /* px que asoma cada disco trasero */
+var DEPTH = 55;   /* profundidad Z entre discos */
+var TILT = 7;     /* inclinación X en grados */
 
-function mostrarCancion(proyecto) {
-  var lista = canciones[proyecto];
-  var i = indices[proyecto];
-  var c = lista[i];
-  document.getElementById('nombre-' + proyecto).textContent = c.nombre;
-  document.getElementById('meta-' + proyecto).textContent = c.album + ' · ' + c.fecha;
-  document.getElementById('counter-' + proyecto).textContent = (i + 1) + ' / ' + lista.length;
-  document.getElementById('up-' + proyecto).className = 'flecha' + (i === 0 ? ' disabled' : '');
-  document.getElementById('down-' + proyecto).className = 'flecha' + (i === lista.length - 1 ? ' disabled' : '');
+function renderCrates(proyecto) {
+  var contenedor = document.getElementById('crates-' + proyecto);
+  if (contenedor.childNodes.length > 0) return; /* ya renderizado */
+
+  var lista = lanzamientos[proyecto].slice().sort(function(a, b) {
+    return a.fecha < b.fecha ? -1 : 1;
+  });
+
+  /* agrupar por año */
+  var porAno = {};
+  lista.forEach(function(l) {
+    var ano = l.fecha.slice(0, 4);
+    if (!porAno[ano]) porAno[ano] = [];
+    porAno[ano].push(l);
+  });
+
+  Object.keys(porAno).sort().forEach(function(ano) {
+    var discos = porAno[ano];
+
+    /* destacado al frente, el resto detrás en orden cronológico */
+    var frente = discos.findIndex(function(d) { return d.destacado; });
+    if (frente === -1) frente = 0;
+    var orden = [discos[frente]].concat(
+      discos.filter(function(d, i) { return i !== frente; })
+    );
+
+    var col = document.createElement('div');
+    col.className = 'year-col';
+
+    var crate = document.createElement('div');
+    crate.className = 'crate';
+    var discoSize = window.innerWidth <= 600 ? 160 : 220;
+    crate.style.height = (discoSize + (orden.length - 1) * PEEK) + 'px';
+
+    orden.forEach(function(l, i) {
+      var d = document.createElement('div');
+      d.className = 'disco';
+      d.style.zIndex = orden.length - i;
+      d.style.transform =
+        'translateY(' + (-i * PEEK) + 'px) ' +
+        'translateZ(' + (-i * DEPTH) + 'px) ' +
+        'rotateX(' + TILT + 'deg)';
+      d.style.filter = 'brightness(' + Math.max(1 - i * 0.18, 0.45) + ')';
+
+      var img = document.createElement('img');
+      img.src = l.portada;
+      img.alt = l.titulo;
+      img.loading = 'lazy';
+      d.appendChild(img);
+
+      crate.appendChild(d);
+    });
+
+    var label = document.createElement('div');
+    label.className = 'year-label';
+    label.textContent = ano;
+
+    var caption = document.createElement('div');
+    caption.className = 'disco-caption';
+    caption.textContent = orden[0].titulo + ' · ' + orden[0].display;
+
+    col.appendChild(crate);
+    col.appendChild(label);
+    col.appendChild(caption);
+    contenedor.appendChild(col);
+  });
 }
 
+/* ===== NAVEGACIÓN (patrón existente) ===== */
 document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelectorAll('.proyecto').forEach(function(el) {
@@ -426,7 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
           p.classList.remove('active');
         });
         document.getElementById('page-' + id).classList.add('active');
-        mostrarCancion(id);
+        renderCrates(id);
       } else {
         document.querySelectorAll('.proyecto').forEach(function(p) {
           p.classList.remove('expandido');
@@ -442,27 +553,6 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.proyecto-page').forEach(function(p) {
         p.classList.remove('active');
       });
-    });
-  });
-
-  document.querySelectorAll('.songs-label').forEach(function(el) {
-    el.addEventListener('click', function() {
-      var id = this.getAttribute('data-carrusel');
-      var c = document.getElementById(id);
-      c.classList.toggle('active');
-    });
-  });
-
-  document.querySelectorAll('.flecha').forEach(function(el) {
-    el.addEventListener('click', function() {
-      var proyecto = this.getAttribute('data-proyecto');
-      var dir = parseInt(this.getAttribute('data-dir'));
-      var lista = canciones[proyecto];
-      var nuevo = indices[proyecto] + dir;
-      if (nuevo >= 0 && nuevo < lista.length) {
-        indices[proyecto] = nuevo;
-        mostrarCancion(proyecto);
-      }
     });
   });
 

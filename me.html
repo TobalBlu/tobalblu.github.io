@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Me — Tobal Blu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      overflow-x: hidden;
+      line-height: 1.75;
+    }
+
+    /* ===== VOLVER (coherente con .home-link de musica.html) ===== */
+    .home-link {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.3s;
+      z-index: 20;
+      mix-blend-mode: difference;
+    }
+    .home-link:hover { color: #fff; }
+
+    /* ===== ENTRADAS (misma animacion fadeUp del homepage) ===== */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 0.2; } 50% { opacity: 0.7; } }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== HERO (tratamiento identico al hero del index) ===== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 88vh;
+      min-height: 480px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.5);
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+    .hero:hover .hero-img { transform: scale(1); }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.35) 0%, transparent 35%, #080808 100%);
+    }
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 1.5rem;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 1.4s ease forwards 0.4s;
+    }
+    .hero-hello {
+      font-size: clamp(30px, 7vw, 62px);
+      letter-spacing: 0.04em;
+      color: #fff;
+      margin-bottom: 0.4rem;
+      font-weight: normal;
+    }
+    .hero-soy {
+      font-size: clamp(14px, 2.6vw, 20px);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 1.6rem;
+    }
+    .hero-tagline {
+      font-size: clamp(12px, 1.9vw, 15px);
+      letter-spacing: 0.04em;
+      color: #999;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #2a2a2a;
+      z-index: 3;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    /* ===== RITMO / GRILLA GENERAL ===== */
+    main { display: block; }
+
+    section { padding: 0 1.5rem; }
+
+    .prose {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .prose p { margin-bottom: 1.3rem; color: #cfcfcf; }
+    .prose p:last-child { margin-bottom: 0; }
+
+    .section-title {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #777;
+      margin-bottom: 1.8rem;
+      text-align: center;
+    }
+
+    /* espacios verticales generosos, alternados para romper monotonia */
+    .pad-xl { padding-top: 8rem; padding-bottom: 8rem; }
+    .pad-l  { padding-top: 6rem; padding-bottom: 6rem; }
+    .pad-m  { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+
+    /* ===== SECCIONES DE DOS COLUMNAS ===== */
+    .split {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .split .col-img { width: 100%; }
+    .split .col-img img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: brightness(0.92);
+    }
+    .split .col-text p { margin-bottom: 1.2rem; color: #cfcfcf; }
+    .split .col-text p:last-child { margin-bottom: 0; }
+
+    /* invertida: texto izquierda, imagen derecha (orden explicito por columnas) */
+    .split.invert .col-text { order: 1; }
+    .split.invert .col-img  { order: 2; }
+
+    /* ===== IMAGENES ANCHAS (transicion / cierre) ===== */
+    .wide {
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .wide img {
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .wide.r32 img  { aspect-ratio: 3 / 2; filter: brightness(0.88); }
+    .wide.r169 img { aspect-ratio: 16 / 9; filter: brightness(0.9); }
+
+    /* ===== DIPTICO CUADRADO ===== */
+    .diptico {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .diptico img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: brightness(0.92);
+    }
+
+    /* ===== SECCION ACTUALMENTE (lista editorial, sin tarjetas) ===== */
+    .actualmente {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .actualmente ol {
+      list-style: none;
+      counter-reset: item;
+    }
+    .actualmente li {
+      counter-increment: item;
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      padding: 1.1rem 0;
+      border-top: 0.5px solid #1c1c1c;
+      color: #cfcfcf;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+    }
+    .actualmente li:last-child { border-bottom: 0.5px solid #1c1c1c; }
+    .actualmente li::before {
+      content: counter(item, decimal-leading-zero);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: #555;
+      min-width: 2.4em;
+    }
+
+    /* ===== CIERRE + FIRMA ===== */
+    .cierre-text {
+      max-width: 620px;
+      margin: 2.5rem auto 0;
+      text-align: center;
+    }
+    .cierre-text p { color: #cfcfcf; margin-bottom: 1.2rem; }
+    .firma-cierre {
+      margin-top: 2rem;
+      font-size: clamp(22px, 4vw, 34px);
+      letter-spacing: 0.08em;
+      color: #fff;
+      text-align: center;
+    }
+
+    /* ===== CONTACTO ===== */
+    .contacto {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contacto .contacto-links {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    .contacto a {
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.3s;
+      border-bottom: 0.5px solid #222;
+      padding-bottom: 3px;
+    }
+    .contacto a:hover { color: #fff; border-color: #555; }
+
+    footer {
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 760px) {
+      .split {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      /* en telefono la imagen SIEMPRE va primero en la seccion normal;
+         en la invertida el prompt pide texto primero, imagen despues */
+      .split .col-img  { order: 1; }
+      .split .col-text { order: 2; }
+      .split.invert .col-text { order: 1; }
+      .split.invert .col-img  { order: 2; }
+
+      .pad-xl { padding-top: 5rem; padding-bottom: 5rem; }
+      .pad-l  { padding-top: 4rem; padding-bottom: 4rem; }
+      .pad-m  { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+
+      .split .col-img img { aspect-ratio: 4 / 5; }
+    }
+
+    @media (max-width: 420px) {
+      /* diptico: si queda muy pequeno, apilar */
+      .diptico { grid-template-columns: 1fr; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <img class="hero-img"
+       src="img/me/me-01-hero-horizontal.webp"
+       alt="Tóbal en un paisaje amplio, fotografía panorámica de apertura"
+       fetchpriority="high"
+       onerror="ph(this)">
+  <div class="hero-overlay"></div>
+  <div class="hero-text">
+    <h1 class="hero-hello">Hello!</h1>
+    <div class="hero-soy">Soy Tóbal.</div>
+    <p class="hero-tagline">Músico, productor, ingeniero, profesor y papá. Construyo proyectos donde el arte, la técnica y las personas se encuentran.</p>
+  </div>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<main>
+
+  <!-- 2. PRESENTACION INICIAL -->
+  <section class="pad-xl">
+    <div class="prose reveal">
+      <p>Bienvenido. Mi nombre es Cristóbal Urbina, aunque casi todos me conocen como Tóbal.</p>
+      <p>Antes que músico, ingeniero o cualquier otra cosa, soy papá. Lo digo porque ser padre fue el punto desde donde comenzó realmente mi vida adulta y porque, hasta hoy, sigue siendo la fuerza que mueve cada proyecto que emprendo.</p>
+    </div>
+  </section>
+
+  <!-- 3. INGENIERIA Y MUSICA (imagen izquierda, texto derecha) -->
+  <section class="pad-l">
+    <div class="split reveal">
+      <div class="col-img">
+        <img src="img/me/me-02-musica-vertical.webp"
+             alt="Tóbal en contexto musical, retrato vertical"
+             loading="lazy" onerror="ph(this)">
+      </div>
+      <div class="col-text">
+        <p>Estudié Ingeniería Mecánica y trabajé cerca de diez años en la industria farmacéutica, mientras construía en paralelo una carrera como músico, compositor y productor.</p>
+        <p>Durante mucho tiempo vivieron dos mundos dentro de mí: el de la ingeniería y el del arte. Hoy ya no los separo. Descubrí que ambos nacen exactamente del mismo lugar: la curiosidad por entender cómo funcionan las cosas y el deseo de construirlas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FAMILIA Y OFICIOS (texto izquierda, imagen derecha) -->
+  <section class="pad-l">
+    <div class="split invert reveal">
+      <div class="col-text">
+        <p>Tuve la suerte de crecer rodeado de personas que hacían con sus manos aquello que imaginaban. Artesanos, diseñadoras, ingenieros, dibujantes, músicos y personas de oficio fueron mi primera escuela.</p>
+        <p>Más que enseñarme un trabajo, me enseñaron que casi cualquier idea puede hacerse realidad cuando uno decide aprender.</p>
+      </div>
+      <div class="col-img">
+        <img src="img/me/me-03-oficios-vertical.webp"
+             alt="Manos y oficio, retrato vertical"
+             loading="lazy" onerror="ph(this)">
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. IMAGEN DE TRANSICION -->
+  <section class="pad-l">
+    <div class="wide r32 reveal">
+      <img src="img/me/me-04-proceso-horizontal.webp"
+           alt="Proceso de trabajo, fotografía horizontal de transición"
+           loading="lazy" onerror="ph(this)">
+    </div>
+  </section>
+
+  <!-- 6. LO QUE HAGO ACTUALMENTE -->
+  <section class="pad-l">
+    <div class="prose reveal">
+      <div class="section-title">Construir, aprender y compartir</div>
+      <p>Actualmente dedico mi tiempo a desarrollar proyectos musicales, audiovisuales, tecnológicos y educativos.</p>
+      <p>Compongo, produzco, dirijo procesos creativos, desarrollo videojuegos, diseño herramientas, doy clases, realizo asesorías y colaboro con personas que quieren transformar una idea en algo real.</p>
+      <p>Me entusiasma aprender disciplinas nuevas casi tanto como compartir lo que voy descubriendo.</p>
+      <p>No creo demasiado en dividir la vida entre arte y ciencia. Siempre he sentido que ambas son maneras distintas de hacer la misma pregunta. Por eso disfruto moverme entre escenarios, estudios de grabación, talleres, libros, computadores o una conversación larga con alguien apasionado por lo que hace.</p>
+    </div>
+  </section>
+
+  <!-- 7. DIPTICO CUADRADO -->
+  <section class="pad-l">
+    <div class="diptico reveal">
+      <img src="img/me/me-05-detalle-cuadrada.webp"
+           alt="Detalle personal, fotografía cuadrada"
+           loading="lazy" onerror="ph(this)">
+      <img src="img/me/me-06-camino-cuadrada.webp"
+           alt="Camino, fotografía cuadrada"
+           loading="lazy" onerror="ph(this)">
+    </div>
+    <div class="prose reveal" style="margin-top:2.8rem;">
+      <p>Hay cosas pequeñas que también me definen.</p>
+      <p>Prefiero el bajo antes que la guitarra. Los ríos antes que la playa. Recuerdo mejor las caras que los nombres. Creo profundamente en el poder de las palabras, en que el camino se construye mientras se camina y en que las dificultades terminan siendo maestros disfrazados.</p>
+      <p>Mi espiritualidad es cristiana, aunque no religiosa. Intento vivir con una idea muy simple: dejar cada lugar, proyecto o persona un poco mejor de como la encontré.</p>
+    </div>
+  </section>
+
+  <!-- 8. ACTUALMENTE (lista editorial numerada) -->
+  <section class="pad-l">
+    <div class="actualmente reveal">
+      <div class="section-title">Actualmente</div>
+      <ol>
+        <li>Producción y composición musical.</li>
+        <li>Proyectos editoriales y educativos.</li>
+        <li>Desarrollo de experiencias digitales.</li>
+        <li>Clases, talleres y asesorías.</li>
+        <li>Colaboraciones artísticas.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 9. IMAGEN DE CIERRE + FIRMA -->
+  <section class="pad-l">
+    <div class="wide r169 reveal">
+      <img src="img/me/me-07-cierre-horizontal.webp"
+           alt="Fotografía horizontal de cierre"
+           loading="lazy" onerror="ph(this)">
+    </div>
+    <div class="cierre-text reveal">
+      <p>Si llegaste hasta aquí, gracias por pasar. Ojalá encuentres algo que te inspire, te sirva o simplemente te saque una sonrisa.</p>
+      <p>Estoy abierto y contento de conversar, colaborar o responder preguntas.</p>
+      <div class="firma-cierre">Tóbal</div>
+    </div>
+  </section>
+
+  <!-- 10. CONTACTO (solo enlaces reales existentes) -->
+  <section class="pad-m">
+    <div class="contacto reveal">
+      <div class="section-title">Contacto</div>
+      <div class="contacto-links">
+        <a href="mailto:tobal.blu@gmail.com">Email</a>
+        <a href="https://www.instagram.com/tobal.blu" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Tobal Blu</footer>
+
+<script>
+  /* ===== Placeholder inline si un .webp aun no existe en el repo =====
+     No depende de archivos ni URLs externas. Cuando subas el .webp real,
+     este fallback deja de dispararse solo. */
+  function ph(img) {
+    img.onerror = null; /* evita bucle */
+    var w = img.naturalWidth || 1600, h = img.naturalHeight || 900;
+    /* deduce proporcion desde el aspect-ratio del contenedor si es posible */
+    var name = (img.getAttribute('src') || '').split('/').pop();
+    var ar = { '4/5': [800,1000], '3/2': [1500,1000], '1/1': [1000,1000], '16/9': [1600,900] };
+    var svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">' +
+      '<rect width="100%" height="100%" fill="#101010"/>' +
+      '<rect x="1" y="1" width="'+(w-2)+'" height="'+(h-2)+'" fill="none" stroke="#242424"/>' +
+      '<text x="50%" y="52%" fill="#3a3a3a" font-family="Courier New, monospace" ' +
+      'font-size="'+Math.round(Math.min(w,h)*0.045)+'" letter-spacing="3" text-anchor="middle">' +
+      name + '</text></svg>';
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  /* ===== Reveal on scroll (reutiliza el lenguaje fadeUp, con moderacion) ===== */
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (e) { e.classList.add('visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('visible');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  })();
+</script>
+
+</body>
+</html>

@@ -156,7 +156,8 @@
       display: flex;
       gap: 3rem;
       overflow-x: auto;
-      padding: 4rem 1rem 2rem 1rem;
+      overflow-y: visible;
+      padding: 4.5rem 1rem 2rem 1rem;
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
     }
@@ -176,7 +177,7 @@
     .crate {
       position: relative;
       width: 220px;
-      perspective: 900px;
+      perspective: 1100px;
       /* altura la fija JS según cantidad de discos */
     }
 
@@ -187,10 +188,31 @@
       width: 220px;
       height: 220px;
       transform-style: preserve-3d;
+      /* posición base (la calcula JS por vinilo) */
+      --ty: 0px;
+      --tz: 0px;
+      --rot: 7deg;
+      --bright: 1;
+      /* estas NO se setean inline: por eso el :hover puede sobreescribirlas */
+      --lift: 0px;
+      --boost: 1;
+      transform: translateY(calc(var(--ty) + var(--lift)))
+                 translateZ(var(--tz))
+                 rotateX(var(--rot));
+      filter: brightness(calc(var(--bright) * var(--boost)));
       transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.3, 1),
                   filter 0.45s ease;
       cursor: pointer;
     }
+
+    /* HOVER sobre un vinilo escondido: se levanta un poco y se aclara */
+    .disco:not(.frente):hover {
+      --lift: -30px;
+      --boost: 1.45;
+    }
+
+    /* el vinilo del frente no reacciona al hover-lift */
+    .disco.frente { cursor: default; }
 
     .disco img {
       width: 100%;
@@ -199,7 +221,10 @@
       display: block;
       border: 0.5px solid #1e1e1e;
       background: #111;
+      transition: border-color 0.3s ease;
     }
+
+    .disco:not(.frente):hover img { border-color: #4a4a4a; }
 
     .year-label {
       font-size: 10px;
@@ -212,11 +237,12 @@
       font-size: 9px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: #444;
+      color: #666;
       margin-top: 0.6rem;
       text-align: center;
       min-height: 2.2em;
       max-width: 220px;
+      transition: color 0.3s ease;
     }
 
     @media (max-width: 600px) {
@@ -384,7 +410,7 @@ var lanzamientos = {
                "Apple Music": "https://music.apple.com/us/album/quema-las-estrellas-single/1635011707?uo=4&app=music&at=1001lry3&ct=dashboard",
                "Tidal": "https://tidal.com/track/238348667/" } },
     { titulo: "Al borde", tipo: "single", fecha: "2022-10", display: "oct 2022",
-      portada: "img/al-borde.jpg", destacado: false,
+      portada: "img/al-borde.jpeg", destacado: false,
       canciones: ["Al borde"],
       links: { "Spotify": "https://open.spotify.com/album/6Wq3QLZYwed7ckVxZPrFo2",
                "Apple Music": "https://music.apple.com/us/album/al-borde-single/1649000808?uo=4&app=music&at=1001lry3&ct=dashboard",
@@ -452,14 +478,44 @@ var lanzamientos = {
   ]
 };
 
-/* ===== RENDER DE CAJONES ===== */
+/* ===== PARÁMETROS DE LA PILA ===== */
 var PEEK = 46;    /* px que asoma cada disco trasero */
 var DEPTH = 55;   /* profundidad Z entre discos */
 var TILT = 7;     /* inclinación X en grados */
 
+/* Aplica la posición de cada vinilo según su lugar en la pila.
+   orden[0] = frente. Actualiza caption al vinilo del frente. */
+function aplicarPila(crate) {
+  var orden = crate._orden;
+  var n = orden.length;
+  orden.forEach(function(disco, i) {
+    disco.style.setProperty('--ty', (-i * PEEK) + 'px');
+    disco.style.setProperty('--tz', (-i * DEPTH) + 'px');
+    disco.style.setProperty('--rot', TILT + 'deg');
+    disco.style.setProperty('--bright', Math.max(1 - i * 0.14, 0.5));
+    disco.style.zIndex = n - i;
+    disco.classList.toggle('frente', i === 0);
+  });
+  var caption = crate.parentNode.querySelector('.disco-caption');
+  if (caption) {
+    var f = orden[0]._data;
+    caption.textContent = f.titulo + ' · ' + f.display;
+  }
+}
+
+/* Trae un vinilo al frente; el resto conserva su orden detrás. */
+function alFrente(crate, disco) {
+  var orden = crate._orden;
+  var pos = orden.indexOf(disco);
+  if (pos <= 0) return; /* ya está al frente (aquí irá el detalle en el futuro) */
+  orden.splice(pos, 1);
+  orden.unshift(disco);
+  aplicarPila(crate);
+}
+
 function renderCrates(proyecto) {
   var contenedor = document.getElementById('crates-' + proyecto);
-  if (contenedor.childNodes.length > 0) return; /* ya renderizado */
+  if (contenedor.childNodes.length > 0) return; /* ya renderizado, conserva estado */
 
   var lista = lanzamientos[proyecto].slice().sort(function(a, b) {
     return a.fecha < b.fecha ? -1 : 1;
@@ -489,25 +545,25 @@ function renderCrates(proyecto) {
     var crate = document.createElement('div');
     crate.className = 'crate';
     var discoSize = window.innerWidth <= 600 ? 160 : 220;
-    crate.style.height = (discoSize + (orden.length - 1) * PEEK) + 'px';
+    /* + headroom para que el hover-lift no toque el borde superior */
+    crate.style.height = (discoSize + (orden.length - 1) * PEEK + 30) + 'px';
 
-    orden.forEach(function(l, i) {
-      var d = document.createElement('div');
-      d.className = 'disco';
-      d.style.zIndex = orden.length - i;
-      d.style.transform =
-        'translateY(' + (-i * PEEK) + 'px) ' +
-        'translateZ(' + (-i * DEPTH) + 'px) ' +
-        'rotateX(' + TILT + 'deg)';
-      d.style.filter = 'brightness(' + Math.max(1 - i * 0.18, 0.45) + ')';
+    orden.forEach(function(l) {
+      var disco = document.createElement('div');
+      disco.className = 'disco';
+      disco._data = l;
 
       var img = document.createElement('img');
       img.src = l.portada;
       img.alt = l.titulo;
       img.loading = 'lazy';
-      d.appendChild(img);
+      disco.appendChild(img);
 
-      crate.appendChild(d);
+      disco.addEventListener('click', function() {
+        alFrente(crate, disco);
+      });
+
+      crate.appendChild(disco);
     });
 
     var label = document.createElement('div');
@@ -516,12 +572,15 @@ function renderCrates(proyecto) {
 
     var caption = document.createElement('div');
     caption.className = 'disco-caption';
-    caption.textContent = orden[0].titulo + ' · ' + orden[0].display;
 
     col.appendChild(crate);
     col.appendChild(label);
     col.appendChild(caption);
     contenedor.appendChild(col);
+
+    /* guardar orden como estado mutable y pintar posición inicial */
+    crate._orden = Array.prototype.slice.call(crate.querySelectorAll('.disco'));
+    aplicarPila(crate);
   });
 }
 

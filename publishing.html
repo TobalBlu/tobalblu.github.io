@@ -18,10 +18,10 @@
   --navy-mid:    #1B2A4A;
   --navy-card:   #0D1625;
   --cream:       #F2F0EA;
-  --cream-dim:   rgba(242,240,234,0.72);
-  --cream-muted: rgba(242,240,234,0.38);
+  --cream-dim:   rgba(242,240,234,0.82);
+  --cream-muted: rgba(242,240,234,0.55);
   --cream-ghost: rgba(242,240,234,0.07);
-  --cream-line:  rgba(242,240,234,0.12);
+  --cream-line:  rgba(242,240,234,0.14);
   --vino:        #8B3A3A;
   --vino-bright: #A84444;
   --font-d: "Cormorant Garamond", Georgia, serif;
@@ -109,14 +109,14 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .ev-num { font-family:var(--font-d); font-weight:300; color:var(--cream); letter-spacing:-.03em; display:block; margin-bottom:12px; line-height:.88; }
 .ev-principal .ev-num { font-size:clamp(80px,11vw,130px); }
 .ev-sec .ev-num { font-size:clamp(36px,4.5vw,54px); }
-.ev-desc { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.1em; text-transform:uppercase; color:var(--cream-muted); line-height:1.7; display:block; }
+.ev-desc { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.1em; text-transform:uppercase; color:rgba(242,240,234,0.62); line-height:1.7; display:block; }
 .ev-tag { font-family:var(--font-u); font-size:9px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--cream); background:rgba(139,58,58,.3); padding:4px 10px; display:inline-block; margin-bottom:8px; border:0.5px solid rgba(139,58,58,.5); }
 @media(max-width:900px){ .ev-grid{grid-template-columns:1fr 1fr;gap:28px 0} .ev-col{border-right:none;padding:0;border-bottom:.5px solid var(--cream-line);padding-bottom:20px} .ev-col:last-child{border-bottom:none} .ev-principal{grid-column:1/-1} }
 @media(max-width:480px){ .ev-grid{grid-template-columns:1fr} .ev-principal{grid-column:auto} }
 
 /* SECCIÓN */
 .sec { max-width:var(--max-w); margin:0 auto; padding:var(--pad-s) var(--pad-x); }
-.s-lbl { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:var(--cream-muted); display:block; margin-bottom:2px; }
+.s-lbl { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:rgba(242,240,234,0.58); display:block; margin-bottom:2px; }
 
 /* CASOS */
 .c-ey { display:flex; align-items:center; gap:16px; margin-bottom:48px; }
@@ -156,7 +156,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .mt-p:last-child { border-bottom:.5px solid var(--cream-line); }
 .mt-n { font-family:var(--font-d); font-size:48px; font-weight:300; color:rgba(242,240,234,.08); line-height:1; padding-top:2px; }
 .mt-pt { font-family:var(--font-d); font-size:19px; font-weight:400; color:var(--cream); margin-bottom:8px; }
-.mt-tx { font-size:14px; font-weight:300; line-height:1.78; color:var(--cream-dim); max-width:560px; }
+.mt-tx { font-size:14px; font-weight:300; line-height:1.78; color:rgba(242,240,234,0.78); max-width:560px; }
 @media(max-width:600px){ .mt-p{grid-template-columns:44px 1fr;gap:0 14px} .mt-n{font-size:30px} }
 
 /* PIPELINE — bloque crema claro */
@@ -171,7 +171,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .tl-i::before { content:''; position:absolute; top:-32px; left:0; width:6px; height:6px; border-radius:50%; background:var(--vino-bright); }
 .tl-f { font-family:var(--font-u); font-size:8px; font-weight:400; letter-spacing:.22em; text-transform:uppercase; color:var(--vino-bright); margin-bottom:12px; display:block; }
 .tl-a { font-family:var(--font-d); font-size:18px; font-weight:300; font-style:italic; color:var(--cream); margin-bottom:4px; display:block; }
-.tl-d { font-family:var(--font-u); font-size:9px; letter-spacing:.1em; color:var(--cream-muted); line-height:1.6; display:block; }
+.tl-d { font-family:var(--font-u); font-size:9px; letter-spacing:.1em; color:rgba(242,240,234,0.58); line-height:1.6; display:block; }
 @media(max-width:767px){ .tl{flex-direction:column;gap:28px;padding-top:0} .tl::before{display:none} .tl-i{padding:0 0 0 20px;border-left:.5px solid var(--cream-line)} .tl-i::before{top:2px;left:-4px} }
 
 /* CPA */
@@ -179,7 +179,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .cpa-i { background:var(--navy-card); padding:32px 28px; }
 .cpa-v { font-family:var(--font-d); font-size:28px; font-weight:300; font-style:italic; color:var(--cream); display:block; margin-bottom:12px; }
 .cpa-d { font-family:var(--font-u); font-size:9px; letter-spacing:.1em; color:var(--cream-muted); line-height:1.8; }
-.cpa-tx { font-size:14px; font-weight:300; line-height:1.78; color:var(--cream-dim); max-width:620px; }
+.cpa-tx { font-size:14px; font-weight:300; line-height:1.78; color:rgba(242,240,234,0.78); max-width:620px; }
 @media(max-width:767px){ .cpa-g{grid-template-columns:1fr} }
 
 /* PRESENCIA */
@@ -209,7 +209,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .ad-i:last-child { border-right:none; }
 .ad-ck { font-family:var(--font-u); font-size:10px; color:var(--vino-bright); margin-bottom:6px; display:block; }
 .ad-t { font-family:var(--font-d); font-size:15px; font-weight:400; font-style:italic; color:var(--cream); display:block; margin-bottom:5px; }
-.ad-d { font-family:var(--font-u); font-size:9px; letter-spacing:.07em; color:var(--cream-muted); line-height:1.7; }
+.ad-d { font-family:var(--font-u); font-size:9px; letter-spacing:.07em; color:rgba(242,240,234,0.6); line-height:1.7; }
 @media(max-width:900px){ .ad-g{grid-template-columns:1fr 1fr;gap:1px;background:var(--cream-line)} .ad-i{padding:20px;border-right:none;background:var(--navy)} }
 @media(max-width:480px){ .ad-g{grid-template-columns:1fr} }
 
@@ -271,10 +271,9 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
     <a href="/" class="nav-marca">Tóbal Blu</a>
     <ul class="nav-links" role="list">
       <li><a href="https://tobalblu.com/musica.html">Música</a></li>
-      <li><a href="https://tobalblu.com/produccion">Producción</a></li>
       <li><a href="https://tobalblu.com/publishing" class="active" aria-current="page">Publishing</a></li>
-      <li><a href="https://tobalblu.com/proyectos">Proyectos</a></li>
-      <li><a href="https://tobalblu.com/contacto">Contacto</a></li>
+      <li><a href="https://tobalblu.com/gallery.html">Galería</a></li>
+      <li><a href="#contacto-final">Contacto</a></li>
     </ul>
     <button class="nav-btn" aria-label="Abrir menú" aria-expanded="false" id="menu-btn">
       <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><line x1="0" y1="1" x2="20" y2="1" stroke="currentColor" stroke-width="1.5"/><line x1="0" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="1.5"/><line x1="0" y1="13" x2="20" y2="13" stroke="currentColor" stroke-width="1.5"/></svg>
@@ -283,10 +282,9 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
 </nav>
 <div class="nav-mob" id="nav-mob" role="dialog" aria-label="Menú móvil">
   <a href="https://tobalblu.com/musica.html">Música</a>
-  <a href="https://tobalblu.com/produccion">Producción</a>
   <a href="https://tobalblu.com/publishing" class="active">Publishing</a>
-  <a href="https://tobalblu.com/proyectos">Proyectos</a>
-  <a href="https://tobalblu.com/contacto">Contacto</a>
+  <a href="https://tobalblu.com/gallery.html">Galería</a>
+  <a href="#contacto-final">Contacto</a>
 </div>
 
 <section aria-label="Presentación">
@@ -303,7 +301,10 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
     <div class="reveal d2">
       <div class="h-foto">
         <!-- FOTO HERO: tobalblu.github.io/img/publishing/hero.jpg -->
-        <div class="h-ph">
+        <img src="https://tobalblu.github.io/img/publishing/hero.jpg" 
+             alt="Cristóbal Urbina Cabalín en estudio"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="h-ph" style="display:none;">
           <span>Fotografía principal</span>
           <span>tobalblu.github.io/img/publishing/hero.jpg</span>
         </div>
@@ -402,7 +403,11 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
     <div class="pr-g reveal">
       <div class="pr-f">
         <!-- FOTO PROCESO: tobalblu.github.io/img/publishing/proceso.jpg -->
-        <div class="pr-ph">
+        <img src="https://tobalblu.github.io/img/publishing/proceso.jpg"
+             alt="Cristóbal Urbina Cabalín — sesión de trabajo"
+             loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="pr-ph" style="display:none;">
           <span>Foto de proceso · sesión real</span>
           <span>tobalblu.github.io/img/publishing/proceso.jpg</span>
         </div>
@@ -424,9 +429,16 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
   <div class="sec" style="padding-top:0;">
     <span class="s-lbl reveal" style="display:block;margin-bottom:16px;">Archivo real</span>
     <!-- ARCHIVO REAL: tobalblu.github.io/img/publishing/archivo.jpg -->
-    <div class="ar-ph reveal">
-      <span>Fragmento de cuaderno o sesión de composición</span>
-      <span>tobalblu.github.io/img/publishing/archivo.jpg</span>
+    <div class="ar-ph reveal" id="archivo-wrap">
+      <img src="https://tobalblu.github.io/img/publishing/archivo.jpg"
+           alt="Archivo de composición 2026"
+           loading="lazy"
+           style="width:100%;height:100%;object-fit:cover;"
+           onerror="this.style.display='none';document.getElementById('archivo-ph-txt').style.display='flex'">
+      <div id="archivo-ph-txt" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;height:100%;">
+        <span>Fragmento de cuaderno o sesión de composición</span>
+        <span>tobalblu.github.io/img/publishing/archivo.jpg</span>
+      </div>
     </div>
   </div>
 </section>
@@ -452,7 +464,7 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
   </div>
 </section>
 
-<section aria-label="Contacto y repertorio">
+<section aria-label="Contacto y repertorio" id="contacto-final">
   <div class="ct-wrap">
     <div class="ct-acc" aria-hidden="true"></div>
     <h2 class="ct-t reveal">Escuchar lo que viene</h2>
@@ -473,7 +485,7 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
   <div class="ot-wrap">
     <p class="ot-t reveal">También habito otros lugares</p>
     <div class="ot-g reveal">
-      <a href="https://tobalblu.com/Gallery.html" class="ot-i"><span class="ot-l">Ver</span><span class="ot-n">Galería</span></a>
+      <a href="https://tobalblu.com/gallery.html" class="ot-i"><span class="ot-l">Ver</span><span class="ot-n">Galería</span></a>
       <a href="https://tobalblu.com/me.html" class="ot-i"><span class="ot-l">Conocer</span><span class="ot-n">Quién soy</span></a>
       <a href="https://tobalblu.com/musica.html" class="ot-i"><span class="ot-l">Escuchar</span><span class="ot-n">Música</span></a>
     </div>

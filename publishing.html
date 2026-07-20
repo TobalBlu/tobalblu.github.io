@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cristóbal Urbina Cabalín — Compositor, productor y publishing</title>
+<meta name="description" content="Catálogo autoral con más de 130 millones de streams, repertorio inédito y participaciones editoriales disponibles.">
+<meta property="og:title" content="Cristóbal Urbina Cabalín — Publishing">
+<meta property="og:description" content="Catálogo probado con más de 130 millones de streams. Participaciones editoriales disponibles. Repertorio inédito terminado.">
+<meta property="og:url" content="https://tobalblu.com/publishing">
+<meta property="og:type" content="profile">
+<link rel="canonical" href="https://tobalblu.com/publishing">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Cristóbal Urbina Cabalín",
+  "alternateName": "Tóbal Blu",
+  "jobTitle": "Compositor, Productor, Director creativo",
+  "url": "https://tobalblu.com",
+  "email": "tobal.blu@gmail.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Santiago", "addressCountry": "CL" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS GLOBALES — integrables a tobalblu.com
+   ============================================================ */
+:root {
+  --cream:        #F5F4EF;
+  --ink:          #131320;
+  --vino:         #7B2D2D;
+  --vino-light:   rgba(123, 45, 45, 0.12);
+  --grafito:      #888;
+  --linea:        #E2DED6;
+  --blanco:       #FAFAF8;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-ui:      'Inter', system-ui, sans-serif;
+
+  --max-w:        1100px;
+  --col-main:     660px;
+  --pad-x:        clamp(20px, 5vw, 80px);
+  --pad-section:  clamp(64px, 10vw, 120px);
+
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-slow:     0.9s;
+  --dur-mid:      0.55s;
+}
+
+/* ============================================================
+   RESET Y BASE
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-display);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--vino); outline-offset: 3px; border-radius: 2px; }
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+.label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--grafito);
+}
+
+.linea-h {
+  border: none;
+  border-top: 0.5px solid var(--linea);
+}
+
+/* ============================================================
+   ANIMACIONES — respeta prefers-reduced-motion
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.32s; }
+  .reveal-delay-4 { transition-delay: 0.44s; }
+}
+
+/* ============================================================
+   LÍNEA AUTORAL — trazo SVG lateral
+   ============================================================ */
+#linea-autoral {
+  position: fixed;
+  left: clamp(12px, 2.5vw, 32px);
+  top: 0;
+  width: 2px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible;
+}
+#linea-autoral line {
+  stroke: var(--vino);
+  stroke-width: 1.5;
+  stroke-dasharray: 100vh;
+  stroke-dashoffset: 100vh;
+  transition: stroke-dashoffset 0.2s linear;
+}
+@media (max-width: 767px) { #linea-autoral { display: none; } }
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245, 244, 239, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--linea);
+}
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.nav-marca {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active {
+  color: var(--vino);
+  border-bottom: 1px solid var(--vino);
+  padding-bottom: 1px;
+}
+.nav-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--ink);
+}
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 56px 0 0 0;
+  background: var(--cream);
+  z-index: 99;
+  padding: 32px var(--pad-x);
+  border-top: 0.5px solid var(--linea);
+}
+.nav-mobile.open { display: flex; flex-direction: column; gap: 24px; }
+.nav-mobile a {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--linea);
+}
+.nav-mobile a.active { color: var(--vino); }
+
+@media (max-width: 767px) {
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 96px) var(--pad-x) clamp(48px, 8vw, 80px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  min-height: 85vh;
+}
+.hero-texto { order: 1; }
+.hero-imagen { order: 2; }
+
+.hero-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--vino);
+  margin-bottom: 20px;
+  display: block;
+}
+.hero-nombre {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.hero-rol {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  margin-bottom: 6px;
+}
+.hero-sub {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--grafito);
+  margin-bottom: 32px;
+}
+.hero-propuesta {
+  font-size: clamp(15px, 1.6vw, 17px);
+  font-weight: 300;
+  line-height: 1.72;
+  color: var(--ink);
+  max-width: 480px;
+  margin-bottom: 28px;
+}
+.hero-propuesta strong { font-weight: 400; }
+.hero-busqueda {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--vino);
+  border-bottom: 1px solid var(--vino);
+  padding-bottom: 2px;
+}
+
+/* Foto hero */
+.hero-foto-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--linea);
+}
+.hero-foto-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  filter: contrast(1.03) brightness(0.95) saturate(0.85);
+}
+.hero-foto-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  background: #E8E5DF;
+  color: var(--grafito);
+}
+.hero-foto-placeholder span:first-child {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hero-foto-placeholder span:last-child {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: #aaa;
+}
+
+.scroll-hint {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--grafito);
+}
+.scroll-hint-line {
+  width: 32px;
+  height: 0.5px;
+  background: var(--grafito);
+}
+.scroll-hint span {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .hero-texto { order: 2; }
+  .hero-imagen { order: 1; }
+  .hero-foto-wrap { aspect-ratio: 16/9; max-height: 340px; }
+  .scroll-hint { display: none; }
+}
+
+/* ============================================================
+   SECCIÓN WRAPPER
+   ============================================================ */
+.seccion {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--pad-section) var(--pad-x);
+}
+.seccion + .seccion { padding-top: 0; }
+
+/* ============================================================
+   EVIDENCIA PRINCIPAL
+   ============================================================ */
+.evidencia-wrap {
+  background: var(--ink);
+  padding: clamp(40px, 6vw, 72px) var(--pad-x);
+}
+.evidencia-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.evidencia-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 40px;
+  display: block;
+}
+.evidencia-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0;
+  align-items: end;
+  border-top: 0.5px solid rgba(255,255,255,0.12);
+  padding-top: 32px;
+}
+.ev-principal {
+  padding-right: 40px;
+  border-right: 0.5px solid rgba(255,255,255,0.12);
+}
+.ev-secundario {
+  padding: 0 28px;
+  border-right: 0.5px solid rgba(255,255,255,0.12);
+}
+.ev-secundario:last-child { border-right: none; }
+.ev-num {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 0.9;
+  color: #fff;
+  letter-spacing: -0.03em;
+  display: block;
+  margin-bottom: 10px;
+}
+.ev-principal .ev-num { font-size: clamp(72px, 10vw, 120px); }
+.ev-secundario .ev-num { font-size: clamp(36px, 5vw, 56px); }
+.ev-desc {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+  display: block;
+}
+.ev-disponible {
+  padding: 0 28px;
+}
+.ev-disponible .ev-tag {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vino);
+  background: rgba(123,45,45,0.15);
+  padding: 4px 10px;
+  display: inline-block;
+  margin-bottom: 10px;
+  border: 0.5px solid rgba(123,45,45,0.3);
+}
+.ev-disponible .ev-desc { color: rgba(255,255,255,0.45); }
+
+@media (max-width: 900px) {
+  .evidencia-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 0;
+  }
+  .ev-principal { grid-column: 1 / -1; padding-right: 0; border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.12); padding-bottom: 24px; }
+  .ev-secundario, .ev-disponible { padding: 0; border-right: none; }
+}
+@media (max-width: 480px) {
+  .evidencia-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ============================================================
+   CASOS DE CATÁLOGO
+   ============================================================ */
+.casos-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.casos-eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--linea);
+}
+
+.caso-principal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  padding: 40px 0;
+  border-top: 0.5px solid var(--linea);
+  border-bottom: 0.5px solid var(--linea);
+  margin-bottom: 32px;
+  align-items: start;
+}
+.caso-p-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.caso-p-artista {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  margin-bottom: 24px;
+}
+.caso-p-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.dato-chip {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 0.5px solid var(--linea);
+  padding: 4px 10px;
+  background: var(--blanco);
+}
+.caso-p-interp {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--grafito);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.caso-p-stream {
+  display: flex;
+  gap: 24px;
+}
+.stream-bloque {}
+.stream-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--ink);
+  display: block;
+  letter-spacing: -0.02em;
+}
+.stream-plat {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  display: block;
+}
+.caso-p-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vino);
+  border-left: 2px solid var(--vino);
+  padding-left: 10px;
+  align-self: start;
+}
+
+.caso-p-acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.btn-ghost {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  border: 0.5px solid var(--linea);
+  padding: 7px 14px;
+  transition: border-color 0.2s, color 0.2s;
+  cursor: pointer;
+  background: none;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+.casos-secundarios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--linea);
+  border: 0.5px solid var(--linea);
+}
+.caso-sec {
+  background: var(--cream);
+  padding: 28px 24px;
+  transition: background 0.2s;
+}
+.caso-sec:hover { background: var(--blanco); }
+.caso-sec-titulo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.caso-sec-artista {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  margin-bottom: 12px;
+}
+.caso-sec-datos {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--grafito);
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+.caso-sec-interp {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.55;
+  border-left: 1.5px solid var(--vino);
+  padding-left: 10px;
+}
+
+@media (max-width: 767px) {
+  .caso-principal { grid-template-columns: 1fr; gap: 24px; }
+  .casos-secundarios { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   DECLARACIÓN AUTORAL
+   ============================================================ */
+.declaracion-wrap {
+  padding: clamp(64px, 10vw, 120px) var(--pad-x);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.declaracion-vino-accent {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 48px;
+  background: var(--vino);
+  opacity: 0.4;
+}
+.declaracion-cita {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.5vw, 38px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--ink);
+  max-width: 700px;
+  margin: 32px auto 24px;
+  letter-spacing: -0.01em;
+}
+/* Placeholder para trazo manuscrito */
+.manuscrito-placeholder {
+  margin: 16px auto 0;
+  max-width: 420px;
+  height: 48px;
+  border: 0.5px dashed var(--linea);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.manuscrito-placeholder span {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ccc;
+}
+
+/* ============================================================
+   MÉTODO
+   ============================================================ */
+.metodo-titulo-bloque {
+  margin-bottom: 48px;
+}
+.metodo-titulo-bloque h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 300;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.metodo-titulo-bloque p {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grafito);
+}
+.metodo-pasos { display: flex; flex-direction: column; gap: 0; }
+.metodo-paso {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 32px;
+  padding: 32px 0;
+  border-top: 0.5px solid var(--linea);
+  align-items: start;
+}
+.metodo-paso:last-child { border-bottom: 0.5px solid var(--linea); }
+.metodo-num {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--linea);
+  line-height: 1;
+  padding-top: 2px;
+}
+.metodo-contenido {}
+.metodo-step-titulo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.metodo-step-txt {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.72;
+  color: var(--ink);
+  max-width: 540px;
+}
+
+@media (max-width: 600px) {
+  .metodo-paso { grid-template-columns: 48px 1fr; gap: 0 16px; }
+  .metodo-num { font-size: 32px; }
+}
+
+/* ============================================================
+   PIPELINE — LÍNEA DE TIEMPO
+   ============================================================ */
+.pipeline-wrap {
+  background: var(--blanco);
+  border: 0.5px solid var(--linea);
+  padding: clamp(32px, 5vw, 56px);
+}
+.pipeline-titulo { margin-bottom: 40px; }
+.pipeline-titulo h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.8vw, 30px);
+  font-weight: 300;
+  margin-bottom: 4px;
+}
+.pipeline-titulo p {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grafito);
+}
+.timeline {
+  display: flex;
+  gap: 0;
+  position: relative;
+  padding-top: 20px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--linea);
+}
+.tl-item {
+  flex: 1;
+  padding-right: 24px;
+  position: relative;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  top: -24px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--vino);
+}
+.tl-fecha {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--vino);
+  margin-bottom: 8px;
+  display: block;
+}
+.tl-artista {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 4px;
+  display: block;
+}
+.tl-detalle {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--grafito);
+  line-height: 1.6;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .timeline { flex-direction: column; gap: 28px; padding-top: 0; }
+  .timeline::before { display: none; }
+  .tl-item { padding-right: 0; padding-left: 20px; border-left: 1px solid var(--linea); }
+  .tl-item::before { top: 0; left: -4px; }
+}
+
+/* ============================================================
+   CREAR · PRODUCIR · AMPLIFICAR
+   ============================================================ */
+.cpa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--linea);
+  border: 0.5px solid var(--linea);
+  margin-bottom: 40px;
+}
+.cpa-item {
+  background: var(--cream);
+  padding: 32px 28px;
+}
+.cpa-verbo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 12px;
+}
+.cpa-desc {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--grafito);
+  line-height: 1.8;
+}
+.cpa-texto {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.72;
+  max-width: 620px;
+}
+
+@media (max-width: 767px) {
+  .cpa-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   PRESENCIA PÚBLICA
+   ============================================================ */
+.presencia-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+  padding: var(--pad-section) var(--pad-x);
+}
+.presencia-foto {
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--linea);
+  position: relative;
+}
+.presencia-foto img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  filter: grayscale(25%) contrast(1.03);
+}
+.presencia-foto-ph {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; background: #E8E5DF;
+  color: var(--grafito);
+}
+.presencia-foto-ph span {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #aaa;
+  text-align: center;
+  padding: 0 20px;
+}
+.presencia-contenido { padding-top: 16px; }
+.presencia-texto {
+  font-size: clamp(16px, 1.8vw, 19px);
+  font-weight: 300;
+  line-height: 1.72;
+  margin-bottom: 32px;
+}
+.presencia-metricas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.metrica-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 0.5px solid var(--linea);
+  background: var(--blanco);
+}
+.metrica-label {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  flex: 1;
+}
+.metrica-valor {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  font-style: italic;
+}
+
+@media (max-width: 767px) {
+  .presencia-wrap { grid-template-columns: 1fr; }
+  .presencia-foto { aspect-ratio: 16/9; }
+}
+
+/* ============================================================
+   ARCHIVO REAL
+   ============================================================ */
+.archivo-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x) var(--pad-section);
+}
+.archivo-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 6;
+  border: 0.5px dashed var(--linea);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--blanco);
+}
+.archivo-placeholder span:first-child {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ccc;
+}
+.archivo-placeholder span:last-child {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--grafito);
+}
+
+/* ============================================================
+   ORDEN ADMINISTRATIVO
+   ============================================================ */
+.admin-wrap {
+  background: var(--ink);
+  padding: clamp(40px, 6vw, 64px) var(--pad-x);
+}
+.admin-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.admin-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.admin-sub {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 36px;
+  display: block;
+}
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 0.5px solid rgba(255,255,255,0.1);
+}
+.admin-item {
+  padding: 20px 20px 20px 0;
+  border-right: 0.5px solid rgba(255,255,255,0.1);
+}
+.admin-item:last-child { border-right: none; }
+.admin-check {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  color: var(--vino);
+  margin-bottom: 6px;
+  display: block;
+}
+.admin-item-titulo {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 400;
+  font-style: italic;
+  color: #fff;
+  display: block;
+  margin-bottom: 5px;
+}
+.admin-item-desc {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .admin-grid { grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.1); }
+  .admin-item { background: var(--ink); padding: 20px; border-right: none; }
+}
+@media (max-width: 480px) {
+  .admin-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   DECLARACIÓN FINAL
+   ============================================================ */
+.decl-final-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--pad-section) var(--pad-x);
+  text-align: center;
+}
+.decl-final-txt {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 2.2vw, 22px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+/* ============================================================
+   CTA PRINCIPAL
+   ============================================================ */
+.cta-wrap {
+  background: var(--cream);
+  border-top: 0.5px solid var(--linea);
+  padding: clamp(56px, 9vw, 112px) var(--pad-x);
+  text-align: center;
+  position: relative;
+}
+.cta-vino-fin {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 48px;
+  background: var(--vino);
+  opacity: 0.5;
+}
+.cta-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 300;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.cta-sub {
+  font-size: clamp(15px, 1.8vw, 18px);
+  font-weight: 300;
+  color: var(--grafito);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  line-height: 1.65;
+}
+.cta-botones {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.btn-primario {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--vino);
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-block;
+}
+.btn-primario:hover { background: #6a2525; }
+.btn-secundario {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  padding: 14px 28px;
+  border: 0.5px solid var(--ink);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+}
+.btn-secundario:hover { background: var(--ink); color: #fff; }
+.cta-contacto {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--grafito);
+  line-height: 2;
+}
+.cta-contacto a { color: var(--grafito); border-bottom: 0.5px solid var(--linea); transition: color 0.2s, border-color 0.2s; }
+.cta-contacto a:hover { color: var(--ink); border-color: var(--ink); }
+.cta-proximo {
+  margin-top: 24px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--grafito);
+}
+
+/* ============================================================
+   OTRAS DIMENSIONES
+   ============================================================ */
+.otras-wrap {
+  border-top: 0.5px solid var(--linea);
+  padding: var(--pad-section) var(--pad-x);
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.otras-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--grafito);
+  margin-bottom: 36px;
+}
+.otras-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--linea);
+  border: 0.5px solid var(--linea);
+}
+.otra-item {
+  background: var(--cream);
+  padding: 24px 20px;
+  transition: background 0.2s;
+  display: block;
+}
+.otra-item:hover { background: var(--blanco); }
+.otra-label {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grafito);
+  display: block;
+  margin-bottom: 8px;
+}
+.otra-nombre {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .otras-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .otras-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   CONFIDENCIAL
+   ============================================================ */
+.confidencial-nota {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x) 24px;
+}
+.confidencial-nota p {
+  font-family: var(--font-ui);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: #bbb;
+  line-height: 1.8;
+  border-top: 0.5px solid var(--linea);
+  padding-top: 16px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--ink);
+  padding: clamp(32px, 5vw, 56px) var(--pad-x);
+}
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.footer-marca {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 300;
+  color: #fff;
+  display: block;
+  margin-bottom: 6px;
+}
+.footer-sub {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  display: block;
+  margin-bottom: 4px;
+}
+.footer-conf {
+  font-family: var(--font-ui);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  margin-top: 16px;
+  display: block;
+  line-height: 1.6;
+}
+.footer-contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-contacto a {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.45);
+  transition: color 0.2s;
+}
+.footer-contacto a:hover { color: #fff; }
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+.footer-nav a {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  transition: color 0.2s;
+}
+.footer-nav a:hover { color: rgba(255,255,255,0.7); }
+
+@media (max-width: 767px) {
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-nav { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- LÍNEA AUTORAL LATERAL -->
+<svg id="linea-autoral" aria-hidden="true">
+  <line x1="1" y1="0" x2="1" y2="100vh" id="linea-stroke"/>
+</svg>
+
+<!-- ============================================================
+     NAVEGACIÓN
+     ============================================================ -->
+<nav class="nav" role="navigation" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a href="/" class="nav-marca">Tóbal Blu</a>
+    <ul class="nav-links" role="list">
+      <li><a href="/musica">Música</a></li>
+      <li><a href="/produccion">Producción</a></li>
+      <li><a href="/publishing" class="active" aria-current="page">Publishing</a></li>
+      <li><a href="/proyectos">Proyectos</a></li>
+      <li><a href="/contacto">Contacto</a></li>
+    </ul>
+    <button class="nav-menu-btn" aria-label="Abrir menú" aria-expanded="false" id="menu-btn">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
+        <line x1="0" y1="1" x2="20" y2="1" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="0" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="0" y1="13" x2="20" y2="13" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile" role="dialog" aria-label="Menú móvil">
+  <a href="/musica">Música</a>
+  <a href="/produccion">Producción</a>
+  <a href="/publishing" class="active">Publishing</a>
+  <a href="/proyectos">Proyectos</a>
+  <a href="/contacto">Contacto</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section aria-label="Presentación">
+  <div class="hero">
+    <div class="hero-texto">
+      <span class="hero-eyebrow reveal">Publishing · Archivo autoral</span>
+      <h1 class="hero-nombre reveal reveal-delay-1">Cristóbal<br>Urbina Cabalín</h1>
+      <p class="hero-rol reveal reveal-delay-2">Compositor · Productor · Director creativo</p>
+      <p class="hero-sub reveal reveal-delay-2">Construcción integral de canciones</p>
+      <p class="hero-propuesta reveal reveal-delay-3">
+        Catálogo probado con <strong>más de 130 millones de streams en Spotify</strong>. Participaciones autorales documentadas. Repertorio inédito terminado y escuchable. Participaciones editoriales libres y disponibles.
+      </p>
+      <span class="hero-busqueda reveal reveal-delay-4">Se busca un socio editorial activo para desarrollo autoral, sincronización y circulación internacional</span>
+      <div class="scroll-hint reveal reveal-delay-4" aria-hidden="true">
+        <div class="scroll-hint-line"></div>
+        <span>Explorar</span>
+      </div>
+    </div>
+    <div class="hero-imagen reveal reveal-delay-2">
+      <!-- FOTO HERO: reemplazar por fotografía principal -->
+      <!-- Ruta sugerida: tobalblu.github.io/img/publishing/hero.jpg -->
+      <div class="hero-foto-wrap">
+        <div class="hero-foto-placeholder">
+          <span>Foto principal</span>
+          <span>tobalblu.github.io/img/publishing/hero.jpg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EVIDENCIA PRINCIPAL
+     ============================================================ -->
+<section aria-label="Evidencia de catálogo">
+  <div class="evidencia-wrap">
+    <div class="evidencia-inner">
+      <span class="evidencia-label reveal">Evidencia de catálogo · Spotify · corte julio 2026</span>
+      <div class="evidencia-grid">
+        <div class="ev-principal reveal">
+          <span class="ev-num">130M+</span>
+          <span class="ev-desc">streams acumulados en obras<br>con participación autoral</span>
+        </div>
+        <div class="ev-secundario reveal reveal-delay-1">
+          <span class="ev-num">59M</span>
+          <span class="ev-desc">Confortas Pero Dañas<br>25 % participación autoral</span>
+        </div>
+        <div class="ev-secundario ev-disponible reveal reveal-delay-2">
+          <span class="ev-tag">12 obras</span>
+          <span class="ev-desc">repertorio inédito terminado<br>y disponible para escucha</span>
+        </div>
+        <div class="ev-secundario ev-disponible reveal reveal-delay-3" style="border-right:none;">
+          <span class="ev-tag">Disponible</span>
+          <span class="ev-desc">participaciones editoriales<br>sin compromisos previos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CASOS DE CATÁLOGO
+     ============================================================ -->
+<section aria-label="Casos de catálogo">
+  <div class="seccion">
+    <div class="casos-eyebrow reveal">
+      <span class="label">Casos de referencia</span>
+    </div>
+
+    <!-- Caso principal -->
+    <div class="caso-principal reveal">
+      <div>
+        <h2 class="caso-p-titulo">Confortas Pero Dañas</h2>
+        <p class="caso-p-artista">Kidd Voodoo ft. Resonancia Etérea</p>
+        <div class="caso-p-datos">
+          <span class="dato-chip">25 % autoría</span>
+          <span class="dato-chip">700 días · Nuevo Rock Latino</span>
+        </div>
+        <p class="caso-p-interp">Permanencia sostenida más allá del ciclo inicial de lanzamiento.</p>
+        <div class="caso-p-acciones">
+          <!-- href a reemplazar con link real de Spotify -->
+          <a href="#" class="btn-ghost">Escuchar en Spotify</a>
+          <a href="#" class="btn-ghost">Ver créditos</a>
+        </div>
+      </div>
+      <div>
+        <div class="caso-p-stream">
+          <div class="stream-bloque">
+            <span class="stream-num">59M</span>
+            <span class="stream-plat">Spotify</span>
+          </div>
+          <div class="stream-bloque">
+            <span class="stream-num">18M</span>
+            <span class="stream-plat">YouTube</span>
+          </div>
+        </div>
+        <p class="caso-p-badge" style="margin-top:24px;">700 días consecutivos en playlist editorial</p>
+      </div>
+    </div>
+
+    <!-- Casos secundarios -->
+    <div class="casos-secundarios reveal">
+      <div class="caso-sec">
+        <h3 class="caso-sec-titulo">Poder quererme</h3>
+        <p class="caso-sec-artista">Kidd Voodoo · 10 % autoría</p>
+        <div class="caso-sec-datos">5M Spotify · Desde febrero 2026</div>
+        <p class="caso-sec-interp">Tracción relevante sin artista invitado como motor de atención.</p>
+      </div>
+      <div class="caso-sec">
+        <h3 class="caso-sec-titulo">Quema las estrellas</h3>
+        <p class="caso-sec-artista">Resonancia Etérea · 25 % autoría</p>
+        <div class="caso-sec-datos">3,8M Spotify · Curva sostenida desde 2022 · 186K oyentes únicos</div>
+        <p class="caso-sec-interp">Permanencia real en catálogo propio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DECLARACIÓN AUTORAL
+     ============================================================ -->
+<section aria-label="Declaración autoral">
+  <div class="declaracion-wrap reveal">
+    <div class="declaracion-vino-accent" aria-hidden="true"></div>
+    <blockquote class="declaracion-cita">
+      Una canción nace cuando hay algo que desea ser dicho.
+      Mi trabajo es darle una forma musical a la que otros quieran volver.
+    </blockquote>
+    <!-- TRAZO MANUSCRITO: "a la que otros quieran volver" — reemplazar por imagen real -->
+    <div class="manuscrito-placeholder" aria-hidden="true">
+      <span>Trazo manuscrito · tobalblu.github.io/img/publishing/manuscrito.jpg</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MÉTODO
+     ============================================================ -->
+<section aria-label="Método de trabajo">
+  <div class="seccion">
+    <div class="metodo-titulo-bloque reveal">
+      <h2>Cómo construye y sostiene los resultados</h2>
+      <p>Método de construcción integral</p>
+    </div>
+    <div class="metodo-pasos">
+      <div class="metodo-paso reveal">
+        <span class="metodo-num" aria-hidden="true">01</span>
+        <div class="metodo-contenido">
+          <h3 class="metodo-step-titulo">Inmersión</h3>
+          <p class="metodo-step-txt">Historia, catálogo, referencias, audiencia y objetivos del artista. Antes de proponer una canción, entiende qué necesita realmente el proyecto y qué dimensiones todavía no han sido exploradas.</p>
+        </div>
+      </div>
+      <div class="metodo-paso reveal reveal-delay-1">
+        <span class="metodo-num" aria-hidden="true">02</span>
+        <div class="metodo-contenido">
+          <h3 class="metodo-step-titulo">Traducción emocional</h3>
+          <p class="metodo-step-txt">Una intención que todavía no tiene forma musical se convierte en decisiones concretas: melodía, armonía, letra, estructura e interpretación. El criterio es siempre la canción, no la demostración técnica.</p>
+        </div>
+      </div>
+      <div class="metodo-paso reveal reveal-delay-2">
+        <span class="metodo-num" aria-hidden="true">03</span>
+        <div class="metodo-contenido">
+          <h3 class="metodo-step-titulo">Construcción</h3>
+          <p class="metodo-step-txt">En una misma sesión pueden convivir composición, estructura, intención, arreglos, producción y dirección vocal. El conocimiento técnico y productivo permite que el demo se acerque desde temprano a la forma final de la obra. Así, el artista y su equipo no escuchan una idea abstracta, sino una representación clara del potencial real de la canción.</p>
+        </div>
+      </div>
+      <div class="metodo-paso reveal reveal-delay-3">
+        <span class="metodo-num" aria-hidden="true">04</span>
+        <div class="metodo-contenido">
+          <h3 class="metodo-step-titulo">Lectura estructural</h3>
+          <p class="metodo-step-txt">La obra es evaluada dentro del proyecto completo: álbum, catálogo, show, potencial de circulación y coherencia con la identidad del artista. La canción no existe aislada de la carrera.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PIPELINE
+     ============================================================ -->
+<section aria-label="Pipeline de lanzamientos">
+  <div class="seccion">
+    <div class="pipeline-wrap reveal">
+      <div class="pipeline-titulo">
+        <h2>Repertorio en movimiento</h2>
+        <p>Pipeline confirmado · Lanzamientos 2026–2028</p>
+      </div>
+      <div class="timeline" role="list">
+        <div class="tl-item" role="listitem">
+          <span class="tl-fecha">30 Jul 2026</span>
+          <span class="tl-artista">Diego Dinnamarco</span>
+          <span class="tl-detalle">Single confirmado</span>
+        </div>
+        <div class="tl-item" role="listitem">
+          <span class="tl-fecha">Ago–Dic 2026</span>
+          <span class="tl-artista">Jas Marty</span>
+          <span class="tl-detalle">10 canciones</span>
+        </div>
+        <div class="tl-item" role="listitem">
+          <span class="tl-fecha">Oct 2026–Feb 2027</span>
+          <span class="tl-artista">Lafé</span>
+          <span class="tl-detalle">2 canciones</span>
+        </div>
+        <div class="tl-item" role="listitem">
+          <span class="tl-fecha">2028</span>
+          <span class="tl-artista">Resonancia Etérea</span>
+          <span class="tl-detalle">Álbum · 4 composiciones terminadas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CREAR · PRODUCIR · AMPLIFICAR
+     ============================================================ -->
+<section aria-label="Capacidad de creación">
+  <div class="seccion">
+    <span class="label reveal" style="display:block; margin-bottom:24px;">Capacidad</span>
+    <div class="cpa-grid reveal">
+      <div class="cpa-item">
+        <span class="cpa-verbo">Crear</span>
+        <p class="cpa-desc">Composición, melodía, armonía, letra, estructura e intención</p>
+      </div>
+      <div class="cpa-item">
+        <span class="cpa-verbo">Producir</span>
+        <p class="cpa-desc">Arreglos, grabación, dirección vocal y demos cercanos a la forma final</p>
+      </div>
+      <div class="cpa-item">
+        <span class="cpa-verbo">Amplificar</span>
+        <p class="cpa-desc">Presencia pública, relato, contenido y vínculo con audiencia</p>
+      </div>
+    </div>
+    <p class="cpa-texto reveal">
+      Cristóbal combina la agilidad aprendida del género urbano con el acceso a grabación analógica, instrumentos acústicos y producción contemporánea. El sistema se adapta al ritmo que exige cada proyecto: puede dedicar semanas a profundizar una sola canción o sostener ciclos intensivos de creación cuando el objetivo es construir volumen de catálogo.<br><br>
+      Desde 2026 trabaja con dedicación completa desde un estudio propio y operativo, desarrollando composición, producción, grabación, dirección vocal y entregables en distintas etapas de avance.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRESENCIA PÚBLICA
+     ============================================================ -->
+<section aria-label="Presencia pública">
+  <div class="presencia-wrap reveal">
+    <div class="presencia-foto">
+      <!-- FOTO PROCESO: reemplazar por imagen de trabajo real -->
+      <!-- Ruta sugerida: tobalblu.github.io/img/publishing/proceso.jpg -->
+      <div class="presencia-foto-ph">
+        <span>Foto de proceso · sesión real</span>
+        <span>tobalblu.github.io/img/publishing/proceso.jpg</span>
+      </div>
+    </div>
+    <div class="presencia-contenido">
+      <span class="label" style="display:block; margin-bottom:20px;">Presencia pública</span>
+      <p class="presencia-texto">Como cofundador de Resonancia Etérea y creador de contenido activo, Cristóbal mantiene una presencia pública propia que aporta circulación orgánica al catálogo en el que participa como autor y fortalece el vínculo entre canción, relato y audiencia.</p>
+      <div class="presencia-metricas">
+        <div class="metrica-item">
+          <span class="metrica-label">Audiencia propia</span>
+          <span class="metrica-valor">Datos disponibles en reunión</span>
+        </div>
+        <div class="metrica-item">
+          <span class="metrica-label">Alcance de contenido</span>
+          <span class="metrica-valor">Datos disponibles en reunión</span>
+        </div>
+        <div class="metrica-item">
+          <span class="metrica-label">Plataformas activas</span>
+          <span class="metrica-valor">TikTok · Instagram · YouTube</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ARCHIVO REAL DE COMPOSICIÓN
+     ============================================================ -->
+<section aria-label="Archivo de composición">
+  <div class="archivo-wrap reveal">
+    <span class="label" style="display:block; margin-bottom:16px;">Archivo real</span>
+    <!-- ARCHIVO REAL: insertar fragmento de cuaderno o sesión -->
+    <!-- Ruta sugerida: tobalblu.github.io/img/publishing/archivo.jpg -->
+    <div class="archivo-placeholder">
+      <span>Archivo real · fragmento de cuaderno o sesión</span>
+      <span>Fragmento de proceso · Archivo de composición 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ORDEN ADMINISTRATIVO
+     ============================================================ -->
+<section aria-label="Orden administrativo">
+  <div class="admin-wrap">
+    <div class="admin-inner">
+      <h2 class="admin-titulo reveal">Listo para revisión editorial</h2>
+      <span class="admin-sub reveal">Due diligence</span>
+      <div class="admin-grid">
+        <div class="admin-item reveal">
+          <span class="admin-check" aria-hidden="true">✓</span>
+          <span class="admin-item-titulo">Registro autoral</span>
+          <span class="admin-item-desc">Individual · Identificador IPI/CAE activo</span>
+        </div>
+        <div class="admin-item reveal reveal-delay-1">
+          <span class="admin-check" aria-hidden="true">✓</span>
+          <span class="admin-item-titulo">Split sheets</span>
+          <span class="admin-item-desc">Cerrados en todas las obras publicadas</span>
+        </div>
+        <div class="admin-item reveal reveal-delay-2">
+          <span class="admin-check" aria-hidden="true">✓</span>
+          <span class="admin-item-titulo">Derechos editoriales</span>
+          <span class="admin-item-desc">Participaciones de Cristóbal libres y disponibles para negociación</span>
+        </div>
+        <div class="admin-item reveal reveal-delay-3">
+          <span class="admin-check" aria-hidden="true">✓</span>
+          <span class="admin-item-titulo">Repertorio inédito</span>
+          <span class="admin-item-desc">12 obras terminadas y escuchables a solicitud</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DECLARACIÓN FINAL
+     ============================================================ -->
+<section aria-label="Declaración final">
+  <div class="decl-final-wrap reveal">
+    <p class="decl-final-txt">No busco únicamente un publisher que administre lo que ya construí. Busco un socio editorial que también quiera participar de lo que viene: proyectos con historia, con mensaje y con algo real que contar; canciones capaces de convertirse en algo real para quien las escucha.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA PRINCIPAL
+     ============================================================ -->
+<section aria-label="Contacto y repertorio">
+  <div class="cta-wrap">
+    <div class="cta-vino-fin" aria-hidden="true"></div>
+    <h2 class="cta-titulo reveal">Escuchar lo que viene</h2>
+    <p class="cta-sub reveal">Doce obras inéditas se encuentran terminadas y disponibles para escucha privada.</p>
+    <div class="cta-botones reveal">
+      <a href="mailto:tobal.blu@gmail.com?subject=Solicitud%20de%20repertorio%20%E2%80%94%20Publishing" class="btn-primario">Solicitar acceso al repertorio</a>
+      <a href="/contacto" class="btn-secundario">Conversar sobre una alianza editorial</a>
+    </div>
+    <div class="cta-contacto reveal">
+      <a href="mailto:tobal.blu@gmail.com">tobal.blu@gmail.com</a><br>
+      <a href="tel:+56963725631">+56 9 6372 5631</a>
+    </div>
+    <p class="cta-proximo reveal">Próximo paso: conocer el repertorio y conversar sobre una posible alianza editorial.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     OTRAS DIMENSIONES
+     ============================================================ -->
+<section aria-label="Otras áreas">
+  <div class="otras-wrap">
+    <p class="otras-titulo reveal">También habito otros lugares</p>
+    <div class="otras-grid reveal">
+      <a href="/musica" class="otra-item">
+        <span class="otra-label">Explorar</span>
+        <span class="otra-nombre">Música</span>
+      </a>
+      <a href="/produccion" class="otra-item">
+        <span class="otra-label">Explorar</span>
+        <span class="otra-nombre">Producción</span>
+      </a>
+      <a href="/proyectos" class="otra-item">
+        <span class="otra-label">Explorar</span>
+        <span class="otra-nombre">Proyectos creativos</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NOTA DE CONFIDENCIALIDAD -->
+<div class="confidencial-nota">
+  <p>Documento confidencial — circulación restringida. La información contenida en esta página incluye planes de trabajo, repertorio inédito y colaboraciones todavía no anunciadas públicamente. No reproducir, compartir ni divulgar total o parcialmente sin autorización expresa de Cristóbal Urbina Cabalín.</p>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="footer-marca">Cristóbal Urbina Cabalín</span>
+      <span class="footer-sub">Santiago de Chile · 2026</span>
+      <span class="footer-conf">Documento confidencial · Circulación restringida</span>
+    </div>
+    <div class="footer-contacto">
+      <a href="mailto:tobal.blu@gmail.com">tobal.blu@gmail.com</a>
+      <a href="tel:+56963725631">+56 9 6372 5631</a>
+      <a href="https://tobalblu.com" target="_blank" rel="noopener">tobalblu.com</a>
+    </div>
+    <nav class="footer-nav" aria-label="Navegación footer">
+      <a href="/musica">Música</a>
+      <a href="/produccion">Producción</a>
+      <a href="/publishing">Publishing</a>
+      <a href="/proyectos">Proyectos</a>
+      <a href="/contacto">Contacto</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// Menú móvil
+const menuBtn = document.getElementById('menu-btn');
+const navMobile = document.getElementById('nav-mobile');
+menuBtn.addEventListener('click', () => {
+  const open = navMobile.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', open);
+  menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+});
+
+// IntersectionObserver para reveal
+if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// Línea autoral — progresa con el scroll
+const lineaStroke = document.getElementById('linea-stroke');
+if (lineaStroke) {
+  function updateLinea() {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = Math.min(scrolled / total, 1);
+    const dashOffset = (1 - pct) * window.innerHeight;
+    lineaStroke.style.strokeDasharray = window.innerHeight + 'px';
+    lineaStroke.style.strokeDashoffset = dashOffset + 'px';
+  }
+  window.addEventListener('scroll', updateLinea, { passive: true });
+  updateLinea();
+}
+</script>
+</body>
+</html>

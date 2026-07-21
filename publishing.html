@@ -1,37 +1,38 @@
+
+
+Presskit · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cristóbal Urbina Cabalín — Compositor, productor y publishing</title>
-<meta name="description" content="Catálogo autoral con más de 130 millones de streams, repertorio inédito y participaciones editoriales disponibles.">
-<meta property="og:title" content="Cristóbal Urbina Cabalín — Publishing">
-<meta property="og:description" content="Catálogo probado con más de 130 millones de streams. Participaciones editoriales disponibles. Repertorio inédito terminado.">
-<meta property="og:url" content="https://tobalblu.com/publishing">
-<link rel="canonical" href="https://tobalblu.com/publishing">
+<title>Cristóbal Urbina Cabalín — Presskit</title>
+<meta name="description" content="Presskit completo de Cristóbal Urbina Cabalín — compositor, artista, performer, productor e ingeniero.">
+<link rel="canonical" href="https://tobalblu.com/presskit">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy:        #090F1A;
-  --navy-mid:    #1B2A4A;
   --navy-card:   #0D1625;
+  --navy-mid:    #111E33;
   --cream:       #F2F0EA;
   --cream-dim:   rgba(242,240,234,0.82);
   --cream-muted: rgba(242,240,234,0.55);
-  --cream-ghost: rgba(242,240,234,0.07);
-  --cream-line:  rgba(242,240,234,0.14);
+  --cream-ghost: rgba(242,240,234,0.05);
+  --cream-line:  rgba(242,240,234,0.12);
   --vino:        #8B3A3A;
   --vino-bright: #A84444;
   --font-d: "Cormorant Garamond", Georgia, serif;
   --font-u: "Inter", system-ui, sans-serif;
   --max-w: 1100px;
-  --pad-x: clamp(24px, 5vw, 80px);
-  --pad-s: clamp(56px, 9vw, 112px);
+  --nav-w: 200px;
+  --pad-x: clamp(24px, 4vw, 64px);
+  --pad-s: clamp(64px, 9vw, 112px);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
-
+ 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { font-size:16px; scroll-behavior:smooth; }
 body {
@@ -45,233 +46,206 @@ body {
 img { display:block; max-width:100%; height:auto; }
 a { color:inherit; text-decoration:none; }
 a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; border-radius:2px; }
-
-/* ANIMACIONES */
+ 
+/* ===== ANIMACIONES ===== */
 @media (prefers-reduced-motion: no-preference) {
-  .reveal { opacity:0; transform:translateY(20px); transition:opacity .85s var(--ease), transform .85s var(--ease); }
+  .reveal { opacity:0; transform:translateY(18px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
   .reveal.vis { opacity:1; transform:translateY(0); }
-  .d1{transition-delay:.11s} .d2{transition-delay:.22s} .d3{transition-delay:.34s} .d4{transition-delay:.46s}
+  .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s}
 }
-
-/* LÍNEA AUTORAL */
-#la { position:fixed; left:clamp(14px,2.5vw,32px); top:0; width:2px; height:100vh; pointer-events:none; z-index:20; }
+ 
+/* ===== LÍNEA AUTORAL ===== */
+#la { position:fixed; left:clamp(12px,2vw,24px); top:0; width:1.5px; height:100vh; pointer-events:none; z-index:30; }
 #ls { stroke:var(--vino); stroke-width:1.5; stroke-dasharray:100vh; stroke-dashoffset:100vh; }
-@media(max-width:767px){#la{display:none}}
-
-/* NAV */
-.nav { position:sticky; top:0; z-index:100; background:rgba(14,24,40,0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:0.5px solid var(--cream-line); }
-.nav-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--pad-x); height:54px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-.nav-marca { font-family:var(--font-d); font-size:16px; font-weight:300; letter-spacing:.04em; color:var(--cream); white-space:nowrap; flex-shrink:0; }
-.nav-links { display:flex; align-items:center; gap:32px; list-style:none; }
-.nav-links a { font-family:var(--font-u); font-size:10px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-muted); transition:color .2s; }
-.nav-links a:hover { color:var(--cream); }
-.nav-links a.active { color:var(--vino-bright); border-bottom:1px solid var(--vino); padding-bottom:1px; }
-.nav-btn { display:none; background:none; border:none; cursor:pointer; padding:6px; color:var(--cream); }
-.nav-mob { display:none; position:fixed; inset:54px 0 0 0; background:rgba(14,24,40,.97); z-index:99; padding:32px var(--pad-x); border-top:0.5px solid var(--cream-line); flex-direction:column; gap:20px; }
-.nav-mob.open { display:flex; }
-.nav-mob a { font-family:var(--font-u); font-size:12px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-muted); padding:10px 0; border-bottom:0.5px solid var(--cream-line); }
-.nav-mob a.active { color:var(--vino-bright); }
-@media(max-width:767px){.nav-links{display:none}.nav-btn{display:block}}
-
-/* HERO */
-.hero { max-width:var(--max-w); margin:0 auto; padding:clamp(64px,10vw,120px) var(--pad-x) clamp(64px,10vw,120px); display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,5vw,72px); align-items:center; min-height:88vh; }
-.h-ey { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.32em; text-transform:uppercase; color:var(--vino-bright); margin-bottom:20px; display:block; }
-.h-nombre { font-family:var(--font-d); font-size:clamp(44px,6.5vw,76px); font-weight:300; letter-spacing:-.02em; line-height:1.0; color:var(--cream); margin-bottom:16px; }
-.h-rol { font-family:var(--font-u); font-size:10px; font-weight:300; letter-spacing:.22em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:5px; }
-.h-sub { font-family:var(--font-d); font-size:13px; font-style:italic; color:var(--cream-muted); margin-bottom:40px; }
-.h-prop { font-size:clamp(15px,1.7vw,18px); font-weight:300; line-height:1.78; color:var(--cream-dim); max-width:460px; margin-bottom:28px; }
-.h-prop strong { font-weight:400; color:var(--cream); }
-.h-busq { display:inline-block; font-family:var(--font-u); font-size:10px; font-weight:400; letter-spacing:.18em; text-transform:uppercase; color:var(--vino-bright); border-bottom:1px solid var(--vino); padding-bottom:2px; }
-.h-foto { position:relative; aspect-ratio:3/4; overflow:hidden; background:var(--cream-ghost); border:0.5px solid var(--cream-line); }
-.h-foto img { width:100%; height:100%; object-fit:cover; object-position:center 20%; filter:contrast(1.02) brightness(.92) saturate(.8); }
-.h-ph { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:24px; }
-.h-ph span { font-family:var(--font-u); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--cream-muted); text-align:center; line-height:1.7; }
-.scroll-h { margin-top:44px; display:flex; align-items:center; gap:10px; color:var(--cream-muted); }
-.scroll-line { width:32px; height:.5px; background:var(--cream-muted); }
-.scroll-h span { font-family:var(--font-u); font-size:9px; letter-spacing:.22em; text-transform:uppercase; }
-@media(max-width:900px){ .hero{grid-template-columns:1fr;min-height:auto} .h-foto{aspect-ratio:16/9;max-height:280px} .scroll-h{display:none} }
-
-/* SEPARADOR CREMA — acento 15% */
-.sep-cream {
-  width:100%; padding:clamp(40px,6vw,64px) var(--pad-x);
-  background: rgba(8,14,26,0.55);
-  border-top:0.5px solid var(--cream-line);
+@media(max-width:900px){#la{display:none}}
+ 
+/* ===== NAV TOP ===== */
+.nav-top {
+  position:sticky; top:0; z-index:100;
+  background:rgba(9,15,26,0.94);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
   border-bottom:0.5px solid var(--cream-line);
 }
-.sep-cream-inner { max-width:var(--max-w); margin:0 auto; }
-
-/* EVIDENCIA */
-.ev-lbl { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:48px; display:block; }
-.ev-grid { display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr; gap:0; border-top:0.5px solid var(--cream-line); padding-top:40px; align-items:end; }
-.ev-col { padding-right:28px; border-right:0.5px solid var(--cream-line); }
-.ev-col:last-child { border-right:none; }
-.ev-col:not(:first-child) { padding-left:24px; }
-.ev-num { font-family:var(--font-d); font-weight:300; color:var(--cream); letter-spacing:-.03em; display:block; margin-bottom:12px; line-height:.88; }
-.ev-principal .ev-num { font-size:clamp(80px,11vw,130px); }
-.ev-sec .ev-num { font-size:clamp(36px,4.5vw,54px); }
-.ev-desc { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.1em; text-transform:uppercase; color:rgba(242,240,234,0.62); line-height:1.7; display:block; }
-.ev-tag { font-family:var(--font-u); font-size:9px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--cream); background:rgba(139,58,58,.3); padding:4px 10px; display:inline-block; margin-bottom:8px; border:0.5px solid rgba(139,58,58,.5); }
-@media(max-width:900px){ .ev-grid{grid-template-columns:1fr 1fr;gap:28px 0} .ev-col{border-right:none;padding:0;border-bottom:.5px solid var(--cream-line);padding-bottom:20px} .ev-col:last-child{border-bottom:none} .ev-principal{grid-column:1/-1} }
-@media(max-width:480px){ .ev-grid{grid-template-columns:1fr} .ev-principal{grid-column:auto} }
-
-/* SECCIÓN */
-.sec { max-width:var(--max-w); margin:0 auto; padding:var(--pad-s) var(--pad-x); }
-.s-lbl { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:rgba(242,240,234,0.58); display:block; margin-bottom:2px; }
-
-/* CASOS */
-.c-ey { display:flex; align-items:center; gap:16px; margin-bottom:48px; }
-.c-ey::after { content:''; flex:1; height:.5px; background:var(--cream-line); }
-.cp { display:grid; grid-template-columns:1fr 1fr; gap:48px; padding:40px 0; border-top:.5px solid var(--cream-line); border-bottom:.5px solid var(--cream-line); margin-bottom:2px; align-items:start; }
-.cp-t { font-family:var(--font-d); font-size:clamp(28px,4vw,44px); font-weight:300; font-style:italic; line-height:1.12; color:var(--cream); margin-bottom:14px; }
-.cp-a { font-family:var(--font-u); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:20px; }
-.chip { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.1em; text-transform:uppercase; color:var(--cream-dim); border:.5px solid var(--cream-line); padding:4px 10px; background:var(--cream-ghost); display:inline-block; margin:0 4px 4px 0; }
-.cp-i { font-size:15px; font-style:italic; font-weight:300; color:var(--cream-muted); line-height:1.6; margin:20px 0 24px; }
-.cp-str { display:flex; gap:28px; margin-bottom:20px; }
-.str-n { font-family:var(--font-d); font-size:32px; font-weight:300; color:var(--cream); display:block; letter-spacing:-.02em; }
-.str-p { font-family:var(--font-u); font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--cream-muted); display:block; }
-.cp-b { font-family:var(--font-u); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--vino-bright); border-left:2px solid var(--vino); padding-left:10px; display:block; line-height:1.6; margin-top:16px; }
-.btn-g { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.16em; text-transform:uppercase; color:var(--cream-muted); border:.5px solid var(--cream-line); padding:7px 14px; transition:border-color .2s,color .2s; cursor:pointer; background:none; display:inline-block; margin-right:8px; margin-top:16px; }
-.btn-g:hover { border-color:var(--cream-dim); color:var(--cream); }
-.cs { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--cream-line); border:.5px solid var(--cream-line); }
-.cs-item { background:var(--navy-card); padding:28px 24px; transition:background .2s; }
-.cs-item:hover { background:rgba(242,240,234,.05); }
-.cs-t { font-family:var(--font-d); font-size:20px; font-weight:300; font-style:italic; color:var(--cream); margin-bottom:6px; }
-.cs-a { font-family:var(--font-u); font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:10px; }
-.cs-d { font-family:var(--font-u); font-size:9px; letter-spacing:.08em; color:var(--cream-muted); line-height:1.8; margin-bottom:12px; }
-.cs-i { font-size:13px; font-style:italic; color:var(--cream-dim); border-left:1.5px solid var(--vino); padding-left:10px; line-height:1.55; }
-@media(max-width:767px){ .cp{grid-template-columns:1fr;gap:24px} .cs{grid-template-columns:1fr} }
-
-/* DECLARACIÓN AUTORAL */
-.dc-wrap { padding:clamp(72px,11vw,128px) var(--pad-x); text-align:center; position:relative; border-top:.5px solid var(--cream-line); }
-.dc-acc { position:absolute; left:50%; top:0; transform:translateX(-50%); width:1px; height:56px; background:var(--vino); opacity:.5; }
-.dc-q { font-family:var(--font-d); font-size:clamp(24px,3.8vw,44px); font-weight:300; font-style:italic; line-height:1.42; color:var(--cream); max-width:720px; margin:48px auto 28px; letter-spacing:-.01em; }
-.ms-ph { margin:20px auto 0; max-width:400px; height:44px; border:.5px dashed var(--cream-line); display:flex; align-items:center; justify-content:center; }
-.ms-ph span { font-family:var(--font-u); font-size:8px; letter-spacing:.16em; text-transform:uppercase; color:var(--cream-muted); }
-
-/* MÉTODO */
-.mt-h { margin-bottom:52px; }
-.mt-h h2 { font-family:var(--font-d); font-size:clamp(26px,3.2vw,38px); font-weight:300; color:var(--cream); margin-bottom:6px; }
-.mt-h p { font-family:var(--font-u); font-size:9px; letter-spacing:.24em; text-transform:uppercase; color:var(--cream-muted); }
-.mt-p { display:grid; grid-template-columns:72px 1fr; gap:0 28px; padding:32px 0; border-top:.5px solid var(--cream-line); align-items:start; }
-.mt-p:last-child { border-bottom:.5px solid var(--cream-line); }
-.mt-n { font-family:var(--font-d); font-size:48px; font-weight:300; color:rgba(242,240,234,.08); line-height:1; padding-top:2px; }
-.mt-pt { font-family:var(--font-d); font-size:19px; font-weight:400; color:var(--cream); margin-bottom:8px; }
-.mt-tx { font-size:14px; font-weight:300; line-height:1.78; color:rgba(242,240,234,0.78); max-width:560px; }
-@media(max-width:600px){ .mt-p{grid-template-columns:44px 1fr;gap:0 14px} .mt-n{font-size:30px} }
-
-/* PIPELINE — bloque crema claro */
-.pl-wrap { background:rgba(242,240,234,0.06); border-top:.5px solid var(--cream-line); border-bottom:.5px solid var(--cream-line); padding:clamp(48px,7vw,80px) var(--pad-x); }
-.pl-inner { max-width:var(--max-w); margin:0 auto; }
-.pl-h { margin-bottom:44px; }
-.pl-h h2 { font-family:var(--font-d); font-size:clamp(24px,3vw,34px); font-weight:300; color:var(--cream); margin-bottom:4px; }
-.pl-h p { font-family:var(--font-u); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--cream-muted); }
-.tl { display:flex; gap:0; position:relative; padding-top:28px; }
-.tl::before { content:''; position:absolute; top:0; left:0; right:0; height:.5px; background:var(--cream-line); }
-.tl-i { flex:1; padding-right:20px; position:relative; }
-.tl-i::before { content:''; position:absolute; top:-32px; left:0; width:6px; height:6px; border-radius:50%; background:var(--vino-bright); }
-.tl-f { font-family:var(--font-u); font-size:8px; font-weight:400; letter-spacing:.22em; text-transform:uppercase; color:var(--vino-bright); margin-bottom:12px; display:block; }
-.tl-a { font-family:var(--font-d); font-size:18px; font-weight:300; font-style:italic; color:var(--cream); margin-bottom:4px; display:block; }
-.tl-d { font-family:var(--font-u); font-size:9px; letter-spacing:.1em; color:rgba(242,240,234,0.58); line-height:1.6; display:block; }
-@media(max-width:767px){ .tl{flex-direction:column;gap:28px;padding-top:0} .tl::before{display:none} .tl-i{padding:0 0 0 20px;border-left:.5px solid var(--cream-line)} .tl-i::before{top:2px;left:-4px} }
-
-/* CPA */
-.cpa-g { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--cream-line); border:.5px solid var(--cream-line); margin-bottom:40px; }
-.cpa-i { background:var(--navy-card); padding:32px 28px; }
-.cpa-v { font-family:var(--font-d); font-size:28px; font-weight:300; font-style:italic; color:var(--cream); display:block; margin-bottom:12px; }
-.cpa-d { font-family:var(--font-u); font-size:9px; letter-spacing:.1em; color:var(--cream-muted); line-height:1.8; }
-.cpa-tx { font-size:14px; font-weight:300; line-height:1.78; color:rgba(242,240,234,0.78); max-width:620px; }
-@media(max-width:767px){ .cpa-g{grid-template-columns:1fr} }
-
-/* PRESENCIA */
-.pr-g { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
-.pr-f { aspect-ratio:4/5; overflow:hidden; background:var(--cream-ghost); border:.5px solid var(--cream-line); }
-.pr-f img { width:100%; height:100%; object-fit:cover; object-position:center 15%; filter:grayscale(15%) contrast(1.03) brightness(.9); }
-.pr-ph { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:24px; }
-.pr-ph span { font-family:var(--font-u); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--cream-muted); text-align:center; line-height:1.6; }
-.pr-tx { font-size:clamp(15px,1.8vw,18px); font-weight:300; line-height:1.78; color:var(--cream-dim); margin-bottom:28px; }
-.pr-m { display:flex; flex-direction:column; gap:10px; }
-.pr-mi { display:flex; align-items:center; gap:12px; padding:10px 14px; border:.5px solid var(--cream-line); background:var(--cream-ghost); }
-.pr-ml { font-family:var(--font-u); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--cream-muted); flex:1; }
-.pr-mv { font-family:var(--font-u); font-size:8px; letter-spacing:.1em; color:var(--cream-muted); font-style:italic; }
-@media(max-width:767px){ .pr-g{grid-template-columns:1fr} .pr-f{aspect-ratio:16/9} }
-
-/* ARCHIVO */
-.ar-ph { width:100%; aspect-ratio:21/8; border:.5px dashed var(--cream-line); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:var(--cream-ghost); }
-.ar-ph span { font-family:var(--font-u); font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--cream-muted); text-align:center; }
-
-/* ADMIN — bloque crema claro */
-.ad-wrap { background:rgba(242,240,234,0.06); border-top:.5px solid var(--cream-line); border-bottom:.5px solid var(--cream-line); padding:clamp(48px,7vw,72px) var(--pad-x); }
-.ad-inner { max-width:var(--max-w); margin:0 auto; }
-.ad-h { font-family:var(--font-d); font-size:clamp(24px,3vw,34px); font-weight:300; color:var(--cream); margin-bottom:6px; }
-.ad-s { font-family:var(--font-u); font-size:9px; letter-spacing:.24em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:40px; display:block; }
-.ad-g { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:.5px solid var(--cream-line); }
-.ad-i { padding:24px 24px 24px 0; border-right:.5px solid var(--cream-line); }
-.ad-i:last-child { border-right:none; }
-.ad-ck { font-family:var(--font-u); font-size:10px; color:var(--vino-bright); margin-bottom:6px; display:block; }
-.ad-t { font-family:var(--font-d); font-size:15px; font-weight:400; font-style:italic; color:var(--cream); display:block; margin-bottom:5px; }
-.ad-d { font-family:var(--font-u); font-size:9px; letter-spacing:.07em; color:rgba(242,240,234,0.6); line-height:1.7; }
-@media(max-width:900px){ .ad-g{grid-template-columns:1fr 1fr;gap:1px;background:var(--cream-line)} .ad-i{padding:20px;border-right:none;background:var(--navy)} }
-@media(max-width:480px){ .ad-g{grid-template-columns:1fr} }
-
-/* DECLARACIÓN FINAL */
-.df { max-width:640px; margin:0 auto; padding:var(--pad-s) var(--pad-x); text-align:center; }
-.df-tx { font-family:var(--font-d); font-size:clamp(17px,2.2vw,22px); font-weight:300; font-style:italic; line-height:1.7; color:var(--cream-dim); }
-
-/* CTA */
-.ct-wrap { border-top:.5px solid var(--cream-line); padding:clamp(64px,10vw,120px) var(--pad-x); text-align:center; position:relative; background:rgba(242,240,234,0.04); }
-.ct-acc { position:absolute; top:0; left:50%; transform:translateX(-50%); width:1px; height:52px; background:var(--vino); opacity:.5; }
-.ct-t { font-family:var(--font-d); font-size:clamp(36px,5.5vw,64px); font-weight:300; color:var(--cream); margin-bottom:18px; letter-spacing:-.02em; }
-.ct-s { font-size:clamp(14px,1.6vw,17px); font-weight:300; color:var(--cream-muted); max-width:460px; margin:0 auto 44px; line-height:1.72; }
-.ct-bs { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:44px; }
-.btn-p { font-family:var(--font-u); font-size:10px; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:#fff; background:var(--vino); padding:14px 30px; border:none; cursor:pointer; transition:background .2s; display:inline-block; }
-.btn-p:hover { background:var(--vino-bright); }
-.btn-s { font-family:var(--font-u); font-size:10px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-dim); background:none; padding:14px 30px; border:.5px solid var(--cream-line); cursor:pointer; transition:border-color .2s,color .2s; display:inline-block; }
-.btn-s:hover { border-color:var(--cream-dim); color:var(--cream); }
-.ct-c { font-family:var(--font-u); font-size:10px; letter-spacing:.12em; color:var(--cream-muted); line-height:2.4; }
-.ct-c a { color:var(--cream-muted); border-bottom:.5px solid var(--cream-line); transition:color .2s; }
-.ct-c a:hover { color:var(--cream); }
-.ct-pr { margin-top:24px; font-family:var(--font-d); font-size:13px; font-style:italic; color:var(--cream-muted); }
-
-/* OTRAS */
-.ot-wrap { max-width:var(--max-w); margin:0 auto; padding:var(--pad-s) var(--pad-x); }
-.ot-t { font-family:var(--font-d); font-size:clamp(20px,2.8vw,30px); font-weight:300; font-style:italic; color:var(--cream-muted); margin-bottom:36px; }
-.ot-g { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--cream-line); border:.5px solid var(--cream-line); }
-.ot-i { background:var(--navy-card); padding:28px 24px; transition:background .2s; display:block; }
-.ot-i:hover { background:rgba(242,240,234,.06); }
-.ot-l { font-family:var(--font-u); font-size:8px; letter-spacing:.24em; text-transform:uppercase; color:var(--cream-muted); display:block; margin-bottom:8px; }
-.ot-n { font-family:var(--font-d); font-size:20px; font-weight:300; font-style:italic; color:var(--cream); display:block; }
-@media(max-width:767px){ .ot-g{grid-template-columns:1fr 1fr} }
-@media(max-width:480px){ .ot-g{grid-template-columns:1fr} }
-
-/* CONF + FOOTER */
-.conf { max-width:var(--max-w); margin:0 auto; padding:0 var(--pad-x) 24px; }
-.conf p { font-family:var(--font-u); font-size:8px; letter-spacing:.08em; color:rgba(242,240,234,.2); line-height:1.8; border-top:.5px solid var(--cream-line); padding-top:16px; }
-footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); padding:clamp(36px,5vw,56px) var(--pad-x); }
-.ft-i { max-width:var(--max-w); margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:32px; align-items:start; }
-.ft-m { font-family:var(--font-d); font-size:20px; font-weight:300; color:var(--cream-dim); display:block; margin-bottom:4px; }
-.ft-s { font-family:var(--font-u); font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--cream-muted); display:block; margin-bottom:4px; }
-.ft-cf { font-family:var(--font-u); font-size:7px; letter-spacing:.1em; color:rgba(242,240,234,.18); margin-top:14px; display:block; line-height:1.6; }
-.ft-c { display:flex; flex-direction:column; gap:8px; }
-.ft-c a { font-family:var(--font-u); font-size:9px; letter-spacing:.1em; color:var(--cream-muted); transition:color .2s; }
-.ft-c a:hover { color:var(--cream-dim); }
-.ft-n { display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
-.ft-n a { font-family:var(--font-u); font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:rgba(242,240,234,.22); transition:color .2s; }
-.ft-n a:hover { color:var(--cream-muted); }
-@media(max-width:767px){ .ft-i{grid-template-columns:1fr} .ft-n{align-items:flex-start} }
+.nav-top-inner {
+  max-width:calc(var(--max-w) + var(--nav-w));
+  margin:0 auto; padding:0 var(--pad-x);
+  height:54px; display:flex; align-items:center; justify-content:space-between; gap:24px;
+}
+.nav-marca { font-family:var(--font-d); font-size:16px; font-weight:300; letter-spacing:.04em; color:var(--cream); white-space:nowrap; flex-shrink:0; }
+.nav-top-links { display:flex; align-items:center; gap:28px; list-style:none; }
+.nav-top-links a { font-family:var(--font-u); font-size:10px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-muted); transition:color .2s; }
+.nav-top-links a:hover { color:var(--cream); }
+.nav-btn { display:none; background:none; border:none; cursor:pointer; padding:6px; color:var(--cream); }
+.nav-mob { display:none; position:fixed; inset:54px 0 0 0; background:rgba(9,15,26,.97); z-index:99; padding:32px var(--pad-x); border-top:0.5px solid var(--cream-line); flex-direction:column; gap:20px; }
+.nav-mob.open { display:flex; }
+.nav-mob a { font-family:var(--font-u); font-size:12px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-muted); padding:10px 0; border-bottom:0.5px solid var(--cream-line); }
+@media(max-width:767px){.nav-top-links{display:none}.nav-btn{display:block}}
+ 
+/* ===== LAYOUT PRINCIPAL ===== */
+.layout {
+  display:grid;
+  grid-template-columns: 1fr var(--nav-w);
+  max-width:calc(var(--max-w) + var(--nav-w));
+  margin:0 auto;
+  min-height:100vh;
+}
+ 
+/* ===== PANEL LATERAL ===== */
+.side-nav {
+  position:sticky;
+  top:54px;
+  height:calc(100vh - 54px);
+  overflow-y:auto;
+  padding:48px 0 48px 24px;
+  border-left:0.5px solid var(--cream-line);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex-shrink:0;
+}
+.side-nav-label {
+  font-family:var(--font-u); font-size:8px; font-weight:300;
+  letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(242,240,234,.28); margin-bottom:16px; display:block;
+}
+.side-link {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 12px; border-radius:2px;
+  font-family:var(--font-u); font-size:10px; font-weight:300;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--cream-muted); transition:color .2s, background .2s;
+  border-left:1.5px solid transparent;
+}
+.side-link:hover { color:var(--cream); }
+.side-link.active { color:var(--cream); border-left-color:var(--vino); background:rgba(139,58,58,.08); }
+.side-link-num { font-family:var(--font-d); font-size:13px; font-weight:300; color:rgba(242,240,234,.2); flex-shrink:0; }
+ 
+.side-nav-sub { display:flex; flex-direction:column; gap:4px; padding-left:12px; margin-top:4px; }
+.side-sub-link {
+  font-family:var(--font-u); font-size:9px; font-weight:300;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(242,240,234,.3); padding:4px 8px;
+  transition:color .2s; border-left:1px solid transparent;
+}
+.side-sub-link:hover { color:var(--cream-muted); }
+.side-sub-link.active { color:var(--cream-muted); border-left-color:rgba(139,58,58,.5); }
+ 
+@media(max-width:900px){
+  .layout { grid-template-columns:1fr; }
+  .side-nav { display:none; }
+}
+ 
+/* ===== CONTENIDO PRINCIPAL ===== */
+.main-content { min-width:0; padding-right:clamp(32px,4vw,64px); }
+ 
+/* ===== PORTADA ===== */
+.portada {
+  padding:clamp(72px,10vw,120px) 0 clamp(64px,8vw,96px);
+  border-bottom:0.5px solid var(--cream-line);
+}
+.portada-ey { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.32em; text-transform:uppercase; color:var(--vino-bright); margin-bottom:24px; display:block; }
+.portada-nombre { font-family:var(--font-d); font-size:clamp(48px,7vw,84px); font-weight:300; letter-spacing:-.02em; line-height:.96; color:var(--cream); margin-bottom:20px; }
+.portada-roles { font-family:var(--font-u); font-size:10px; font-weight:300; letter-spacing:.24em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:32px; line-height:2; }
+.portada-intro { font-size:clamp(16px,1.8vw,19px); font-weight:300; line-height:1.78; color:var(--cream-dim); max-width:560px; }
+.portada-fecha { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:rgba(242,240,234,.28); margin-top:40px; display:block; }
+ 
+/* ===== SECCIONES ===== */
+.seccion { padding:var(--pad-s) 0; border-bottom:0.5px solid var(--cream-line); }
+.seccion:last-child { border-bottom:none; }
+ 
+.sec-header { margin-bottom:52px; }
+.sec-num { font-family:var(--font-d); font-size:64px; font-weight:300; color:rgba(242,240,234,.06); line-height:1; display:block; margin-bottom:-8px; }
+.sec-titulo { font-family:var(--font-d); font-size:clamp(28px,4vw,42px); font-weight:300; color:var(--cream); margin-bottom:8px; }
+.sec-subtitulo { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:var(--cream-muted); }
+ 
+/* ===== BLOQUES DE TEXTO ===== */
+.bloque { margin-bottom:48px; }
+.bloque-titulo {
+  font-family:var(--font-u); font-size:9px; font-weight:400;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--vino-bright); margin-bottom:16px; display:block;
+  padding-bottom:10px; border-bottom:0.5px solid rgba(139,58,58,.25);
+}
+.bloque p { font-size:15px; font-weight:300; line-height:1.82; color:var(--cream-dim); margin-bottom:16px; max-width:620px; }
+.bloque p:last-child { margin-bottom:0; }
+.bloque p em { font-style:italic; color:var(--cream); }
+.bloque p strong { font-weight:400; color:var(--cream); }
+ 
+/* ===== TABLA DE CANCIONES ===== */
+.cancion-lista { width:100%; border-collapse:collapse; margin-bottom:8px; }
+.cancion-lista thead tr { border-bottom:0.5px solid var(--cream-line); }
+.cancion-lista th { font-family:var(--font-u); font-size:8px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:rgba(242,240,234,.3); padding:0 16px 10px 0; text-align:left; }
+.cancion-lista td { font-size:13px; font-weight:300; padding:12px 16px 12px 0; border-bottom:0.5px solid rgba(242,240,234,.06); vertical-align:top; }
+.cancion-lista td:first-child { font-style:italic; color:var(--cream); font-family:var(--font-d); font-size:15px; }
+.cancion-lista td.artista { font-family:var(--font-u); font-size:10px; letter-spacing:.06em; color:var(--cream-muted); }
+.cancion-lista td.autoria { font-family:var(--font-u); font-size:10px; color:var(--cream-muted); }
+.cancion-lista td.streams { font-family:var(--font-d); font-size:16px; font-weight:300; color:var(--cream); }
+.cancion-lista td.nota { font-family:var(--font-u); font-size:9px; letter-spacing:.06em; color:rgba(139,58,58,.8); }
+ 
+/* ===== CIFRAS ===== */
+.cifras-row { display:flex; gap:0; margin-bottom:40px; border:.5px solid var(--cream-line); }
+.cifra-bloque { flex:1; padding:24px 20px; border-right:.5px solid var(--cream-line); }
+.cifra-bloque:last-child { border-right:none; }
+.cifra-num { font-family:var(--font-d); font-size:clamp(32px,4vw,48px); font-weight:300; color:var(--cream); display:block; letter-spacing:-.02em; line-height:1; margin-bottom:6px; }
+.cifra-desc { font-family:var(--font-u); font-size:8px; font-weight:300; letter-spacing:.12em; text-transform:uppercase; color:var(--cream-muted); display:block; line-height:1.6; }
+@media(max-width:600px){ .cifras-row{flex-direction:column} .cifra-bloque{border-right:none;border-bottom:.5px solid var(--cream-line)} .cifra-bloque:last-child{border-bottom:none} }
+ 
+/* ===== PIPELINE ===== */
+.pipeline { display:flex; flex-direction:column; gap:0; border:.5px solid var(--cream-line); }
+.pipeline-item { display:grid; grid-template-columns:140px 1fr; gap:0; border-bottom:.5px solid var(--cream-line); }
+.pipeline-item:last-child { border-bottom:none; }
+.pipeline-fecha { padding:16px 20px; background:var(--cream-ghost); border-right:.5px solid var(--cream-line); }
+.pipeline-fecha span:first-child { font-family:var(--font-u); font-size:8px; font-weight:400; letter-spacing:.18em; text-transform:uppercase; color:var(--vino-bright); display:block; margin-bottom:4px; }
+.pipeline-fecha span:last-child { font-family:var(--font-d); font-size:14px; font-style:italic; color:var(--cream); display:block; }
+.pipeline-detalle { padding:16px 20px; }
+.pipeline-detalle p { font-size:13px; font-weight:300; color:var(--cream-dim); line-height:1.6; }
+@media(max-width:500px){ .pipeline-item{grid-template-columns:1fr} .pipeline-fecha{border-right:none;border-bottom:.5px solid var(--cream-line)} }
+ 
+/* ===== SHOWS ===== */
+.show-item { display:grid; grid-template-columns:80px 1fr; gap:0 24px; padding:20px 0; border-top:.5px solid var(--cream-line); align-items:start; }
+.show-item:last-child { border-bottom:.5px solid var(--cream-line); }
+.show-año { font-family:var(--font-d); font-size:22px; font-weight:300; color:rgba(242,240,234,.2); line-height:1; padding-top:3px; }
+.show-contenido {}
+.show-venue { font-family:var(--font-d); font-size:19px; font-weight:300; font-style:italic; color:var(--cream); margin-bottom:4px; }
+.show-detalle { font-family:var(--font-u); font-size:10px; letter-spacing:.08em; color:var(--cream-muted); line-height:1.7; }
+.show-badge { display:inline-block; font-family:var(--font-u); font-size:8px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--vino-bright); border:.5px solid rgba(139,58,58,.4); padding:2px 8px; margin-top:6px; }
+ 
+/* ===== ETAPAS MÉTODO ===== */
+.etapa { display:grid; grid-template-columns:56px 1fr; gap:0 20px; padding:24px 0; border-top:.5px solid var(--cream-line); }
+.etapa:last-child { border-bottom:.5px solid var(--cream-line); }
+.etapa-n { font-family:var(--font-d); font-size:40px; font-weight:300; color:rgba(242,240,234,.07); line-height:1; }
+.etapa-titulo { font-family:var(--font-d); font-size:18px; font-weight:400; color:var(--cream); margin-bottom:8px; }
+.etapa-txt { font-size:14px; font-weight:300; line-height:1.78; color:rgba(242,240,234,.72); max-width:520px; }
+ 
+/* ===== TAGS GEOGRAFÍA ===== */
+.geo-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.geo-tag { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.1em; color:var(--cream-dim); border:.5px solid var(--cream-line); padding:4px 10px; }
+ 
+/* ===== CONTACTO FINAL ===== */
+#contacto-final { padding:var(--pad-s) 0; }
+.contacto-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--cream-line); border:.5px solid var(--cream-line); }
+.contacto-item { background:var(--navy-card); padding:24px 20px; }
+.contacto-label { font-family:var(--font-u); font-size:8px; font-weight:300; letter-spacing:.22em; text-transform:uppercase; color:var(--cream-muted); display:block; margin-bottom:8px; }
+.contacto-valor { font-family:var(--font-d); font-size:18px; font-weight:300; color:var(--cream); display:block; }
+.contacto-valor a { color:var(--cream); transition:color .2s; }
+.contacto-valor a:hover { color:var(--vino-bright); }
+.conf-txt { font-family:var(--font-u); font-size:8px; letter-spacing:.08em; color:rgba(242,240,234,.18); line-height:1.8; margin-top:32px; border-top:.5px solid var(--cream-line); padding-top:16px; }
+@media(max-width:500px){ .contacto-grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
-
-<svg id="la" aria-hidden="true" style="position:fixed;left:clamp(14px,2.5vw,32px);top:0;width:2px;height:100vh;pointer-events:none;z-index:20;">
-  <line id="ls" x1="1" y1="0" x2="1" y2="100vh" stroke="#8B3A3A" stroke-width="1.5" stroke-dasharray="100vh" stroke-dashoffset="100vh"/>
+ 
+<svg id="la" aria-hidden="true" style="position:fixed;left:clamp(12px,2vw,24px);top:0;width:1.5px;height:100vh;pointer-events:none;z-index:30;">
+  <line id="ls" x1="0.75" y1="0" x2="0.75" y2="100vh" stroke="#8B3A3A" stroke-width="1.5" stroke-dasharray="100vh" stroke-dashoffset="100vh"/>
 </svg>
-
-<nav class="nav" role="navigation" aria-label="Navegación principal">
-  <div class="nav-inner">
-    <a href="/" class="nav-marca">Tóbal Blu</a>
-    <ul class="nav-links" role="list">
+ 
+<!-- NAV TOP -->
+<nav class="nav-top" role="navigation" aria-label="Navegación principal">
+  <div class="nav-top-inner">
+    <a href="https://tobalblu.com" class="nav-marca">Tóbal Blu</a>
+    <ul class="nav-top-links" role="list">
       <li><a href="https://tobalblu.com/musica.html">Música</a></li>
-      <li><a href="https://tobalblu.com/publishing" class="active" aria-current="page">Publishing</a></li>
+      <li><a href="https://tobalblu.com/publishing">Publishing</a></li>
       <li><a href="https://tobalblu.com/gallery.html">Galería</a></li>
       <li><a href="#contacto-final">Contacto</a></li>
     </ul>
@@ -282,237 +256,426 @@ footer { background:rgba(0,0,0,.35); border-top:.5px solid var(--cream-line); pa
 </nav>
 <div class="nav-mob" id="nav-mob" role="dialog" aria-label="Menú móvil">
   <a href="https://tobalblu.com/musica.html">Música</a>
-  <a href="https://tobalblu.com/publishing" class="active">Publishing</a>
+  <a href="https://tobalblu.com/publishing">Publishing</a>
   <a href="https://tobalblu.com/gallery.html">Galería</a>
   <a href="#contacto-final">Contacto</a>
 </div>
-
-<section aria-label="Presentación">
-  <div class="hero">
-    <div>
-      <span class="h-ey reveal">Publishing · Archivo autoral · Julio 2026</span>
-      <h1 class="h-nombre reveal d1">Cristóbal<br>Urbina Cabalín</h1>
-      <p class="h-rol reveal d2">Compositor · Productor · Director creativo</p>
-      <p class="h-sub reveal d2">Construcción integral de canciones</p>
-      <p class="h-prop reveal d3">Catálogo probado con <strong>más de 130 millones de streams en Spotify</strong>. Participaciones autorales documentadas. Repertorio inédito terminado y escuchable. Participaciones editoriales libres y disponibles.</p>
-      <span class="h-busq reveal d4">Se busca un socio editorial activo para desarrollo autoral, sincronización y circulación internacional</span>
-      <div class="scroll-h reveal d4" aria-hidden="true"><div class="scroll-line"></div><span>Explorar</span></div>
-    </div>
-    <div class="reveal d2">
-      <div class="h-foto">
-        <!-- FOTO HERO: tobalblu.github.io/img/publishing/hero.jpg -->
-        <img src="https://tobalblu.github.io/img/publishing/hero.jpg" 
-             alt="Cristóbal Urbina Cabalín en estudio"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="h-ph" style="display:none;">
-          <span>Fotografía principal</span>
-          <span>tobalblu.github.io/img/publishing/hero.jpg</span>
+ 
+<!-- LAYOUT PRINCIPAL -->
+<div class="layout">
+ 
+  <!-- CONTENIDO -->
+  <main class="main-content" role="main">
+ 
+    <!-- PORTADA -->
+    <section class="portada" aria-label="Presentación">
+      <span class="portada-ey reveal">Presskit · Julio 2026 · Documento confidencial</span>
+      <h1 class="portada-nombre reveal d1">Cristóbal<br>Urbina Cabalín</h1>
+      <div class="portada-roles reveal d2">
+        Compositor · Letrista · Director creativo<br>
+        Artista · Performer · Productor musical · Ingeniero
+      </div>
+      <p class="portada-intro reveal d2">
+        Más de una década operando simultáneamente en dos industrias de alto desempeño. Una carrera corporativa global como ingeniero mecánico, y en paralelo, la construcción sostenida de un catálogo autoral que hoy supera los 130 millones de streams. Desde 2026, dedicación completa a la música.
+      </p>
+      <span class="portada-fecha reveal d3">Santiago de Chile · tobalblu.com · tobal.blu@gmail.com · +56 9 6372 5631</span>
+    </section>
+ 
+    <!-- SECCIÓN 1: COMPOSITOR -->
+    <section class="seccion" id="compositor" aria-label="Compositor">
+      <div class="sec-header reveal">
+        <span class="sec-num" aria-hidden="true">01</span>
+        <h2 class="sec-titulo">Compositor</h2>
+        <span class="sec-subtitulo">Catálogo · Autorías · Proyectos activos</span>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Perfil</span>
+        <p>Cristóbal Urbina Cabalín es compositor, letrista y director creativo con más de una década de trayectoria autoral activa. Su trabajo abarca desde la construcción integral de canciones hasta la dirección creativa de proyectos de largo aliento, operando simultáneamente en catálogo propio, colaboraciones estratégicas y desarrollo de nuevos artistas.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Catálogo publicado · Spotify · corte julio 2026</span>
+        <div class="cifras-row">
+          <div class="cifra-bloque">
+            <span class="cifra-num">130M+</span>
+            <span class="cifra-desc">Streams acumulados<br>obras con participación autoral</span>
+          </div>
+          <div class="cifra-bloque">
+            <span class="cifra-num">59M</span>
+            <span class="cifra-desc">Confortas Pero Dañas<br>25 % autoría</span>
+          </div>
+          <div class="cifra-bloque">
+            <span class="cifra-num">38M</span>
+            <span class="cifra-desc">La verdad<br>8 % autoría</span>
+          </div>
+        </div>
+        <table class="cancion-lista">
+          <thead><tr><th>Canción</th><th>Artista</th><th>Autoría</th><th>Streams</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Confortas Pero Dañas</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">25 %</td><td class="streams">59M</td><td class="nota">700 días · Nuevo Rock Latino</td></tr>
+            <tr><td>La verdad</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">8 %</td><td class="streams">38M</td><td class="nota">+ 12M YouTube</td></tr>
+            <tr><td>Perdámonos</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">12 %</td><td class="streams">15M</td><td class="nota"></td></tr>
+            <tr><td>Frío</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">10 %</td><td class="streams">4M</td><td class="nota"></td></tr>
+            <tr><td>Poder quererme</td><td class="artista">Kidd Voodoo</td><td class="autoria">10 %</td><td class="streams">5M</td><td class="nota">desde feb 2026</td></tr>
+            <tr><td>Noviembre</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">15 %</td><td class="streams">4.8M</td><td class="nota"></td></tr>
+            <tr><td>Me quedo en esa vez</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">9 %</td><td class="streams">4M</td><td class="nota"></td></tr>
+            <tr><td>En el suelo</td><td class="artista">Kidd Voodoo ft. Rels B</td><td class="autoria">7 %</td><td class="streams">3.3M</td><td class="nota"></td></tr>
+            <tr><td>Quema las estrellas</td><td class="artista">Resonancia Etérea</td><td class="autoria">25 %</td><td class="streams">3.8M</td><td class="nota">curva sostenida desde 2022</td></tr>
+          </tbody>
+        </table>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Circulación internacional de autoría</span>
+        <p>Las canciones de autoría de Cristóbal han sido interpretadas en más de 18 fechas internacionales como parte de las giras de Kidd Voodoo, recorriendo cuatro continentes. Su catálogo viaja y funciona fuera del contexto local.</p>
+        <div class="geo-grid">
+          <span class="geo-tag">Valencia</span><span class="geo-tag">Madrid</span><span class="geo-tag">Barcelona</span>
+          <span class="geo-tag">Asturias</span><span class="geo-tag">Sevilla</span><span class="geo-tag">Mallorca</span>
+          <span class="geo-tag">Granada</span><span class="geo-tag">Colombia</span><span class="geo-tag">México</span>
+          <span class="geo-tag">Perú</span><span class="geo-tag">Argentina</span><span class="geo-tag">Alemania</span>
+          <span class="geo-tag">Suiza</span><span class="geo-tag">Holanda</span>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Evidencia de catálogo">
-  <div class="sep-cream" style="background:rgba(4,9,18,0.7);">
-    <div class="sep-cream-inner">
-      <span class="ev-lbl reveal">Evidencia de catálogo · Spotify · corte julio 2026</span>
-      <div class="ev-grid">
-        <div class="ev-col ev-principal reveal"><span class="ev-num">130M+</span><span class="ev-desc">streams acumulados en obras<br>con participación autoral</span></div>
-        <div class="ev-col ev-sec reveal d1"><span class="ev-num">59M</span><span class="ev-desc">Confortas Pero Dañas<br>25 % participación autoral</span></div>
-        <div class="ev-col ev-sec reveal d2"><span class="ev-tag">12 obras</span><span class="ev-desc">repertorio inédito terminado<br>y disponible para escucha</span></div>
-        <div class="ev-col ev-sec reveal d3"><span class="ev-tag">Disponible</span><span class="ev-desc">participaciones editoriales<br>sin compromisos previos</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Casos de catálogo">
-  <div class="sec">
-    <div class="c-ey reveal"><span class="s-lbl">Casos de referencia</span></div>
-    <div class="cp reveal">
-      <div>
-        <h2 class="cp-t">Confortas Pero Dañas</h2>
-        <p class="cp-a">Kidd Voodoo ft. Resonancia Etérea</p>
-        <div><span class="chip">25 % autoría</span><span class="chip">700 días · Nuevo Rock Latino</span></div>
-        <p class="cp-i">Permanencia sostenida más allá del ciclo inicial de lanzamiento.</p>
-        <a href="#" class="btn-g">Escuchar en Spotify</a>
-        <a href="#" class="btn-g">Ver créditos</a>
-      </div>
-      <div>
-        <div class="cp-str">
-          <div><span class="str-n">59M</span><span class="str-p">Spotify</span></div>
-          <div><span class="str-n">18M</span><span class="str-p">YouTube</span></div>
-        </div>
-        <span class="cp-b">700 días consecutivos en playlist editorial</span>
-      </div>
-    </div>
-    <div class="cs reveal">
-      <div class="cs-item"><h3 class="cs-t">Poder quererme</h3><p class="cs-a">Kidd Voodoo · 10 % autoría</p><div class="cs-d">5M Spotify · Desde febrero 2026</div><p class="cs-i">Tracción relevante sin artista invitado como motor de atención.</p></div>
-      <div class="cs-item"><h3 class="cs-t">Quema las estrellas</h3><p class="cs-a">Resonancia Etérea · 25 % autoría</p><div class="cs-d">3,8M Spotify · Curva sostenida desde 2022 · 186K oyentes únicos</div><p class="cs-i">Permanencia real en catálogo propio.</p></div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Declaración autoral">
-  <div class="dc-wrap reveal">
-    <div class="dc-acc" aria-hidden="true"></div>
-    <blockquote class="dc-q">Una canción nace cuando hay algo que desea ser dicho.<br>Mi trabajo es darle una forma musical a la que otros quieran volver.</blockquote>
-    <div class="ms-ph" aria-hidden="true"><span>Trazo manuscrito · tobalblu.github.io/img/publishing/manuscrito.jpg</span></div>
-  </div>
-</section>
-
-<section aria-label="Método de trabajo">
-  <div class="sec">
-    <div class="mt-h reveal"><h2>Cómo construye y sostiene los resultados</h2><p>Método de construcción integral</p></div>
-    <div class="mt-p reveal"><span class="mt-n" aria-hidden="true">01</span><div><h3 class="mt-pt">Inmersión</h3><p class="mt-tx">Historia, catálogo, referencias, audiencia y objetivos del artista. Antes de proponer una canción, entiende qué necesita realmente el proyecto y qué dimensiones todavía no han sido exploradas.</p></div></div>
-    <div class="mt-p reveal d1"><span class="mt-n" aria-hidden="true">02</span><div><h3 class="mt-pt">Traducción emocional</h3><p class="mt-tx">Una intención que todavía no tiene forma musical se convierte en decisiones concretas: melodía, armonía, letra, estructura e interpretación. El criterio es siempre la canción, no la demostración técnica.</p></div></div>
-    <div class="mt-p reveal d2"><span class="mt-n" aria-hidden="true">03</span><div><h3 class="mt-pt">Construcción</h3><p class="mt-tx">En una misma sesión pueden convivir composición, estructura, intención, arreglos, producción y dirección vocal. El conocimiento técnico y productivo permite que el demo se acerque desde temprano a la forma final de la obra. Así, el artista y su equipo no escuchan una idea abstracta, sino una representación clara del potencial real de la canción.</p></div></div>
-    <div class="mt-p reveal d3"><span class="mt-n" aria-hidden="true">04</span><div><h3 class="mt-pt">Lectura estructural</h3><p class="mt-tx">La obra es evaluada dentro del proyecto completo: álbum, catálogo, show, potencial de circulación y coherencia con la identidad del artista. La canción no existe aislada de la carrera.</p></div></div>
-  </div>
-</section>
-
-<section aria-label="Pipeline de lanzamientos">
-  <div class="pl-wrap">
-    <div class="pl-inner">
-      <div class="pl-h reveal"><h2>Repertorio en movimiento</h2><p>Pipeline confirmado · Lanzamientos 2026–2028</p></div>
-      <div class="tl" role="list">
-        <div class="tl-i reveal" role="listitem"><span class="tl-f">30 Jul 2026</span><span class="tl-a">Diego Dinnamarco</span><span class="tl-d">Single confirmado</span></div>
-        <div class="tl-i reveal d1" role="listitem"><span class="tl-f">Ago–Dic 2026</span><span class="tl-a">Jas Marty</span><span class="tl-d">10 canciones</span></div>
-        <div class="tl-i reveal d2" role="listitem"><span class="tl-f">Oct 2026–Feb 2027</span><span class="tl-a">Lafé</span><span class="tl-d">2 canciones</span></div>
-        <div class="tl-i reveal d3" role="listitem"><span class="tl-f">2028</span><span class="tl-a">Resonancia Etérea</span><span class="tl-d">Álbum · 4 composiciones terminadas</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Capacidad de creación">
-  <div class="sec">
-    <span class="s-lbl reveal" style="display:block;margin-bottom:24px;">Capacidad</span>
-    <div class="cpa-g reveal">
-      <div class="cpa-i"><span class="cpa-v">Crear</span><p class="cpa-d">Composición, melodía, armonía, letra, estructura e intención</p></div>
-      <div class="cpa-i"><span class="cpa-v">Producir</span><p class="cpa-d">Arreglos, grabación, dirección vocal y demos cercanos a la forma final</p></div>
-      <div class="cpa-i"><span class="cpa-v">Amplificar</span><p class="cpa-d">Presencia pública, relato, contenido y vínculo con audiencia</p></div>
-    </div>
-    <p class="cpa-tx reveal">Cristóbal combina la agilidad aprendida del género urbano con el acceso a grabación analógica, instrumentos acústicos y producción contemporánea. El sistema se adapta al ritmo que exige cada proyecto: puede dedicar semanas a profundizar una sola canción o sostener ciclos intensivos de creación cuando el objetivo es construir volumen de catálogo.<br><br>Desde 2026 trabaja con dedicación completa desde un estudio propio y operativo, desarrollando composición, producción, grabación, dirección vocal y entregables en distintas etapas de avance.</p>
-  </div>
-</section>
-
-<section aria-label="Presencia pública">
-  <div class="sec" style="padding-top:0;">
-    <div class="pr-g reveal">
-      <div class="pr-f">
-        <!-- FOTO PROCESO: tobalblu.github.io/img/publishing/proceso.jpg -->
-        <img src="https://tobalblu.github.io/img/publishing/proceso.jpg"
-             alt="Cristóbal Urbina Cabalín — sesión de trabajo"
-             loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="pr-ph" style="display:none;">
-          <span>Foto de proceso · sesión real</span>
-          <span>tobalblu.github.io/img/publishing/proceso.jpg</span>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Pipeline confirmado · 2026–2028</span>
+        <div class="pipeline">
+          <div class="pipeline-item">
+            <div class="pipeline-fecha"><span>30 Jul 2026</span><span>Diego Dinnamarco</span></div>
+            <div class="pipeline-detalle"><p>Single confirmado. Plan de trabajo compositivo constante con proyección de lanzamientos continuos.</p></div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-fecha"><span>Ago–Oct 2026</span><span>Jas Marty</span></div>
+            <div class="pipeline-detalle"><p>10 canciones en proceso de lanzamiento. Construcción de catálogo con identidad definida y continuidad editorial.</p></div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-fecha"><span>Oct 2026–Feb 2027</span><span>Lafé</span></div>
+            <div class="pipeline-detalle"><p>Mínimo 2 lanzamientos proyectados. Composición en proceso activo.</p></div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-fecha"><span>Próximos meses</span><span>Soulfía</span></div>
+            <div class="pipeline-detalle"><p>Al menos 2 canciones con participación autoral en su próximo álbum.</p></div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-fecha"><span>2027</span><span>Kidd Voodoo</span></div>
+            <div class="pipeline-detalle"><p>Álbum en desarrollo.</p></div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-fecha"><span>2028</span><span>Resonancia Etérea</span></div>
+            <div class="pipeline-detalle"><p>Álbum en desarrollo. Doce años desde la formación de la banda.</p></div>
+          </div>
         </div>
       </div>
-      <div>
-        <span class="s-lbl" style="display:block;margin-bottom:20px;">Presencia pública</span>
-        <p class="pr-tx">Como cofundador de Resonancia Etérea y creador de contenido activo, Cristóbal mantiene una presencia pública propia que aporta circulación orgánica al catálogo en el que participa como autor y fortalece el vínculo entre canción, relato y audiencia.</p>
-        <div class="pr-m">
-          <div class="pr-mi"><span class="pr-ml">Audiencia propia</span><span class="pr-mv">Datos disponibles en reunión</span></div>
-          <div class="pr-mi"><span class="pr-ml">Alcance de contenido</span><span class="pr-mv">Datos disponibles en reunión</span></div>
-          <div class="pr-mi"><span class="pr-ml">Plataformas activas</span><span class="pr-mv">TikTok · Instagram · YouTube</span></div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Desarrollo de nuevos artistas</span>
+        <p>En paralelo al trabajo con artistas establecidos, Cristóbal mantiene sesiones activas con artistas en distintas etapas de carrera — desde proyectos emergentes como Aura Bae y Sol Alegría, hasta colaboraciones con artistas de mayor trayectoria y renombre. El objetivo no es solo ampliar el catálogo, sino participar desde distintos puntos focales en el desarrollo de carreras: como compositor, como productor, como director creativo, o como socio estratégico según lo que cada proyecto requiera.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Presencia digital · Tobal Blu</span>
+        <div class="cifras-row">
+          <div class="cifra-bloque">
+            <span class="cifra-num">3.2M</span>
+            <span class="cifra-desc">TikTok post views<br>365 días · jul 2025–jul 2026</span>
+          </div>
+          <div class="cifra-bloque">
+            <span class="cifra-num">361K</span>
+            <span class="cifra-desc">TikTok likes<br>11.8K shares orgánicos</span>
+          </div>
+          <div class="cifra-bloque">
+            <span class="cifra-num">778K</span>
+            <span class="cifra-desc">Instagram views<br>90 días · 39.3% audiencia nueva</span>
+          </div>
+        </div>
+        <p>La cuenta @tobal.blu en redes sociales no es el proyecto solista — es Tóbal el músico: un canal que amplifica el catálogo propio, Resonancia Etérea, KiddVoodoo y las colaboraciones en gestación. El ratio de 11.8K shares sobre 3.2M views indica circulación orgánica real — el contenido viaja entre usuarios sin pauta. Este canal está disponible como herramienta de amplificación para los proyectos con los que trabaja.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Orden administrativo</span>
+        <p>Cristóbal se encuentra registrado individualmente como autor con identificador IPI/CAE activo. Sus participaciones publicadas están respaldadas por split sheets cerrados y las obras se encuentran inscritas bajo una identidad autoral normalizada. Sus participaciones editoriales no tienen compromisos previos y están disponibles para negociación. Opera como gestor directo de su propio trabajo — con conocimiento del negocio y capacidad de negociación autónoma a nivel ejecutivo.</p>
+      </div>
+    </section>
+ 
+    <!-- SECCIÓN 2: ARTISTA -->
+    <section class="seccion" id="artista" aria-label="Artista">
+      <div class="sec-header reveal">
+        <span class="sec-num" aria-hidden="true">02</span>
+        <h2 class="sec-titulo">Artista</h2>
+        <span class="sec-subtitulo">Resonancia Etérea · Tóbal Blu</span>
+      </div>
+ 
+      <div class="bloque reveal">
+        <p>Cristóbal Urbina Cabalín desarrolla su identidad artística en dos proyectos paralelos y complementarios: Resonancia Etérea, el proyecto colectivo que fundó, financió y dirigió desde sus orígenes, y Tóbal Blu, su proyecto solista.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Resonancia Etérea</span>
+        <p>Resonancia Etérea nació como una apuesta personal de Cristóbal. Antes de las colaboraciones sistemáticas con Kidd Voodoo — que catapultaron al proyecto hacia el mainstream — fue él quien financió, produjo y dirigió la construcción del catálogo inicial de la banda. Esa inversión no fue solo económica: fue de tiempo, criterio creativo y visión de largo plazo en un momento en que el proyecto no tenía el respaldo de ningún sello ni publisher.</p>
+        <p>El resultado de esa etapa fundacional es un catálogo propio que hoy supera los 129 millones de reproducciones en Spotify, con canciones que han permanecido en circulación durante años sin depender de activaciones promocionales continuas.</p>
+        <p>Las colaboraciones posteriores con Kidd Voodoo no reemplazaron esa identidad: la amplificaron. Canciones como <em>Confortas Pero Dañas</em>, <em>La verdad</em> y <em>Perdámonos</em> surgieron de la intersección entre dos universos creativos que Cristóbal conoce desde adentro, habiendo sido parte fundadora de ambos.</p>
+        <p>Resonancia Etérea se proyecta hacia un nuevo álbum en 2028. Un proyecto con doce años de historia, que llega a este momento con el catálogo y la audiencia que siempre tuvo la ambición de alcanzar.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Tóbal Blu</span>
+        <p>Tóbal Blu es la identidad solista de Cristóbal: más personal, más expuesta, más directa. Con un álbum ya lanzado, el proyecto avanza a un ritmo autoral — son la inspiración y las realidades vividas las que dictan cuándo aparece una canción nueva, no un calendario editorial. Esa decisión es en sí misma una declaración de intención: Tóbal Blu existe para decir algo, no para ocupar un espacio en el algoritmo.</p>
+        <p>Mientras Resonancia Etérea opera como un proyecto colectivo con historia compartida, Tóbal Blu es el espacio donde Cristóbal habla en primera persona — como guitarrista, como compositor, como intérprete.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Lo que une a los dos proyectos</span>
+        <p>Ambos proyectos comparten una misma firma creativa: canciones que no dependen del ciclo de lanzamiento para seguir circulando, letras que esconden más de lo que muestran, y una producción que sirve a la emoción sin imponerse sobre ella. Esa coherencia es el resultado de una década de trabajo sostenido, financiado en gran parte con recursos propios, en un mercado que no siempre valoró lo que se estaba construyendo antes de que los números lo demostraran.</p>
+      </div>
+    </section>
+ 
+    <!-- SECCIÓN 3: PERFORMER -->
+    <section class="seccion" id="performer" aria-label="Performer">
+      <div class="sec-header reveal">
+        <span class="sec-num" aria-hidden="true">03</span>
+        <h2 class="sec-titulo">Performer</h2>
+        <span class="sec-subtitulo">Presentaciones en vivo · Escala escénica</span>
+      </div>
+ 
+      <div class="bloque reveal">
+        <p>Haber estado en el escenario frente a decenas de miles de personas, en recintos de primer nivel, informa directamente cómo Cristóbal compone: sabe lo que una canción necesita para sostenerse en vivo, para crecer frente a una audiencia, para convertirse en un momento colectivo.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Presentaciones en vivo</span>
+ 
+        <div class="show-item">
+          <div class="show-año">2025</div>
+          <div class="show-contenido">
+            <div class="show-venue">Movistar Arena · Santiago</div>
+            <div class="show-detalle">12 presentaciones · 7 fechas julio 2025 · 5 fechas diciembre 2025<br>15.000 personas por noche · Las canciones de autoría de Cristóbal ocupan los momentos de mayor carga emocional del show.</div>
+          </div>
+        </div>
+ 
+        <div class="show-item">
+          <div class="show-año">2025</div>
+          <div class="show-contenido">
+            <div class="show-venue">Lollapalooza Chile · Mainstage Banco de Chile</div>
+            <div class="show-detalle">Festival de mayor convocatoria del país · Presentación en el escenario principal en horario desafiante (15:00 hrs) con llenado del recinto.</div>
+            <span class="show-badge">Mainstage</span>
+          </div>
+        </div>
+ 
+        <div class="show-item">
+          <div class="show-año">2024</div>
+          <div class="show-contenido">
+            <div class="show-venue">Estadio Chinquihue · Puerto Montt</div>
+            <div class="show-detalle">Sold out · Transmisión en vivo por TVN · Primera transmisión televisiva nacional de gran escala del proyecto.</div>
+            <span class="show-badge">Sold out · TVN</span>
+          </div>
+        </div>
+ 
+        <div class="show-item">
+          <div class="show-año">2024</div>
+          <div class="show-contenido">
+            <div class="show-venue">Euforia · Plaza de Maipú · Santiago</div>
+            <div class="show-detalle">Espectáculo en espacio abierto vinculado al álbum Euforia de Kidd Voodoo. Cristóbal participa como compositor y guitarrista.</div>
+          </div>
+        </div>
+ 
+        <div class="show-item">
+          <div class="show-año">2026</div>
+          <div class="show-contenido">
+            <div class="show-venue">Estadio Monumental · Santiago</div>
+            <div class="show-detalle">Fecha confirmada · 7 de diciembre de 2026 · +47.000 personas · El recinto más grande de Chile.</div>
+            <span class="show-badge">Confirmado · Dic 2026</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Archivo de composición">
-  <div class="sec" style="padding-top:0;">
-    <span class="s-lbl reveal" style="display:block;margin-bottom:16px;">Archivo real</span>
-    <!-- ARCHIVO REAL: tobalblu.github.io/img/publishing/archivo.jpg -->
-    <div class="ar-ph reveal" id="archivo-wrap">
-      <img src="https://tobalblu.github.io/img/publishing/archivo.jpg"
-           alt="Archivo de composición 2026"
-           loading="lazy"
-           style="width:100%;height:100%;object-fit:cover;"
-           onerror="this.style.display='none';document.getElementById('archivo-ph-txt').style.display='flex'">
-      <div id="archivo-ph-txt" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;height:100%;">
-        <span>Fragmento de cuaderno o sesión de composición</span>
-        <span>tobalblu.github.io/img/publishing/archivo.jpg</span>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Las canciones de Cristóbal en el escenario</span>
+        <p>Dentro de los shows de Kidd Voodoo, las canciones con autoría de Cristóbal son parte de los momentos de mayor carga emocional. Son los clímax, las pausas que se cargan de silencio antes de estallar, los cierres que sostienen el peso de todo lo que vino antes. Eso es observable en la respuesta del público, en los videos que circulan después de los shows, y en la forma en que esas canciones acumulan streams sostenidos mucho después de su lanzamiento.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Orden administrativo">
-  <div class="ad-wrap">
-    <div class="ad-inner">
-      <h2 class="ad-h reveal">Listo para revisión editorial</h2>
-      <span class="ad-s reveal">Due diligence</span>
-      <div class="ad-g">
-        <div class="ad-i reveal"><span class="ad-ck" aria-hidden="true">✓</span><span class="ad-t">Registro autoral</span><span class="ad-d">Individual · Identificador IPI/CAE activo</span></div>
-        <div class="ad-i reveal d1"><span class="ad-ck" aria-hidden="true">✓</span><span class="ad-t">Split sheets</span><span class="ad-d">Cerrados en todas las obras publicadas</span></div>
-        <div class="ad-i reveal d2"><span class="ad-ck" aria-hidden="true">✓</span><span class="ad-t">Derechos editoriales</span><span class="ad-d">Participaciones de Cristóbal libres y disponibles para negociación</span></div>
-        <div class="ad-i reveal d3"><span class="ad-ck" aria-hidden="true">✓</span><span class="ad-t">Repertorio inédito</span><span class="ad-d">12 obras terminadas y escuchables a solicitud</span></div>
+    </section>
+ 
+    <!-- SECCIÓN 4: PRODUCTOR -->
+    <section class="seccion" id="productor" aria-label="Productor">
+      <div class="sec-header reveal">
+        <span class="sec-num" aria-hidden="true">04</span>
+        <h2 class="sec-titulo">Productor</h2>
+        <span class="sec-subtitulo">Método · Estudio · Ecosistema</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<section aria-label="Declaración final">
-  <div class="df reveal">
-    <p class="df-tx">No busco únicamente un publisher que administre lo que ya construí. Busco un socio editorial que también quiera participar de lo que viene: proyectos con historia, con mensaje y con algo real que contar; canciones capaces de convertirse en algo real para quien las escucha.</p>
-  </div>
-</section>
-
-<section aria-label="Contacto y repertorio" id="contacto-final">
-  <div class="ct-wrap">
-    <div class="ct-acc" aria-hidden="true"></div>
-    <h2 class="ct-t reveal">Escuchar lo que viene</h2>
-    <p class="ct-s reveal">Doce obras inéditas se encuentran terminadas y disponibles para escucha privada.</p>
-    <div class="ct-bs reveal">
-      <a href="mailto:tobal.blu@gmail.com?subject=Solicitud%20de%20repertorio" class="btn-p">Solicitar acceso al repertorio</a>
-      <a href="https://tobalblu.com/contacto" class="btn-s">Conversar sobre una alianza editorial</a>
-    </div>
-    <div class="ct-c reveal">
-      <a href="mailto:tobal.blu@gmail.com">tobal.blu@gmail.com</a><br>
-      <a href="tel:+56963725631">+56 9 6372 5631</a>
-    </div>
-    <p class="ct-pr reveal">Próximo paso: conocer el repertorio y conversar sobre una posible alianza editorial.</p>
-  </div>
-</section>
-
-<section aria-label="Otras áreas">
-  <div class="ot-wrap">
-    <p class="ot-t reveal">También habito otros lugares</p>
-    <div class="ot-g reveal">
-      <a href="https://tobalblu.com/gallery.html" class="ot-i"><span class="ot-l">Ver</span><span class="ot-n">Galería</span></a>
-      <a href="https://tobalblu.com/me.html" class="ot-i"><span class="ot-l">Conocer</span><span class="ot-n">Quién soy</span></a>
-      <a href="https://tobalblu.com/musica.html" class="ot-i"><span class="ot-l">Escuchar</span><span class="ot-n">Música</span></a>
-    </div>
-  </div>
-</section>
-
-<div class="conf">
-  <p>Documento confidencial — circulación restringida. La información contenida en esta página incluye planes de trabajo, repertorio inédito y colaboraciones todavía no anunciadas públicamente. No reproducir, compartir ni divulgar total o parcialmente sin autorización expresa de Cristóbal Urbina Cabalín.</p>
+ 
+      <div class="bloque reveal">
+        <p>Cristóbal Urbina Cabalín no separa la composición de la producción. Su forma de trabajar integra ambas desde el inicio: una canción no está terminada cuando tiene letra y melodía — está terminada cuando tiene una forma sonora que permite al artista y a su equipo visualizar su potencial real antes de entrar a un estudio de primer nivel.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Estudio y ecosistema de producción</span>
+        <p>Cristóbal opera desde un estudio propio y completamente equipado en Santiago de Chile, con capacidad para desarrollar composición, preproducción, grabación de voces e instrumentos, dirección vocal, arreglos, mezcla y preparación de stems. El estudio no es solo una herramienta técnica — es un espacio donde los artistas se sienten acogidos. Hay un ambiente de colaboración real: humanidad, fraternidad y servicio a la música como principios de operación.</p>
+        <p>En paralelo, Cristóbal está inmerso en un ecosistema colectivo de productores y sellos que permite el acceso a estudios de primer nivel cuando el proyecto lo requiere. Tiene experiencia de trabajo en <strong>Estudio Los Lobos</strong>, <strong>Estudios del Sur</strong>, y los principales estudios de los sellos más importantes de la industria — Sony, BZR, Warner, Lotus y La Cueva.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Método de construcción integral</span>
+        <div class="etapa">
+          <span class="etapa-n" aria-hidden="true">01</span>
+          <div><h3 class="etapa-titulo">Inmersión</h3><p class="etapa-txt">Historia, catálogo, referencias, audiencia y objetivos del artista. Antes de proponer una dirección, entiende qué necesita realmente el proyecto. La producción debe servir a una identidad, no imponerse sobre ella.</p></div>
+        </div>
+        <div class="etapa">
+          <span class="etapa-n" aria-hidden="true">02</span>
+          <div><h3 class="etapa-titulo">Traducción emocional</h3><p class="etapa-txt">La intención del artista se convierte en decisiones musicales concretas: melodía, armonía, letra, ritmo, estructura, interpretación, sonoridad. Su background como instrumentista le permite expresar mediante acordes y movimiento musical emociones que muchas veces no han sido formuladas técnicamente todavía.</p></div>
+        </div>
+        <div class="etapa">
+          <span class="etapa-n" aria-hidden="true">03</span>
+          <div><h3 class="etapa-titulo">Pre-mixing</h3><p class="etapa-txt">En una misma sesión pueden convivir composición, producción, dirección vocal y arreglos. Al finalizar, ya existe una propuesta sonora limpia, con dinámica controlada, espacialidad estéreo y un buen volumen de referencia — para que el artista y su equipo escuchen el potencial real de la canción.</p></div>
+        </div>
+        <div class="etapa">
+          <span class="etapa-n" aria-hidden="true">04</span>
+          <div><h3 class="etapa-titulo">Lectura estructural</h3><p class="etapa-txt">Cada obra es evaluada dentro del proyecto completo: su lugar en el álbum, su relación con el catálogo, su potencial en vivo, su coherencia con la identidad del artista. La canción no existe aislada de la carrera.</p></div>
+        </div>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Desarrollo autoral y producción musical</span>
+        <p>Desde enero de 2026, Cristóbal dedica su jornada completa al desarrollo autoral y producción musical. El sistema de trabajo le permite operar con flexibilidad de ritmo — puede profundizar semanas en una sola canción o sostener ciclos intensivos cuando el objetivo es construir volumen de catálogo. En lo que va del año lleva más de treinta canciones desarrolladas en distintas etapas de producción.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Ecosistema de colaboración</span>
+        <p>El trabajo de Cristóbal se extiende a través de alianzas con equipos audiovisuales especializados en contenido y videoclips, empresas de merch, y conexiones directas con músicos de primer nivel — incluyendo a Felipe Castro, productor con trayectoria junto a Los Bunkers y Mon Laferte, y Boris Ramírez, baterista reconocido en la escena nacional. Estas conexiones permiten elevar la calidad de producción de cada proyecto sin depender de una sola cadena de recursos.</p>
+      </div>
+    </section>
+ 
+    <!-- SECCIÓN 5: INGENIERO -->
+    <section class="seccion" id="ingeniero" aria-label="Ingeniero">
+      <div class="sec-header reveal">
+        <span class="sec-num" aria-hidden="true">05</span>
+        <h2 class="sec-titulo">Ingeniero</h2>
+        <span class="sec-subtitulo">Formación · Trayectoria · Visión sistémica</span>
+      </div>
+ 
+      <div class="bloque reveal">
+        <p>Antes de dedicarse de lleno a la música, Cristóbal Urbina Cabalín construyó una carrera profesional de diez años como ingeniero mecánico, alcanzando posiciones de gerencia en industria corporativa global — incluyendo su paso por Laboratorio Chile y Teva Pharmaceuticals, dos de las operaciones farmacéuticas más exigentes del país en términos de estándares internacionales, trazabilidad y gestión de cadena de suministro.</p>
+        <p>Esa trayectoria no es un antecedente que quedó atrás. Es la base sobre la que opera hoy.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Formación académica</span>
+        <p><strong>Ingeniería Mecánica</strong> — Universidad de Santiago de Chile (USACH)</p>
+        <p><strong>Diplomado en Dirección Estratégica de Operaciones Logísticas</strong> — Universidad de Chile</p>
+        <p>Diez años de ejercicio profesional activo en industria corporativa de escala global, con roles de creciente responsabilidad hasta alcanzar niveles de gerencia.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">Lo que la ingeniería le da a la música</span>
+        <p><strong>Visión sistémica</strong> — Un ingeniero ve sistemas donde otros ven procesos. Esa mirada se traduce en la capacidad de coordinar un álbum, una gira o un pipeline de canciones simultáneas con la misma claridad estructural con que se gestiona una operación de alto estándar.</p>
+        <p><strong>Comprensión del negocio</strong> — Cristóbal entiende contratos, splits, estructuras de derechos y modelos de ingreso con autonomía y criterio de alto nivel. Negocia directamente y con plena comprensión de lo que está en juego en cada conversación.</p>
+        <p><strong>Rigor administrativo</strong> — Split sheets cerrados, participaciones documentadas, inscripciones en orden. No como obligación burocrática, sino como práctica natural de quien entiende que el orden es la base de cualquier sistema que funcione a largo plazo.</p>
+        <p><strong>Tolerancia a la incertidumbre con metodología</strong> — La carrera musical es inherentemente incierta. La formación en ingeniería entrena para operar con eficiencia en contextos de alta variabilidad — exactamente lo que la industria musical exige.</p>
+      </div>
+ 
+      <div class="bloque reveal">
+        <span class="bloque-titulo">El salto</span>
+        <p>Dejar una carrera corporativa exitosa de diez años para dedicarse de lleno a la música no fue una decisión impulsiva. Fue el resultado de una evaluación sistemática de riesgos, oportunidades y recursos — hecha con la misma metodología con la que Cristóbal tomó decisiones durante una década en la industria.</p>
+        <p>Desde enero de 2026 lleva su primera temporada completa dedicado exclusivamente a la música. Los resultados de ese primer año — más de treinta canciones desarrolladas, pipeline activo con cinco artistas, acceso directo a los principales estudios y escenarios de la industria nacional — sugieren que la evaluación fue correcta.</p>
+      </div>
+    </section>
+ 
+    <!-- CONTACTO -->
+    <section id="contacto-final" aria-label="Contacto">
+      <div class="bloque reveal" style="margin-bottom:24px;">
+        <span class="bloque-titulo">Contacto directo</span>
+        <p>Cristóbal gestiona directamente todas las conversaciones relacionadas a su trabajo. No hay intermediarios.</p>
+      </div>
+      <div class="contacto-grid reveal">
+        <div class="contacto-item">
+          <span class="contacto-label">Correo</span>
+          <span class="contacto-valor"><a href="mailto:tobal.blu@gmail.com">tobal.blu@gmail.com</a></span>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-label">Teléfono</span>
+          <span class="contacto-valor"><a href="tel:+56963725631">+56 9 6372 5631</a></span>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-label">Sitio web</span>
+          <span class="contacto-valor"><a href="https://tobalblu.com" target="_blank" rel="noopener">tobalblu.com</a></span>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-label">Ubicación</span>
+          <span class="contacto-valor">Santiago de Chile</span>
+        </div>
+      </div>
+      <p class="conf-txt reveal">Documento confidencial — circulación restringida. La información contenida en este presskit incluye planes de trabajo, repertorio inédito y colaboraciones todavía no anunciadas públicamente. No reproducir, compartir ni divulgar total o parcialmente sin autorización expresa de Cristóbal Urbina Cabalín · Julio 2026</p>
+    </section>
+ 
+  </main>
+ 
+  <!-- PANEL LATERAL DERECHO -->
+  <aside class="side-nav" aria-label="Navegación del presskit">
+    <span class="side-nav-label">Presskit</span>
+    <a href="#compositor" class="side-link" data-section="compositor">
+      <span class="side-link-num">01</span> Compositor
+    </a>
+    <a href="#artista" class="side-link" data-section="artista">
+      <span class="side-link-num">02</span> Artista
+    </a>
+    <a href="#performer" class="side-link" data-section="performer">
+      <span class="side-link-num">03</span> Performer
+    </a>
+    <a href="#productor" class="side-link" data-section="productor">
+      <span class="side-link-num">04</span> Productor
+    </a>
+    <a href="#ingeniero" class="side-link" data-section="ingeniero">
+      <span class="side-link-num">05</span> Ingeniero
+    </a>
+  </aside>
+ 
 </div>
-
-<footer>
-  <div class="ft-i">
-    <div><span class="ft-m">Cristóbal Urbina Cabalín</span><span class="ft-s">Santiago de Chile · 2026</span><span class="ft-cf">Documento confidencial · Circulación restringida</span></div>
-    <div class="ft-c"><a href="mailto:tobal.blu@gmail.com">tobal.blu@gmail.com</a><a href="tel:+56963725631">+56 9 6372 5631</a><a href="https://tobalblu.com" target="_blank" rel="noopener">tobalblu.com</a></div>
-    <nav class="ft-n" aria-label="Navegación footer"><a href="https://tobalblu.com/musica.html">Música</a><a href="https://tobalblu.com/gallery.html">Galería</a><a href="https://tobalblu.com/me.html">Quién soy</a><a href="https://tobalblu.com/proyectos">Proyectos</a><a href="https://tobalblu.com/contacto">Contacto</a></nav>
-  </div>
-</footer>
-
+ 
 <script>
+// Menú móvil
 const btn=document.getElementById("menu-btn"),mob=document.getElementById("nav-mob");
 btn.addEventListener("click",()=>{const o=mob.classList.toggle("open");btn.setAttribute("aria-expanded",o);btn.setAttribute("aria-label",o?"Cerrar menú":"Abrir menú")});
+ 
+// Reveal
 if(window.matchMedia("(prefers-reduced-motion:no-preference)").matches){
-  const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add("vis");obs.unobserve(x.target)}})},{threshold:.07,rootMargin:"0px 0px -32px 0px"});
+  const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add("vis");obs.unobserve(x.target)}})},{threshold:.06,rootMargin:"0px 0px -24px 0px"});
   document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
 }
+ 
+// Línea autoral
 const ls=document.getElementById("ls");
 if(ls){function upd(){const p=Math.min(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight),1);ls.style.strokeDasharray=window.innerHeight+"px";ls.style.strokeDashoffset=((1-p)*window.innerHeight)+"px"}window.addEventListener("scroll",upd,{passive:true});upd()}
+ 
+// Panel lateral activo según scroll
+const secciones=document.querySelectorAll("section[id]");
+const sideLinks=document.querySelectorAll(".side-link[data-section]");
+const observer2=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      sideLinks.forEach(l=>{
+        l.classList.toggle("active", l.dataset.section===id);
+      });
+    }
+  });
+},{threshold:0.25});
+secciones.forEach(s=>observer2.observe(s));
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

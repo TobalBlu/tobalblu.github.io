@@ -1,6 +1,3 @@
-
-
-Presskit · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -32,7 +29,7 @@ Presskit · HTML
   --pad-s: clamp(64px, 9vw, 112px);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
- 
+
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { font-size:16px; scroll-behavior:smooth; }
 body {
@@ -46,19 +43,19 @@ body {
 img { display:block; max-width:100%; height:auto; }
 a { color:inherit; text-decoration:none; }
 a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; border-radius:2px; }
- 
+
 /* ===== ANIMACIONES ===== */
 @media (prefers-reduced-motion: no-preference) {
   .reveal { opacity:0; transform:translateY(18px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
   .reveal.vis { opacity:1; transform:translateY(0); }
   .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s}
 }
- 
+
 /* ===== LÍNEA AUTORAL ===== */
 #la { position:fixed; left:clamp(12px,2vw,24px); top:0; width:1.5px; height:100vh; pointer-events:none; z-index:30; }
 #ls { stroke:var(--vino); stroke-width:1.5; stroke-dasharray:100vh; stroke-dashoffset:100vh; }
 @media(max-width:900px){#la{display:none}}
- 
+
 /* ===== NAV TOP ===== */
 .nav-top {
   position:sticky; top:0; z-index:100;
@@ -80,7 +77,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .nav-mob.open { display:flex; }
 .nav-mob a { font-family:var(--font-u); font-size:12px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-muted); padding:10px 0; border-bottom:0.5px solid var(--cream-line); }
 @media(max-width:767px){.nav-top-links{display:none}.nav-btn{display:block}}
- 
+
 /* ===== LAYOUT PRINCIPAL ===== */
 .layout {
   display:grid;
@@ -89,7 +86,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
   margin:0 auto;
   min-height:100vh;
 }
- 
+
 /* ===== PANEL LATERAL ===== */
 .side-nav {
   position:sticky;
@@ -119,7 +116,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .side-link:hover { color:var(--cream); }
 .side-link.active { color:var(--cream); border-left-color:var(--vino); background:rgba(139,58,58,.08); }
 .side-link-num { font-family:var(--font-d); font-size:13px; font-weight:300; color:rgba(242,240,234,.2); flex-shrink:0; }
- 
+
 .side-nav-sub { display:flex; flex-direction:column; gap:4px; padding-left:12px; margin-top:4px; }
 .side-sub-link {
   font-family:var(--font-u); font-size:9px; font-weight:300;
@@ -129,15 +126,15 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 }
 .side-sub-link:hover { color:var(--cream-muted); }
 .side-sub-link.active { color:var(--cream-muted); border-left-color:rgba(139,58,58,.5); }
- 
+
 @media(max-width:900px){
   .layout { grid-template-columns:1fr; }
   .side-nav { display:none; }
 }
- 
+
 /* ===== CONTENIDO PRINCIPAL ===== */
 .main-content { min-width:0; padding-right:clamp(32px,4vw,64px); }
- 
+
 /* ===== PORTADA ===== */
 .portada {
   padding:clamp(72px,10vw,120px) 0 clamp(64px,8vw,96px);
@@ -148,16 +145,16 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .portada-roles { font-family:var(--font-u); font-size:10px; font-weight:300; letter-spacing:.24em; text-transform:uppercase; color:var(--cream-muted); margin-bottom:32px; line-height:2; }
 .portada-intro { font-size:clamp(16px,1.8vw,19px); font-weight:300; line-height:1.78; color:var(--cream-dim); max-width:560px; }
 .portada-fecha { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:rgba(242,240,234,.28); margin-top:40px; display:block; }
- 
+
 /* ===== SECCIONES ===== */
 .seccion { padding:var(--pad-s) 0; border-bottom:0.5px solid var(--cream-line); }
 .seccion:last-child { border-bottom:none; }
- 
+
 .sec-header { margin-bottom:52px; }
 .sec-num { font-family:var(--font-d); font-size:64px; font-weight:300; color:rgba(242,240,234,.06); line-height:1; display:block; margin-bottom:-8px; }
 .sec-titulo { font-family:var(--font-d); font-size:clamp(28px,4vw,42px); font-weight:300; color:var(--cream); margin-bottom:8px; }
 .sec-subtitulo { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:var(--cream-muted); }
- 
+
 /* ===== BLOQUES DE TEXTO ===== */
 .bloque { margin-bottom:48px; }
 .bloque-titulo {
@@ -170,7 +167,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .bloque p:last-child { margin-bottom:0; }
 .bloque p em { font-style:italic; color:var(--cream); }
 .bloque p strong { font-weight:400; color:var(--cream); }
- 
+
 /* ===== TABLA DE CANCIONES ===== */
 .cancion-lista { width:100%; border-collapse:collapse; margin-bottom:8px; }
 .cancion-lista thead tr { border-bottom:0.5px solid var(--cream-line); }
@@ -181,7 +178,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .cancion-lista td.autoria { font-family:var(--font-u); font-size:10px; color:var(--cream-muted); }
 .cancion-lista td.streams { font-family:var(--font-d); font-size:16px; font-weight:300; color:var(--cream); }
 .cancion-lista td.nota { font-family:var(--font-u); font-size:9px; letter-spacing:.06em; color:rgba(139,58,58,.8); }
- 
+
 /* ===== CIFRAS ===== */
 .cifras-row { display:flex; gap:0; margin-bottom:40px; border:.5px solid var(--cream-line); }
 .cifra-bloque { flex:1; padding:24px 20px; border-right:.5px solid var(--cream-line); }
@@ -189,7 +186,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .cifra-num { font-family:var(--font-d); font-size:clamp(32px,4vw,48px); font-weight:300; color:var(--cream); display:block; letter-spacing:-.02em; line-height:1; margin-bottom:6px; }
 .cifra-desc { font-family:var(--font-u); font-size:8px; font-weight:300; letter-spacing:.12em; text-transform:uppercase; color:var(--cream-muted); display:block; line-height:1.6; }
 @media(max-width:600px){ .cifras-row{flex-direction:column} .cifra-bloque{border-right:none;border-bottom:.5px solid var(--cream-line)} .cifra-bloque:last-child{border-bottom:none} }
- 
+
 /* ===== PIPELINE ===== */
 .pipeline { display:flex; flex-direction:column; gap:0; border:.5px solid var(--cream-line); }
 .pipeline-item { display:grid; grid-template-columns:140px 1fr; gap:0; border-bottom:.5px solid var(--cream-line); }
@@ -200,7 +197,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .pipeline-detalle { padding:16px 20px; }
 .pipeline-detalle p { font-size:13px; font-weight:300; color:var(--cream-dim); line-height:1.6; }
 @media(max-width:500px){ .pipeline-item{grid-template-columns:1fr} .pipeline-fecha{border-right:none;border-bottom:.5px solid var(--cream-line)} }
- 
+
 /* ===== SHOWS ===== */
 .show-item { display:grid; grid-template-columns:80px 1fr; gap:0 24px; padding:20px 0; border-top:.5px solid var(--cream-line); align-items:start; }
 .show-item:last-child { border-bottom:.5px solid var(--cream-line); }
@@ -209,18 +206,18 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 .show-venue { font-family:var(--font-d); font-size:19px; font-weight:300; font-style:italic; color:var(--cream); margin-bottom:4px; }
 .show-detalle { font-family:var(--font-u); font-size:10px; letter-spacing:.08em; color:var(--cream-muted); line-height:1.7; }
 .show-badge { display:inline-block; font-family:var(--font-u); font-size:8px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--vino-bright); border:.5px solid rgba(139,58,58,.4); padding:2px 8px; margin-top:6px; }
- 
+
 /* ===== ETAPAS MÉTODO ===== */
 .etapa { display:grid; grid-template-columns:56px 1fr; gap:0 20px; padding:24px 0; border-top:.5px solid var(--cream-line); }
 .etapa:last-child { border-bottom:.5px solid var(--cream-line); }
 .etapa-n { font-family:var(--font-d); font-size:40px; font-weight:300; color:rgba(242,240,234,.07); line-height:1; }
 .etapa-titulo { font-family:var(--font-d); font-size:18px; font-weight:400; color:var(--cream); margin-bottom:8px; }
 .etapa-txt { font-size:14px; font-weight:300; line-height:1.78; color:rgba(242,240,234,.72); max-width:520px; }
- 
+
 /* ===== TAGS GEOGRAFÍA ===== */
 .geo-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
 .geo-tag { font-family:var(--font-u); font-size:9px; font-weight:300; letter-spacing:.1em; color:var(--cream-dim); border:.5px solid var(--cream-line); padding:4px 10px; }
- 
+
 /* ===== CONTACTO FINAL ===== */
 #contacto-final { padding:var(--pad-s) 0; }
 .contacto-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--cream-line); border:.5px solid var(--cream-line); }
@@ -234,19 +231,19 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
 </style>
 </head>
 <body>
- 
+
 <svg id="la" aria-hidden="true" style="position:fixed;left:clamp(12px,2vw,24px);top:0;width:1.5px;height:100vh;pointer-events:none;z-index:30;">
   <line id="ls" x1="0.75" y1="0" x2="0.75" y2="100vh" stroke="#8B3A3A" stroke-width="1.5" stroke-dasharray="100vh" stroke-dashoffset="100vh"/>
 </svg>
- 
+
 <!-- NAV TOP -->
 <nav class="nav-top" role="navigation" aria-label="Navegación principal">
   <div class="nav-top-inner">
     <a href="https://tobalblu.com" class="nav-marca">Tóbal Blu</a>
     <ul class="nav-top-links" role="list">
       <li><a href="https://tobalblu.com/musica.html">Música</a></li>
-      <li><a href="https://tobalblu.com/presskit">Presskit</a></li>
-      <li><a href="https://tobalblu.com/Gallery.html">Galería</a></li>
+      <li><a href="https://tobalblu.com/publishing">Publishing</a></li>
+      <li><a href="https://tobalblu.com/gallery.html">Galería</a></li>
       <li><a href="#contacto-final">Contacto</a></li>
     </ul>
     <button class="nav-btn" aria-label="Abrir menú" aria-expanded="false" id="menu-btn">
@@ -260,13 +257,13 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
   <a href="https://tobalblu.com/gallery.html">Galería</a>
   <a href="#contacto-final">Contacto</a>
 </div>
- 
+
 <!-- LAYOUT PRINCIPAL -->
 <div class="layout">
- 
+
   <!-- CONTENIDO -->
   <main class="main-content" role="main">
- 
+
     <!-- PORTADA -->
     <section class="portada" aria-label="Presentación">
       <span class="portada-ey reveal">Presskit · Julio 2026 · Documento confidencial</span>
@@ -280,7 +277,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
       </p>
       <span class="portada-fecha reveal d3">Santiago de Chile · tobalblu.com · tobal.blu@gmail.com · +56 9 6372 5631</span>
     </section>
- 
+
     <!-- SECCIÓN 1: COMPOSITOR -->
     <section class="seccion" id="compositor" aria-label="Compositor">
       <div class="sec-header reveal">
@@ -288,12 +285,12 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <h2 class="sec-titulo">Compositor</h2>
         <span class="sec-subtitulo">Catálogo · Autorías · Proyectos activos</span>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Perfil</span>
         <p>Cristóbal Urbina Cabalín es compositor, letrista y director creativo con más de una década de trayectoria autoral activa. Su trabajo abarca desde la construcción integral de canciones hasta la dirección creativa de proyectos de largo aliento, operando simultáneamente en catálogo propio, colaboraciones estratégicas y desarrollo de nuevos artistas.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Catálogo publicado · Spotify · corte julio 2026</span>
         <div class="cifras-row">
@@ -303,29 +300,29 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
           </div>
           <div class="cifra-bloque">
             <span class="cifra-num">59M</span>
-            <span class="cifra-desc">Confortas Pero Dañas<br>25 % autoría</span>
+            <span class="cifra-desc">Confortas Pero Dañas</span>
           </div>
           <div class="cifra-bloque">
             <span class="cifra-num">38M</span>
-            <span class="cifra-desc">La verdad<br>8 % autoría</span>
+            <span class="cifra-desc">La verdad</span>
           </div>
         </div>
         <table class="cancion-lista">
-          <thead><tr><th>Canción</th><th>Artista</th><th>Autoría</th><th>Streams</th><th></th></tr></thead>
+          <thead><tr><th>Canción</th><th>Artista</th><th>Streams</th><th></th></tr></thead>
           <tbody>
-            <tr><td>Confortas Pero Dañas</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">25 %</td><td class="streams">59M</td><td class="nota">700 días · Nuevo Rock Latino</td></tr>
-            <tr><td>La verdad</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">8 %</td><td class="streams">38M</td><td class="nota">+ 12M YouTube</td></tr>
-            <tr><td>Perdámonos</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">12 %</td><td class="streams">15M</td><td class="nota"></td></tr>
-            <tr><td>Frío</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">10 %</td><td class="streams">4M</td><td class="nota"></td></tr>
-            <tr><td>Poder quererme</td><td class="artista">Kidd Voodoo</td><td class="autoria">10 %</td><td class="streams">5M</td><td class="nota">desde feb 2026</td></tr>
-            <tr><td>Noviembre</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">15 %</td><td class="streams">4.8M</td><td class="nota"></td></tr>
-            <tr><td>Me quedo en esa vez</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="autoria">9 %</td><td class="streams">4M</td><td class="nota"></td></tr>
-            <tr><td>En el suelo</td><td class="artista">Kidd Voodoo ft. Rels B</td><td class="autoria">7 %</td><td class="streams">3.3M</td><td class="nota"></td></tr>
-            <tr><td>Quema las estrellas</td><td class="artista">Resonancia Etérea</td><td class="autoria">25 %</td><td class="streams">3.8M</td><td class="nota">curva sostenida desde 2022</td></tr>
+            <tr><td>Confortas Pero Dañas</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="streams">59M</td><td class="nota">700 días · Nuevo Rock Latino</td></tr>
+            <tr><td>La verdad</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="streams">38M</td><td class="nota">+ 12M YouTube</td></tr>
+            <tr><td>Perdámonos</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="streams">15M</td><td class="nota"></td></tr>
+            <tr><td>Frío</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="streams">4M</td><td class="nota"></td></tr>
+            <tr><td>Poder quererme</td><td class="artista">Kidd Voodoo</td><td class="streams">5M</td><td class="nota">desde feb 2026</td></tr>
+            <tr><td>Noviembre</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="streams">4.8M</td><td class="nota"></td></tr>
+            <tr><td>Me quedo en esa vez</td><td class="artista">Kidd Voodoo ft. Resonancia Etérea</td><td class="streams">4M</td><td class="nota"></td></tr>
+            <tr><td>En el suelo</td><td class="artista">Kidd Voodoo ft. Rels B</td><td class="streams">3.3M</td><td class="nota"></td></tr>
+            <tr><td>Quema las estrellas</td><td class="artista">Resonancia Etérea</td><td class="streams">3.8M</td><td class="nota">curva sostenida desde 2022</td></tr>
           </tbody>
         </table>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Circulación internacional de autoría</span>
         <p>Las canciones de autoría de Cristóbal han sido interpretadas en más de 18 fechas internacionales como parte de las giras de Kidd Voodoo, recorriendo cuatro continentes. Su catálogo viaja y funciona fuera del contexto local.</p>
@@ -337,7 +334,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
           <span class="geo-tag">Suiza</span><span class="geo-tag">Holanda</span>
         </div>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Pipeline confirmado · 2026–2028</span>
         <div class="pipeline">
@@ -367,12 +364,12 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
           </div>
         </div>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Desarrollo de nuevos artistas</span>
         <p>En paralelo al trabajo con artistas establecidos, Cristóbal mantiene sesiones activas con artistas en distintas etapas de carrera — desde proyectos emergentes como Aura Bae y Sol Alegría, hasta colaboraciones con artistas de mayor trayectoria y renombre. El objetivo no es solo ampliar el catálogo, sino participar desde distintos puntos focales en el desarrollo de carreras: como compositor, como productor, como director creativo, o como socio estratégico según lo que cada proyecto requiera.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Presencia digital · Tobal Blu</span>
         <div class="cifras-row">
@@ -391,13 +388,13 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         </div>
         <p>La cuenta @tobal.blu en redes sociales no es el proyecto solista — es Tóbal el músico: un canal que amplifica el catálogo propio, Resonancia Etérea, KiddVoodoo y las colaboraciones en gestación. El ratio de 11.8K shares sobre 3.2M views indica circulación orgánica real — el contenido viaja entre usuarios sin pauta. Este canal está disponible como herramienta de amplificación para los proyectos con los que trabaja.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Orden administrativo</span>
         <p>Cristóbal se encuentra registrado individualmente como autor con identificador IPI/CAE activo. Sus participaciones publicadas están respaldadas por split sheets cerrados y las obras se encuentran inscritas bajo una identidad autoral normalizada. Sus participaciones editoriales no tienen compromisos previos y están disponibles para negociación. Opera como gestor directo de su propio trabajo — con conocimiento del negocio y capacidad de negociación autónoma a nivel ejecutivo.</p>
       </div>
     </section>
- 
+
     <!-- SECCIÓN 2: ARTISTA -->
     <section class="seccion" id="artista" aria-label="Artista">
       <div class="sec-header reveal">
@@ -405,11 +402,11 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <h2 class="sec-titulo">Artista</h2>
         <span class="sec-subtitulo">Resonancia Etérea · Tóbal Blu</span>
       </div>
- 
+
       <div class="bloque reveal">
         <p>Cristóbal Urbina Cabalín desarrolla su identidad artística en dos proyectos paralelos y complementarios: Resonancia Etérea, el proyecto colectivo que fundó, financió y dirigió desde sus orígenes, y Tóbal Blu, su proyecto solista.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Resonancia Etérea</span>
         <p>Resonancia Etérea nació como una apuesta personal de Cristóbal. Antes de las colaboraciones sistemáticas con Kidd Voodoo — que catapultaron al proyecto hacia el mainstream — fue él quien financió, produjo y dirigió la construcción del catálogo inicial de la banda. Esa inversión no fue solo económica: fue de tiempo, criterio creativo y visión de largo plazo en un momento en que el proyecto no tenía el respaldo de ningún sello ni publisher.</p>
@@ -417,19 +414,19 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <p>Las colaboraciones posteriores con Kidd Voodoo no reemplazaron esa identidad: la amplificaron. Canciones como <em>Confortas Pero Dañas</em>, <em>La verdad</em> y <em>Perdámonos</em> surgieron de la intersección entre dos universos creativos que Cristóbal conoce desde adentro, habiendo sido parte fundadora de ambos.</p>
         <p>Resonancia Etérea se proyecta hacia un nuevo álbum en 2028. Un proyecto con doce años de historia, que llega a este momento con el catálogo y la audiencia que siempre tuvo la ambición de alcanzar.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Tóbal Blu</span>
         <p>Tóbal Blu es la identidad solista de Cristóbal: más personal, más expuesta, más directa. Con un álbum ya lanzado, el proyecto avanza a un ritmo autoral — son la inspiración y las realidades vividas las que dictan cuándo aparece una canción nueva, no un calendario editorial. Esa decisión es en sí misma una declaración de intención: Tóbal Blu existe para decir algo, no para ocupar un espacio en el algoritmo.</p>
         <p>Mientras Resonancia Etérea opera como un proyecto colectivo con historia compartida, Tóbal Blu es el espacio donde Cristóbal habla en primera persona — como guitarrista, como compositor, como intérprete.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Lo que une a los dos proyectos</span>
         <p>Ambos proyectos comparten una misma firma creativa: canciones que no dependen del ciclo de lanzamiento para seguir circulando, letras que esconden más de lo que muestran, y una producción que sirve a la emoción sin imponerse sobre ella. Esa coherencia es el resultado de una década de trabajo sostenido, financiado en gran parte con recursos propios, en un mercado que no siempre valoró lo que se estaba construyendo antes de que los números lo demostraran.</p>
       </div>
     </section>
- 
+
     <!-- SECCIÓN 3: PERFORMER -->
     <section class="seccion" id="performer" aria-label="Performer">
       <div class="sec-header reveal">
@@ -437,14 +434,14 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <h2 class="sec-titulo">Performer</h2>
         <span class="sec-subtitulo">Presentaciones en vivo · Escala escénica</span>
       </div>
- 
+
       <div class="bloque reveal">
         <p>Haber estado en el escenario frente a decenas de miles de personas, en recintos de primer nivel, informa directamente cómo Cristóbal compone: sabe lo que una canción necesita para sostenerse en vivo, para crecer frente a una audiencia, para convertirse en un momento colectivo.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Presentaciones en vivo</span>
- 
+
         <div class="show-item">
           <div class="show-año">2025</div>
           <div class="show-contenido">
@@ -452,7 +449,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
             <div class="show-detalle">12 presentaciones · 7 fechas julio 2025 · 5 fechas diciembre 2025<br>15.000 personas por noche · Las canciones de autoría de Cristóbal ocupan los momentos de mayor carga emocional del show.</div>
           </div>
         </div>
- 
+
         <div class="show-item">
           <div class="show-año">2025</div>
           <div class="show-contenido">
@@ -461,7 +458,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
             <span class="show-badge">Mainstage</span>
           </div>
         </div>
- 
+
         <div class="show-item">
           <div class="show-año">2024</div>
           <div class="show-contenido">
@@ -470,7 +467,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
             <span class="show-badge">Sold out · TVN</span>
           </div>
         </div>
- 
+
         <div class="show-item">
           <div class="show-año">2024</div>
           <div class="show-contenido">
@@ -478,7 +475,7 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
             <div class="show-detalle">Espectáculo en espacio abierto vinculado al álbum Euforia de Kidd Voodoo. Cristóbal participa como compositor y guitarrista.</div>
           </div>
         </div>
- 
+
         <div class="show-item">
           <div class="show-año">2026</div>
           <div class="show-contenido">
@@ -488,13 +485,13 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
           </div>
         </div>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Las canciones de Cristóbal en el escenario</span>
         <p>Dentro de los shows de Kidd Voodoo, las canciones con autoría de Cristóbal son parte de los momentos de mayor carga emocional. Son los clímax, las pausas que se cargan de silencio antes de estallar, los cierres que sostienen el peso de todo lo que vino antes. Eso es observable en la respuesta del público, en los videos que circulan después de los shows, y en la forma en que esas canciones acumulan streams sostenidos mucho después de su lanzamiento.</p>
       </div>
     </section>
- 
+
     <!-- SECCIÓN 4: PRODUCTOR -->
     <section class="seccion" id="productor" aria-label="Productor">
       <div class="sec-header reveal">
@@ -502,17 +499,17 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <h2 class="sec-titulo">Productor</h2>
         <span class="sec-subtitulo">Método · Estudio · Ecosistema</span>
       </div>
- 
+
       <div class="bloque reveal">
         <p>Cristóbal Urbina Cabalín no separa la composición de la producción. Su forma de trabajar integra ambas desde el inicio: una canción no está terminada cuando tiene letra y melodía — está terminada cuando tiene una forma sonora que permite al artista y a su equipo visualizar su potencial real antes de entrar a un estudio de primer nivel.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Estudio y ecosistema de producción</span>
         <p>Cristóbal opera desde un estudio propio y completamente equipado en Santiago de Chile, con capacidad para desarrollar composición, preproducción, grabación de voces e instrumentos, dirección vocal, arreglos, mezcla y preparación de stems. El estudio no es solo una herramienta técnica — es un espacio donde los artistas se sienten acogidos. Hay un ambiente de colaboración real: humanidad, fraternidad y servicio a la música como principios de operación.</p>
         <p>En paralelo, Cristóbal está inmerso en un ecosistema colectivo de productores y sellos que permite el acceso a estudios de primer nivel cuando el proyecto lo requiere. Tiene experiencia de trabajo en <strong>Estudio Los Lobos</strong>, <strong>Estudios del Sur</strong>, y los principales estudios de los sellos más importantes de la industria — Sony, BZR, Warner, Lotus y La Cueva.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Método de construcción integral</span>
         <div class="etapa">
@@ -532,18 +529,18 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
           <div><h3 class="etapa-titulo">Lectura estructural</h3><p class="etapa-txt">Cada obra es evaluada dentro del proyecto completo: su lugar en el álbum, su relación con el catálogo, su potencial en vivo, su coherencia con la identidad del artista. La canción no existe aislada de la carrera.</p></div>
         </div>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Desarrollo autoral y producción musical</span>
         <p>Desde enero de 2026, Cristóbal dedica su jornada completa al desarrollo autoral y producción musical. El sistema de trabajo le permite operar con flexibilidad de ritmo — puede profundizar semanas en una sola canción o sostener ciclos intensivos cuando el objetivo es construir volumen de catálogo. En lo que va del año lleva más de treinta canciones desarrolladas en distintas etapas de producción.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Ecosistema de colaboración</span>
         <p>El trabajo de Cristóbal se extiende a través de alianzas con equipos audiovisuales especializados en contenido y videoclips, empresas de merch, y conexiones directas con músicos de primer nivel — incluyendo a Felipe Castro, productor con trayectoria junto a Los Bunkers y Mon Laferte, y Boris Ramírez, baterista reconocido en la escena nacional. Estas conexiones permiten elevar la calidad de producción de cada proyecto sin depender de una sola cadena de recursos.</p>
       </div>
     </section>
- 
+
     <!-- SECCIÓN 5: INGENIERO -->
     <section class="seccion" id="ingeniero" aria-label="Ingeniero">
       <div class="sec-header reveal">
@@ -551,19 +548,19 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <h2 class="sec-titulo">Ingeniero</h2>
         <span class="sec-subtitulo">Formación · Trayectoria · Visión sistémica</span>
       </div>
- 
+
       <div class="bloque reveal">
         <p>Antes de dedicarse de lleno a la música, Cristóbal Urbina Cabalín construyó una carrera profesional de diez años como ingeniero mecánico, alcanzando posiciones de gerencia en industria corporativa global — incluyendo su paso por Laboratorio Chile y Teva Pharmaceuticals, dos de las operaciones farmacéuticas más exigentes del país en términos de estándares internacionales, trazabilidad y gestión de cadena de suministro.</p>
         <p>Esa trayectoria no es un antecedente que quedó atrás. Es la base sobre la que opera hoy.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Formación académica</span>
         <p><strong>Ingeniería Mecánica</strong> — Universidad de Santiago de Chile (USACH)</p>
         <p><strong>Diplomado en Dirección Estratégica de Operaciones Logísticas</strong> — Universidad de Chile</p>
         <p>Diez años de ejercicio profesional activo en industria corporativa de escala global, con roles de creciente responsabilidad hasta alcanzar niveles de gerencia.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">Lo que la ingeniería le da a la música</span>
         <p><strong>Visión sistémica</strong> — Un ingeniero ve sistemas donde otros ven procesos. Esa mirada se traduce en la capacidad de coordinar un álbum, una gira o un pipeline de canciones simultáneas con la misma claridad estructural con que se gestiona una operación de alto estándar.</p>
@@ -571,14 +568,14 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
         <p><strong>Rigor administrativo</strong> — Split sheets cerrados, participaciones documentadas, inscripciones en orden. No como obligación burocrática, sino como práctica natural de quien entiende que el orden es la base de cualquier sistema que funcione a largo plazo.</p>
         <p><strong>Tolerancia a la incertidumbre con metodología</strong> — La carrera musical es inherentemente incierta. La formación en ingeniería entrena para operar con eficiencia en contextos de alta variabilidad — exactamente lo que la industria musical exige.</p>
       </div>
- 
+
       <div class="bloque reveal">
         <span class="bloque-titulo">El salto</span>
         <p>Dejar una carrera corporativa exitosa de diez años para dedicarse de lleno a la música no fue una decisión impulsiva. Fue el resultado de una evaluación sistemática de riesgos, oportunidades y recursos — hecha con la misma metodología con la que Cristóbal tomó decisiones durante una década en la industria.</p>
         <p>Desde enero de 2026 lleva su primera temporada completa dedicado exclusivamente a la música. Los resultados de ese primer año — más de treinta canciones desarrolladas, pipeline activo con cinco artistas, acceso directo a los principales estudios y escenarios de la industria nacional — sugieren que la evaluación fue correcta.</p>
       </div>
     </section>
- 
+
     <!-- CONTACTO -->
     <section id="contacto-final" aria-label="Contacto">
       <div class="bloque reveal" style="margin-bottom:24px;">
@@ -605,9 +602,9 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
       </div>
       <p class="conf-txt reveal">Documento confidencial — circulación restringida. La información contenida en este presskit incluye planes de trabajo, repertorio inédito y colaboraciones todavía no anunciadas públicamente. No reproducir, compartir ni divulgar total o parcialmente sin autorización expresa de Cristóbal Urbina Cabalín · Julio 2026</p>
     </section>
- 
+
   </main>
- 
+
   <!-- PANEL LATERAL DERECHO -->
   <aside class="side-nav" aria-label="Navegación del presskit">
     <span class="side-nav-label">Presskit</span>
@@ -627,24 +624,24 @@ a:focus-visible { outline:2px solid var(--vino-bright); outline-offset:3px; bord
       <span class="side-link-num">05</span> Ingeniero
     </a>
   </aside>
- 
+
 </div>
- 
+
 <script>
 // Menú móvil
 const btn=document.getElementById("menu-btn"),mob=document.getElementById("nav-mob");
 btn.addEventListener("click",()=>{const o=mob.classList.toggle("open");btn.setAttribute("aria-expanded",o);btn.setAttribute("aria-label",o?"Cerrar menú":"Abrir menú")});
- 
+
 // Reveal
 if(window.matchMedia("(prefers-reduced-motion:no-preference)").matches){
   const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add("vis");obs.unobserve(x.target)}})},{threshold:.06,rootMargin:"0px 0px -24px 0px"});
   document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
 }
- 
+
 // Línea autoral
 const ls=document.getElementById("ls");
 if(ls){function upd(){const p=Math.min(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight),1);ls.style.strokeDasharray=window.innerHeight+"px";ls.style.strokeDashoffset=((1-p)*window.innerHeight)+"px"}window.addEventListener("scroll",upd,{passive:true});upd()}
- 
+
 // Panel lateral activo según scroll
 const secciones=document.querySelectorAll("section[id]");
 const sideLinks=document.querySelectorAll(".side-link[data-section]");
@@ -662,20 +659,3 @@ secciones.forEach(s=>observer2.observe(s));
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

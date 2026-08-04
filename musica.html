@@ -567,15 +567,21 @@ function eufInitAudio() {
   if (euforia.ctx) return;
   var A = new Audio(euforia.audioSrc);
   A.preload = 'none';
+  A.setAttribute('playsinline', '');   /* iOS: no forzar pantalla completa */
+  A.setAttribute('webkit-playsinline', '');
   /* mismo origen (GitHub Pages): NO se pone crossOrigin, o el audio se bloquea */
   var AC = window.AudioContext || window.webkitAudioContext;
   var C = new AC();
   var an = C.createAnalyser();
   an.fftSize = 256;
+  var gain = C.createGain();          /* salida audible explícita */
+  gain.gain.value = 1;
   var src = C.createMediaElementSource(A);
+  /* source -> analyser -> gain -> altavoces */
   src.connect(an);
-  an.connect(C.destination);
-  euforia.audio = A; euforia.ctx = C; euforia.analyser = an;
+  an.connect(gain);
+  gain.connect(C.destination);
+  euforia.audio = A; euforia.ctx = C; euforia.analyser = an; euforia.gain = gain;
   euforia.freq = new Uint8Array(an.frequencyBinCount);
   euforia.time = new Uint8Array(an.fftSize);
   A.addEventListener('ended', function() { euforia.playing = false; eufUI(); });
@@ -583,13 +589,23 @@ function eufInitAudio() {
 
 function eufToggle() {
   eufInitAudio();
-  if (euforia.ctx.state === 'suspended') euforia.ctx.resume();
+  /* iOS/Chrome: el resume DEBE ocurrir dentro del gesto, antes de play() */
+  if (euforia.ctx.state === 'suspended') {
+    euforia.ctx.resume();
+  }
   if (euforia.audio.paused) {
     var p = euforia.audio.play();
     if (p && p.then) {
-      p.then(function() { euforia.playing = true; eufUI(); })
-       .catch(function() { euforia.playing = false; eufUI(); });
-    } else { euforia.playing = true; eufUI(); }
+      p.then(function() {
+        euforia.playing = true; eufUI();
+        /* re-asegurar resume tras el play (Safari a veces re-suspende) */
+        if (euforia.ctx.state === 'suspended') euforia.ctx.resume();
+      }).catch(function() {
+        euforia.playing = false; eufUI();
+      });
+    } else {
+      euforia.playing = true; eufUI();
+    }
   } else {
     euforia.audio.pause(); euforia.playing = false; eufUI();
   }

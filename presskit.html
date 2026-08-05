@@ -1,40 +1,136 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cristóbal Urbina Cabalín — Presskit</title>
-<meta name="description" content="Presskit completo de Cristóbal Urbina Cabalín — compositor, artista, performer, productor e ingeniero.">
-<link rel="canonical" href="https://tobalblu.com/presskit">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --navy:        #090F1A;
-  --navy-card:   #0D1625;
-  --navy-mid:    #111E33;
-  --cream:       #F2F0EA;
-  --cream-dim:   rgba(242,240,234,0.82);
-  --cream-muted: rgba(242,240,234,0.55);
-  --cream-ghost: rgba(242,240,234,0.05);
-  --cream-line:  rgba(242,240,234,0.12);
-  --vino:        #8B3A3A;
-  --vino-bright: #A84444;
-  --font-d: "Cormorant Garamond", Georgia, serif;
-  --font-u: "Inter", system-ui, sans-serif;
-  --max-w: 1100px;
-  --nav-w: 200px;
-  --pad-x: clamp(24px, 4vw, 64px);
-  --pad-s: clamp(64px, 9vw, 112px);
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presskit — Tobal Blu</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
-html { font-size:16px; scroll-behavior:smooth; }
-body {
-  background: var(--navy);
-  color: var(--cream);
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .home-link {
+      position: fixed; top: 1.5rem; left: 1.5rem;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #333; text-decoration: none; transition: color 0.3s; z-index: 10;
+    }
+    .home-link:hover { color: #888; }
+
+    .wrap { max-width: 760px; margin: 0 auto; padding: 6rem 1.5rem 4rem; }
+
+    .eyebrow {
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: #555; margin-bottom: 1.2rem;
+    }
+    .titulo {
+      font-size: clamp(26px, 6vw, 44px);
+      letter-spacing: 0.02em; color: #fff; line-height: 1.15;
+      margin-bottom: 0.8rem; font-weight: normal;
+    }
+    .nombre {
+      font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: #888; margin-bottom: 2.2rem;
+    }
+    .resumen {
+      font-size: 13px; color: #999; letter-spacing: 0.03em;
+      max-width: 560px; margin-bottom: 3rem; line-height: 1.75;
+    }
+
+    /* ===== BOTONES ===== */
+    .acciones { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      font-family: 'Courier New', monospace;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none; padding: 1rem 2rem; cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      border: 0.5px solid;
+    }
+    .btn-primario { border-color: #B67B3A; color: #d89a4a; background: rgba(182,123,58,0.06); }
+    .btn-primario:hover { background: rgba(182,123,58,0.18); color: #f0c98a; border-color: #d89a4a; }
+    .btn-secundario { border-color: #2f2f2f; color: #888; background: none; }
+    .btn-secundario:hover { color: #ddd; border-color: #555; }
+
+    .nota {
+      font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #333; margin-bottom: 3.5rem;
+    }
+
+    /* ===== PREVIEW (solo desktop) ===== */
+    .preview {
+      width: 100%; aspect-ratio: 16 / 9;
+      border: 0.5px solid #1e1e1e; background: #0d0d0d;
+    }
+    .preview iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    .preview-label {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #444; margin-bottom: 0.8rem;
+    }
+
+    /* En móvil el iframe de PDF suele fallar: se oculta y mandan los botones */
+    .preview-bloque { display: none; }
+    @media (min-width: 900px) {
+      .preview-bloque { display: block; }
+    }
+
+    .firma {
+      margin-top: 4rem; padding-top: 2rem; border-top: 0.5px solid #1a1a1a;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #444;
+    }
+    .firma a { color: #666; text-decoration: none; transition: color 0.3s; }
+    .firma a:hover { color: #aaa; }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<div class="wrap">
+  <div class="eyebrow">Presskit 2026</div>
+  <h1 class="titulo">Tóbal Blu</h1>
+  <div class="nombre">Cristóbal Urbina Cabalín</div>
+
+  <p class="resumen">
+    Artista, compositor, productor y director creativo con más de una década de
+    trayectoria autoral activa. Más de 130M de streams acumulados en obras con
+    participación autoral, escenarios como Lollapalooza Chile y Movistar Arena,
+    y una fecha confirmada en Estadio Monumental.
+  </p>
+
+  <div class="acciones">
+    <a class="btn btn-primario" href="presskit-tobalblu-2026.pdf" target="_blank" rel="noopener">
+      Ver presskit ↗
+    </a>
+    <a class="btn btn-secundario" href="presskit-tobalblu-2026.pdf" download>
+      Descargar PDF ↓
+    </a>
+  </div>
+  <div class="nota">PDF · 12 páginas · corte julio 2026</div>
+
+  <div class="preview-bloque">
+    <div class="preview-label">Vista previa</div>
+    <div class="preview">
+      <iframe src="presskit-tobalblu-2026.pdf#toolbar=0&view=FitH" title="Presskit Tóbal Blu 2026"></iframe>
+    </div>
+  </div>
+
+  <div class="firma">
+    <a href="https://www.tobalblu.com" target="_blank">www.tobalblu.com</a>
+    &nbsp;·&nbsp; tobal.blu@gmail.com
+  </div>
+</div>
+
+</body>
+</html>  color: var(--cream);
   font-family: var(--font-d);
   line-height: 1.6;
   overflow-x: hidden;

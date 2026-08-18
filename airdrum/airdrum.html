@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Batería de Aire · Tóbal Blu</title>
+<style>
+  :root{
+    --azul:#0E2439; --musgo:#2E4A38; --crema:#F5EDDC;
+    --ambar:#B67B3A; --cobre:#8C4A2A;
+    --azul2:#16324f; --linea:rgba(245,237,220,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(1200px 800px at 70% -10%, var(--azul2), var(--azul) 60%);
+    color:var(--crema); font-family:"Helvetica Neue",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 20px; border-bottom:1px solid var(--linea); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+  header h1{margin:0; font-size:18px; letter-spacing:.5px; font-weight:700}
+  header h1 span{color:var(--ambar)}
+  header .sub{font-size:12px; opacity:.6}
+  .wrap{display:grid; grid-template-columns:1fr 340px; gap:16px; padding:16px; align-items:start}
+  @media (max-width:900px){ .wrap{grid-template-columns:1fr} }
+  .stage{position:relative; background:#000; border:1px solid var(--linea); border-radius:14px; overflow:hidden; aspect-ratio:4/3}
+  video{display:none}
+  canvas{display:block; width:100%; height:100%}
+  .stage .hint{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:30px; font-size:14px; opacity:.85}
+  .panel{background:rgba(14,36,57,.6); border:1px solid var(--linea); border-radius:14px; padding:14px; margin-bottom:14px}
+  .panel h2{margin:0 0 10px; font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--ambar)}
+  button{font:inherit; color:var(--crema); background:var(--cobre); border:none; padding:9px 12px; border-radius:9px; cursor:pointer; font-size:13px}
+  button:hover{filter:brightness(1.1)}
+  button.ghost{background:transparent; border:1px solid var(--linea)}
+  button.amber{background:var(--ambar); color:var(--azul); font-weight:700}
+  button:disabled{opacity:.4; cursor:not-allowed}
+  .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px}
+  label.small{font-size:12px; opacity:.8}
+  input[type=range]{width:100%}
+  input[type=number]{width:64px; background:#0a1a2b; color:var(--crema); border:1px solid var(--linea); border-radius:6px; padding:4px}
+  .pad-list{display:flex; flex-direction:column; gap:6px}
+  .pad{display:grid; grid-template-columns:14px 1fr auto; gap:8px; align-items:center; padding:8px; border:1px solid var(--linea); border-radius:9px; background:rgba(0,0,0,.15)}
+  .pad.sel{border-color:var(--ambar)}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .pad .name{font-size:13px; font-weight:600}
+  .pad .meta{font-size:11px; opacity:.6}
+  .pad .btns{display:flex; gap:5px}
+  .pad .btns button{padding:5px 7px; font-size:11px}
+  input[type=file]{font-size:11px; color:var(--crema); max-width:150px}
+  .status{font-size:12px; padding:8px 10px; border-radius:8px; background:rgba(0,0,0,.25); border:1px solid var(--linea); min-height:18px}
+  .status.err{border-color:var(--cobre); color:#ffd7c2}
+  .status.ok{border-color:var(--musgo)}
+  details summary{cursor:pointer; font-size:12px; opacity:.8; margin-top:6px}
+  a{color:var(--ambar)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Batería de <span>Aire</span></h1>
+  <span class="sub">Tóbal Blu · toca el beat con tu cámara</span>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="stage">
+      <video id="video" playsinline muted></video>
+      <canvas id="canvas"></canvas>
+      <div class="hint" id="hint">
+        Ábrela desde tu GitHub Pages (HTTPS) para que funcione la cámara.<br><br>
+        <b>Iniciar cámara</b> → calibra golpeando cada tambor → el Kick va con la pierna.
+      </div>
+    </div>
+    <div class="status" id="status" style="margin-top:12px">Listo para empezar.</div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>1 · Cámara y motor</h2>
+      <div class="row">
+        <button id="btnCam" class="amber">Iniciar cámara</button>
+        <button id="btnFeet" class="amber">Pierna (kick): ON</button>
+      </div>
+      <label class="small">Sensibilidad manos</label>
+      <input type="range" id="sensHands" min="0.6" max="3.5" step="0.05" value="1.5">
+      <label class="small">Sensibilidad pierna (kick)</label>
+      <input type="range" id="sensFeet" min="0.2" max="2" step="0.02" value="0.6">
+    </div>
+
+    <div class="panel">
+      <h2>2 · Pads y samples</h2>
+      <div class="pad-list" id="padList"></div>
+      <div class="row" style="margin-top:10px"><label class="small">Radio del pad seleccionado</label></div>
+      <input type="range" id="radius" min="0.04" max="0.20" step="0.005" value="0.09">
+      <details>
+        <summary>Cómo calibrar</summary>
+        <p style="font-size:12px; opacity:.85; line-height:1.5">
+          1. Toca un tambor en la lista para seleccionarlo.<br>
+          2. Aprieta <b>Aprender</b> y pégale al cojín/lugar donde va: se fija ahí.<br>
+          3. El <b>Kick</b> se toca con la pierna: rebota la rodilla (súbela y bájala rápido).<br>
+          4. Los samples se cargan solos desde <code>/sonidos</code>; o súbelos a mano con <b>Archivo</b>.
+        </p>
+      </details>
+    </div>
+
+    <div class="panel">
+      <h2>3 · Tiempo y pista</h2>
+      <div class="row">
+        <label class="small">BPM</label>
+        <input type="number" id="bpm" value="100" min="40" max="240">
+        <button id="btnMetro" class="ghost">Metrónomo</button>
+      </div>
+      <div class="row">
+        <label class="small">Pista base:</label>
+        <input type="file" id="backingFile" accept="audio/*">
+      </div>
+      <div class="row">
+        <button id="btnPlay" class="ghost" disabled>Reproducir pista (con conteo)</button>
+        <button id="btnStop" class="ghost">Parar</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4 · Grabar (opcional)</h2>
+      <div class="row">
+        <button id="btnRec" class="ghost">● Grabar audio</button>
+        <span id="recTag" style="display:none;font-size:10px;padding:2px 6px;border-radius:5px;background:var(--cobre)">REC</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { HandLandmarker, PoseLandmarker, FilesetResolver }
+  from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+
+const $ = id => document.getElementById(id);
+const statusEl = $("status");
+function setStatus(m, c=""){ statusEl.textContent = m; statusEl.className = "status " + c; }
+
+/* ---------- AUDIO ---------- */
+let audioCtx, masterGain, musicGain, clickGain, mediaDest;
+function initAudio(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  musicGain  = audioCtx.createGain();
+  clickGain  = audioCtx.createGain(); clickGain.gain.value = 0.5;
+  mediaDest  = audioCtx.createMediaStreamDestination();
+  masterGain.connect(audioCtx.destination);
+  musicGain.connect(masterGain);
+  musicGain.connect(mediaDest);       // graba solo la percusión/música
+  clickGain.connect(audioCtx.destination); // el click NO se graba
+}
+function playBuffer(buffer){ const s=audioCtx.createBufferSource(); s.buffer=buffer; s.connect(musicGain); s.start(); }
+async function fileToBuffer(file){ return await audioCtx.decodeAudioData(await file.arrayBuffer()); }
+
+/* ---------- PADS ---------- */
+// x,y en 0..1 (espacio ESPEJADO, lo que ves). r = fracción del ancho.
+// hidden:true => no dibuja círculo ni lo tocan las manos (el kick va por pierna).
+const pads = [
+  {id:"hh",   name:"Hi-Hat",      role:"hihat", x:0.28, y:0.45, r:0.09, color:"#B67B3A", src:"sonidos/hihat.wav",    buffer:null, flash:0, lastHit:0},
+  {id:"snare",name:"Tarola",      role:"snare", x:0.44, y:0.66, r:0.10, color:"#F5EDDC", src:"sonidos/tarola.wav",   buffer:null, flash:0, lastHit:0},
+  {id:"tom",  name:"Tom",         role:"tom",   x:0.56, y:0.42, r:0.09, color:"#8C4A2A", src:"sonidos/tom.wav",      buffer:null, flash:0, lastHit:0},
+  {id:"floor",name:"Tom de piso", role:"floor", x:0.72, y:0.55, r:0.10, color:"#2E4A38", src:"sonidos/tom-piso.wav", buffer:null, flash:0, lastHit:0},
+  {id:"kick", name:"Kick (pierna)", role:"kick", x:0.5, y:0.9, r:0.10, color:"#e0863c", src:"sonidos/kick.wav",     buffer:null, flash:0, lastHit:0, hidden:true},
+];
+let selectedPadId = "snare", learnPadId = null;
+
+function renderPadList(){
+  const list = $("padList"); list.innerHTML = "";
+  pads.forEach(p=>{
+    const row = document.createElement("div");
+    row.className = "pad" + (p.id===selectedPadId?" sel":"");
+    row.innerHTML = `
+      <span class="dot" style="background:${p.color}"></span>
+      <span>
+        <span class="name">${p.name}</span>
+        <span class="meta">${p.buffer?"sample ✓":"sin sample"}${learnPadId===p.id?" · APRENDIENDO…":""}</span>
+      </span>
+      <span class="btns">
+        ${p.hidden?"":`<button data-learn="${p.id}">Aprender</button>`}
+        <label style="padding:5px 7px;border:1px solid var(--linea);border-radius:8px;cursor:pointer;font-size:11px">
+          Archivo<input type="file" accept="audio/*" data-file="${p.id}" style="display:none"></label>
+      </span>`;
+    row.addEventListener("click", e=>{
+      if(e.target.dataset.learn || e.target.dataset.file) return;
+      selectedPadId = p.id; $("radius").value = p.r; renderPadList();
+    });
+    list.appendChild(row);
+  });
+  list.querySelectorAll("[data-learn]").forEach(b=>b.onclick=()=>{
+    initAudio(); learnPadId=b.dataset.learn; selectedPadId=learnPadId;
+    setStatus("Pégale al lugar de « "+pads.find(p=>p.id===learnPadId).name+" » para fijarlo…","ok");
+    renderPadList();
+  });
+  list.querySelectorAll("[data-file]").forEach(inp=>inp.onchange=async e=>{
+    initAudio(); const p=pads.find(p=>p.id===inp.dataset.file);
+    try{ p.buffer=await fileToBuffer(e.target.files[0]); setStatus("Sample cargado en "+p.name,"ok"); renderPadList(); }
+    catch(err){ setStatus("No pude leer ese audio: "+err.message,"err"); }
+  });
+}
+renderPadList();
+$("radius").addEventListener("input", e=>{ const p=pads.find(p=>p.id===selectedPadId); if(p) p.r=parseFloat(e.target.value); });
+
+/* ---------- AUTO-CARGA desde /sonidos ---------- */
+async function loadDefaults(){
+  for(const p of pads){
+    if(!p.src) continue;
+    try{ const r=await fetch(p.src); if(!r.ok) continue; p.buffer=await audioCtx.decodeAudioData(await r.arrayBuffer()); }
+    catch(e){ /* falta el archivo: se carga a mano */ }
+  }
+  renderPadList();
+  const n=pads.filter(p=>p.buffer).length;
+  if(n>0) setStatus(n+" samples cargados desde /sonidos.","ok");
+}
+window.addEventListener("load", ()=>{ initAudio(); loadDefaults(); });
+
+/* ---------- CÁMARA + MODELOS ---------- */
+const video=$("video"), canvas=$("canvas"), ctx=canvas.getContext("2d");
+let handLandmarker=null, poseLandmarker=null, running=false, lastVideoTime=-1;
+let legEnabled=true, frameCount=0;
+
+async function startCamera(){
+  initAudio(); if(audioCtx.state==="suspended") await audioCtx.resume();
+  if(!window.isSecureContext){ setStatus("La cámara necesita HTTPS. Súbela a GitHub Pages y ábrela desde ahí.","err"); return; }
+  setStatus("Cargando modelos de visión…");
+  try{
+    const vision=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+    handLandmarker=await HandLandmarker.createFromOptions(vision,{
+      baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",delegate:"GPU"},
+      runningMode:"VIDEO", numHands:2});
+    poseLandmarker=await PoseLandmarker.createFromOptions(vision,{
+      baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",delegate:"GPU"},
+      runningMode:"VIDEO", numPoses:1});
+  }catch(err){ setStatus("Fallo cargando modelos (¿sin internet?): "+err.message,"err"); return; }
+
+  setStatus("Pidiendo cámara…");
+  let stream;
+  try{ stream=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:960,facingMode:"user"},audio:false}); }
+  catch(err){ setStatus("No pude abrir la cámara: "+err.message,"err"); return; }
+
+  video.srcObject=stream; await video.play();
+  canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+  $("hint").style.display="none"; running=true;
+  setStatus("¡Lista! Calibra los tambores golpeando y prueba el kick rebotando la rodilla.","ok");
+  requestAnimationFrame(loop);
+}
+$("btnCam").onclick=startCamera;
+
+/* ---------- DETECCIÓN ---------- */
+let handState={};
+let legState={lY:null, rY:null, prevT:null, lastKick:0, dL:null, dR:null};
+let kickFlash=0;
+const sensHands=()=>parseFloat($("sensHands").value);
+const sensLeg  =()=>parseFloat($("sensFeet").value);
+
+function fire(mx,my){
+  if(learnPadId){ const p=pads.find(p=>p.id===learnPadId); p.x=mx; p.y=my;
+    setStatus("« "+p.name+" » fijado. Súbele su sample si falta.","ok"); learnPadId=null; renderPadList(); return; }
+  let best=null,bestD=Infinity;
+  for(const p of pads){ if(p.hidden) continue;
+    const dx=(mx-p.x)*canvas.width, dy=(my-p.y)*canvas.height, d=Math.hypot(dx,dy), rpx=p.r*canvas.width;
+    if(d<rpx && d<bestD){ best=p; bestD=d; } }
+  if(best) triggerPad(best);
+}
+function triggerPad(p){
+  const now=performance.now(); if(now-p.lastHit<70) return; p.lastHit=now;
+  if(p.buffer) playBuffer(p.buffer); p.flash=1;
+}
+function handleHands(res,now){
+  if(!res||!res.landmarks) return;
+  for(let i=0;i<res.landmarks.length;i++){
+    const label=(res.handedness?.[i]?.[0]?.categoryName)||("h"+i);
+    const lm=res.landmarks[i][9]; const y=lm.y, mx=1-lm.x, my=lm.y;
+    let st=handState[label]||(handState[label]={prevY:y,prevT:now,armed:true});
+    let dt=(now-st.prevT)/1000; if(dt<=0) dt=0.016;
+    const vy=(y-st.prevY)/dt, thr=sensHands();
+    if(st.armed && vy>thr){ fire(mx,my); st.armed=false; }
+    if(vy<thr*0.25) st.armed=true;
+    st.prevY=y; st.prevT=now; st._draw={x:mx*canvas.width,y:my*canvas.height};
+  }
+}
+function handleLegs(res,now){
+  if(!res||!res.landmarks||!res.landmarks[0]) return;
+  const lms=res.landmarks[0], kL=lms[25], kR=lms[26];
+  if(legState.prevT!=null){
+    let dt=(now-legState.prevT)/1000; if(dt<=0) dt=0.016;
+    const vL=kL?Math.abs((kL.y-legState.lY)/dt):0;
+    const vR=kR?Math.abs((kR.y-legState.rY)/dt):0;
+    if(Math.max(vL,vR)>sensLeg() && now-legState.lastKick>200){
+      const kp=pads.find(p=>p.role==="kick"); if(kp){ triggerPad(kp); kickFlash=1; } legState.lastKick=now;
+    }
+  }
+  if(kL){ legState.lY=kL.y; legState.dL={x:(1-kL.x)*canvas.width,y:kL.y*canvas.height}; }
+  if(kR){ legState.rY=kR.y; legState.dR={x:(1-kR.x)*canvas.width,y:kR.y*canvas.height}; }
+  legState.prevT=now;
+}
+
+/* ---------- LOOP ---------- */
+function loop(){
+  if(!running) return;
+  frameCount++; const now=performance.now();
+  if(video.currentTime!==lastVideoTime){
+    lastVideoTime=video.currentTime;
+    try{
+      handleHands(handLandmarker.detectForVideo(video,now),now);
+      if(legEnabled && frameCount%2===0) handleLegs(poseLandmarker.detectForVideo(video,now+0.5),now);
+    }catch(e){}
+  }
+  draw(); requestAnimationFrame(loop);
+}
+function draw(){
+  const w=canvas.width, h=canvas.height;
+  ctx.save(); ctx.scale(-1,1); ctx.drawImage(video,-w,0,w,h); ctx.restore();
+  ctx.fillStyle="rgba(14,36,57,.18)"; ctx.fillRect(0,0,w,h);
+  for(const p of pads){
+    if(p.hidden) continue;
+    const cx=p.x*w, cy=p.y*h, r=p.r*w;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.lineWidth=p.id===selectedPadId?5:3; ctx.strokeStyle=p.color; ctx.globalAlpha=.9; ctx.stroke();
+    if(p.flash>0){ ctx.globalAlpha=p.flash*.5; ctx.fillStyle=p.color; ctx.fill(); p.flash*=.82; }
+    ctx.globalAlpha=1; ctx.fillStyle="#F5EDDC"; ctx.font="600 15px Helvetica,sans-serif"; ctx.textAlign="center";
+    ctx.fillText(p.name, cx, cy-r-8);
+  }
+  // manos
+  for(const k in handState){ const d=handState[k]._draw; if(!d) continue;
+    ctx.beginPath(); ctx.arc(d.x,d.y,10,0,Math.PI*2); ctx.fillStyle="#F5EDDC"; ctx.fill();
+    ctx.lineWidth=2; ctx.strokeStyle="#B67B3A"; ctx.stroke(); }
+  // rodillas + kick
+  if(legEnabled){
+    for(const d of [legState.dL,legState.dR]){ if(!d) continue;
+      ctx.beginPath(); ctx.arc(d.x,d.y,9,0,Math.PI*2); ctx.fillStyle="#e0863c"; ctx.globalAlpha=.8; ctx.fill(); ctx.globalAlpha=1; }
+    ctx.fillStyle="#F5EDDC"; ctx.font="600 14px Helvetica,sans-serif"; ctx.textAlign="center";
+    ctx.fillText("KICK · rebota la rodilla", w/2, h-64);
+    if(kickFlash>0){ ctx.globalAlpha=kickFlash*.6; ctx.fillStyle="#e0863c";
+      ctx.beginPath(); ctx.arc(w/2,h-34,24+(1-kickFlash)*28,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; kickFlash*=.85; }
+  }
+}
+$("btnFeet").onclick=()=>{
+  legEnabled=!legEnabled;
+  $("btnFeet").textContent="Pierna (kick): "+(legEnabled?"ON":"OFF");
+  $("btnFeet").classList.toggle("amber", legEnabled);
+};
+
+/* ---------- METRÓNOMO + PISTA ---------- */
+let metroTimer=null, metroNext=0, metroBeat=0;
+function playClick(t,accent){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.frequency.value=accent?1600:950; o.connect(g); g.connect(clickGain);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(.7,t+.001); g.gain.exponentialRampToValueAtTime(.0001,t+.05);
+  o.start(t); o.stop(t+.06);
+}
+$("btnMetro").onclick=()=>{
+  initAudio(); if(audioCtx.state==="suspended") audioCtx.resume();
+  if(metroTimer){ clearInterval(metroTimer); metroTimer=null; $("btnMetro").classList.remove("amber"); return; }
+  metroNext=audioCtx.currentTime+.1; metroBeat=0;
+  metroTimer=setInterval(()=>{ const spb=60/(+$("bpm").value);
+    while(metroNext<audioCtx.currentTime+.12){ playClick(metroNext,metroBeat%4===0); metroNext+=spb; metroBeat++; } },25);
+  $("btnMetro").classList.add("amber");
+};
+let backingBuffer=null, backingSource=null;
+$("backingFile").onchange=async e=>{ initAudio();
+  try{ backingBuffer=await fileToBuffer(e.target.files[0]); $("btnPlay").disabled=false; setStatus("Pista base cargada.","ok"); }
+  catch(err){ setStatus("No pude leer la pista: "+err.message,"err"); } };
+$("btnPlay").onclick=()=>{
+  if(!backingBuffer) return; initAudio(); if(audioCtx.state==="suspended") audioCtx.resume();
+  const spb=60/(+$("bpm").value), start=audioCtx.currentTime+.15;
+  for(let i=0;i<4;i++) playClick(start+i*spb,i===0);
+  backingSource=audioCtx.createBufferSource(); backingSource.buffer=backingBuffer; backingSource.connect(musicGain);
+  backingSource.start(start+4*spb); setStatus("Conteo… ¡y a tocar encima!","ok");
+};
+$("btnStop").onclick=()=>{ if(backingSource){ try{backingSource.stop()}catch(e){} backingSource=null; } };
+
+/* ---------- GRABAR ---------- */
+let recorder=null, recChunks=[];
+$("btnRec").onclick=()=>{
+  initAudio();
+  if(recorder && recorder.state==="recording"){ recorder.stop(); return; }
+  recChunks=[]; recorder=new MediaRecorder(mediaDest.stream);
+  recorder.ondataavailable=e=>recChunks.push(e.data);
+  recorder.onstop=()=>{ const blob=new Blob(recChunks,{type:"audio/webm"}); const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download="airdrum.webm"; a.click();
+    $("recTag").style.display="none"; $("btnRec").classList.remove("amber"); setStatus("Audio grabado descargado.","ok"); };
+  recorder.start(); $("recTag").style.display="inline-block"; $("btnRec").classList.add("amber"); setStatus("Grabando…","ok");
+};
+</script>
+</body>
+</html>

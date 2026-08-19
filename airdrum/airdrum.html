@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Batería de Aire · Tóbal Blu</title>
 <style>
-  :root{
-    --azul:#0E2439; --musgo:#2E4A38; --crema:#F5EDDC;
-    --ambar:#B67B3A; --cobre:#8C4A2A; --azul2:#16324f; --linea:rgba(245,237,220,.14);
-  }
+  :root{ --azul:#0E2439; --musgo:#2E4A38; --crema:#F5EDDC; --ambar:#B67B3A; --cobre:#8C4A2A; --azul2:#16324f; --linea:rgba(245,237,220,.14); }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
   body{background:radial-gradient(1200px 800px at 70% -10%, var(--azul2), var(--azul) 60%);
@@ -22,18 +19,14 @@
   .stage{position:relative; background:#000; border:1px solid var(--linea); border-radius:14px; overflow:hidden; aspect-ratio:4/3}
   video{display:none}
   canvas{display:block; width:100%; height:100%}
-
   .wizard{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; gap:20px; padding:24px; pointer-events:none}
-  .wizard::before{content:""; position:absolute; inset:0;
+  .wizard::before{content:""; position:absolute; inset:0; pointer-events:none;
     background:radial-gradient(65% 60% at 50% 46%, rgba(14,36,57,.55), rgba(14,36,57,.04) 72%)}
   .wiz-step{position:relative; font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--ambar); opacity:.9}
-  .wiz-big{position:relative; font-size:clamp(30px,6vw,66px); font-weight:800; letter-spacing:1px; color:var(--crema);
-    text-shadow:0 4px 26px rgba(0,0,0,.65); line-height:1.05}
-  .wiz-sub{position:relative; font-size:clamp(15px,2.3vw,22px); color:var(--crema); opacity:.9; max-width:640px;
-    text-shadow:0 2px 14px rgba(0,0,0,.75)}
-  .wiz-count{position:relative; font-size:clamp(90px,22vw,220px); font-weight:800; color:var(--ambar);
-    text-shadow:0 8px 44px rgba(0,0,0,.6)}
+  .wiz-big{position:relative; font-size:clamp(30px,6vw,66px); font-weight:800; letter-spacing:1px; color:var(--crema); text-shadow:0 4px 26px rgba(0,0,0,.65); line-height:1.05}
+  .wiz-sub{position:relative; font-size:clamp(15px,2.3vw,22px); color:var(--crema); opacity:.9; max-width:640px; text-shadow:0 2px 14px rgba(0,0,0,.75)}
+  .wiz-count{position:relative; font-size:clamp(90px,22vw,220px); font-weight:800; color:var(--ambar); text-shadow:0 8px 44px rgba(0,0,0,.6)}
   .wiz-actions{position:relative; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; pointer-events:auto}
   .wiz-actions button{font-size:16px; padding:12px 22px}
   .wizbar{position:relative; width:min(420px,70%); height:9px; background:rgba(245,237,220,.2); border-radius:6px; overflow:hidden}
@@ -41,7 +34,6 @@
   .wiz-slider{position:relative; width:min(460px,80%); pointer-events:auto}
   .wiz-slider input{width:100%}
   .wiz-slider .lab{font-size:13px; opacity:.85; margin-bottom:6px}
-
   .panel{background:rgba(14,36,57,.6); border:1px solid var(--linea); border-radius:14px; padding:14px; margin-bottom:14px}
   .panel h2{margin:0 0 10px; font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--ambar)}
   button{font:inherit; color:var(--crema); background:var(--cobre); border:none; padding:9px 12px; border-radius:9px; cursor:pointer; font-size:13px}
@@ -64,6 +56,7 @@
   .status.err{border-color:var(--cobre); color:#ffd7c2}
   .status.ok{border-color:var(--musgo)}
   a{color:var(--ambar)}
+  .swatch{width:20px;height:20px;border-radius:5px;border:1px solid var(--linea);display:inline-block}
 </style>
 </head>
 <body>
@@ -85,10 +78,22 @@
   <div>
     <div class="panel">
       <h2>Sensibilidad</h2>
-      <label class="small">Manos</label>
+      <label class="small">Manos / baqueta</label>
       <input type="range" id="sensHands" min="0.6" max="3.5" step="0.05" value="1.5">
       <label class="small">Pierna (kick)</label>
-      <input type="range" id="sensFeet" min="0.2" max="2" step="0.02" value="0.6">
+      <input type="range" id="sensFeet" min="0.15" max="2" step="0.02" value="0.5">
+    </div>
+
+    <div class="panel">
+      <h2>Baqueta (opcional)</h2>
+      <div class="row">
+        <button id="btnStick" class="ghost">Modo baqueta: OFF</button>
+        <button id="btnStickCal" class="ghost">Calibrar color</button>
+        <span class="swatch" id="stickSwatch"></span>
+      </div>
+      <label class="small">Tolerancia de color</label>
+      <input type="range" id="stickTol" min="30" max="140" step="5" value="70">
+      <p style="font-size:11px;opacity:.6;margin:4px 0 0">Pinta la punta de un color vivo (rosado/verde neón). Aprieta <b>Calibrar color</b> y haz clic sobre la punta dentro del video.</p>
     </div>
 
     <div class="panel">
@@ -131,6 +136,7 @@ const $ = id => document.getElementById(id);
 const statusEl = $("status");
 function setStatus(m,c=""){ statusEl.textContent=m; statusEl.className="status "+c; }
 
+/* ---------- AUDIO ---------- */
 let audioCtx, masterGain, musicGain, clickGain, mediaDest;
 function initAudio(){
   if(audioCtx) return;
@@ -145,12 +151,13 @@ function initAudio(){
 function playBuffer(b){ const s=audioCtx.createBufferSource(); s.buffer=b; s.connect(musicGain); s.start(); }
 async function fileToBuffer(f){ return await audioCtx.decodeAudioData(await f.arrayBuffer()); }
 
+/* ---------- PADS ---------- */
 const pads=[
-  {id:"kick", name:"Kick",        role:"kick",  x:.5,  y:.9,  r:.10, color:"#e0863c", src:"sonidos/kick.wav",     buffer:null, flash:0, lastHit:0, hidden:true},
-  {id:"snare",name:"Snare",       role:"snare", x:.44, y:.66, r:.10, color:"#F5EDDC", src:"sonidos/snare.wav",    buffer:null, flash:0, lastHit:0},
-  {id:"hh",   name:"Hi-Hat",      role:"hihat", x:.28, y:.45, r:.09, color:"#B67B3A", src:"sonidos/hihat.wav",    buffer:null, flash:0, lastHit:0},
-  {id:"tom",  name:"Tom",         role:"tom",   x:.56, y:.42, r:.09, color:"#8C4A2A", src:"sonidos/tom.wav",      buffer:null, flash:0, lastHit:0},
-  {id:"floor",name:"Tom de piso", role:"floor", x:.72, y:.55, r:.10, color:"#2E4A38", src:"sonidos/tom-piso.wav", buffer:null, flash:0, lastHit:0},
+  {id:"kick", name:"Kick",        role:"kick",  x:.5,  y:.9,  r:.11, color:"#e0863c", src:"sonidos/kick.wav",     buffer:null, flash:0, lastHit:0, cal:false},
+  {id:"snare",name:"Snare",       role:"snare", x:.44, y:.66, r:.10, color:"#F5EDDC", src:"sonidos/snare.wav",    buffer:null, flash:0, lastHit:0, cal:false},
+  {id:"hh",   name:"Hi-Hat",      role:"hihat", x:.28, y:.45, r:.09, color:"#B67B3A", src:"sonidos/hihat.wav",    buffer:null, flash:0, lastHit:0, cal:false},
+  {id:"tom",  name:"Tom",         role:"tom",   x:.56, y:.42, r:.09, color:"#8C4A2A", src:"sonidos/tom.wav",      buffer:null, flash:0, lastHit:0, cal:false},
+  {id:"floor",name:"Tom de piso", role:"floor", x:.72, y:.55, r:.10, color:"#2E4A38", src:"sonidos/tom-piso.wav", buffer:null, flash:0, lastHit:0, cal:false},
 ];
 const DRUMS={
   kick:{name:"Kick",        type:"leg",  hint:"Rebota la rodilla (súbela y bájala rápido) para sonar el kick."},
@@ -191,10 +198,12 @@ async function loadDefaults(){
   renderPadList();
   const n=pads.filter(p=>p.buffer).length; if(n>0) setStatus(n+" samples cargados desde /sonidos.","ok");
 }
-window.addEventListener("load",()=>{ initAudio(); loadDefaults(); renderWizard(); });
+window.addEventListener("load",()=>{ initAudio(); loadDefaults(); renderWizard(); updateStickUI(); });
 
+/* ---------- CÁMARA + MODELOS ---------- */
 const video=$("video"), canvas=$("canvas"), ctx=canvas.getContext("2d");
 let handLandmarker=null, poseLandmarker=null, running=false, lastVideoTime=-1, frameCount=0;
+let dcanvas=null, dctx=null;
 
 async function startCamera(){
   initAudio(); if(audioCtx.state==="suspended") await audioCtx.resume();
@@ -215,46 +224,90 @@ async function startCamera(){
   catch(err){ setStatus("No pude abrir la cámara: "+err.message,"err"); wiz.loading=false; renderWizard(); return; }
   video.srcObject=stream; await video.play();
   canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+  dcanvas=document.createElement("canvas");
+  dcanvas.width=192; dcanvas.height=Math.round(192*video.videoHeight/video.videoWidth);
+  dctx=dcanvas.getContext("2d",{willReadFrequently:true});
   running=true; requestAnimationFrame(loop);
   setStatus("Cámara lista.","ok");
   wiz.loading=false; wiz.idx=0; goPrep();
 }
 
-let handState={};
+/* ---------- DETECCIÓN ---------- */
+let handState={}, tipState={}, lastTips={L:null,R:null};
 let legState={lY:null,rY:null,prevT:null,lastKick:0,dL:null,dR:null};
 let kickFlash=0;
+let stickMode=false, stickColor=null, stickTol=70, sampling=false;
 const sensHands=()=>parseFloat($("sensHands").value);
 const sensLeg  =()=>parseFloat($("sensFeet").value);
 
-function triggersEnabled(){ return ["capture","adjust","done","play"].includes(wiz.state); }
-
-function fire(mx,my){
-  if(learnPadId){ const p=pads.find(p=>p.id===learnPadId); p.x=mx; p.y=my; learnPadId=null;
+function canTrigger(p){
+  if(wiz.state==="capture"||wiz.state==="adjust") return p.id===curId();
+  if(wiz.state==="play"||wiz.state==="done") return true;
+  return false;
+}
+function fire(x,y){
+  if(learnPadId){ const p=pads.find(p=>p.id===learnPadId); p.x=x; p.y=y; learnPadId=null;
     if(p.buffer) playBuffer(p.buffer); p.flash=1; return; }
   let best=null,bestD=Infinity;
-  for(const p of pads){ if(p.hidden) continue;
-    const dx=(mx-p.x)*canvas.width, dy=(my-p.y)*canvas.height, d=Math.hypot(dx,dy), rpx=p.r*canvas.width;
+  for(const p of pads){ if(p.role==="kick") continue;   // el kick es solo pierna
+    const dx=(x-p.x)*canvas.width, dy=(y-p.y)*canvas.height, d=Math.hypot(dx,dy), rpx=p.r*canvas.width;
     if(d<rpx && d<bestD){ best=p; bestD=d; } }
   if(best) triggerPad(best);
 }
 function triggerPad(p){
-  if(!triggersEnabled()) return;
+  if(!canTrigger(p)) return;
   const now=performance.now(); if(now-p.lastHit<70) return; p.lastHit=now;
   if(p.buffer) playBuffer(p.buffer); p.flash=1;
 }
+function strike(store,key,x,y,now,thr){
+  let st=store[key]||(store[key]={prevY:y,prevT:now,armed:true});
+  let dt=(now-st.prevT)/1000; if(dt<=0) dt=.016;
+  const vy=(y-st.prevY)/dt;
+  if(st.armed && vy>thr){ fire(x,y); st.armed=false; }
+  if(vy<thr*.25) st.armed=true;
+  st.prevY=y; st.prevT=now; st._draw={x:x*canvas.width,y:y*canvas.height};
+}
 function handleHands(res,now){
   if(!res||!res.landmarks) return;
+  const seen=new Set();
   for(let i=0;i<res.landmarks.length;i++){
-    const label=(res.handedness?.[i]?.[0]?.categoryName)||("h"+i);
-    const lm=res.landmarks[i][9]; const y=lm.y, mx=1-lm.x, my=lm.y;
-    let st=handState[label]||(handState[label]={prevY:y,prevT:now,armed:true});
-    let dt=(now-st.prevT)/1000; if(dt<=0) dt=.016;
-    const vy=(y-st.prevY)/dt, thr=sensHands();
-    if(st.armed && vy>thr){ fire(mx,my); st.armed=false; }
-    if(vy<thr*.25) st.armed=true;
-    st.prevY=y; st.prevT=now; st._draw={x:mx*canvas.width,y:my*canvas.height};
+    const label=(res.handedness?.[i]?.[0]?.categoryName)||("h"+i); seen.add(label);
+    const lm=res.landmarks[i][9];
+    strike(handState,label,1-lm.x,lm.y,now,sensHands());
   }
+  for(const k in handState){ if(!seen.has(k)) handState[k]._draw=null; }
 }
+
+/* ---- rastreo de punta por color ---- */
+function drawDetFrame(){ const dw=dcanvas.width,dh=dcanvas.height;
+  dctx.save(); dctx.scale(-1,1); dctx.drawImage(video,-dw,0,dw,dh); dctx.restore(); }
+function sampleColorAt(nx,ny){
+  drawDetFrame(); const dw=dcanvas.width,dh=dcanvas.height;
+  const dx=Math.max(0,Math.min(dw-1,Math.floor(nx*dw))), dy=Math.max(0,Math.min(dh-1,Math.floor(ny*dh)));
+  const px=dctx.getImageData(dx,dy,1,1).data; return {r:px[0],g:px[1],b:px[2]};
+}
+function detectTips(){
+  if(!dctx||!stickColor) return {L:null,R:null};
+  drawDetFrame(); const dw=dcanvas.width,dh=dcanvas.height;
+  const data=dctx.getImageData(0,0,dw,dh).data, t2=stickTol*stickTol;
+  const xs=[],ys=[];
+  for(let y=0;y<dh;y+=2){ for(let x=0;x<dw;x+=2){ const i=(y*dw+x)*4;
+    const dr=data[i]-stickColor.r, dg=data[i+1]-stickColor.g, db=data[i+2]-stickColor.b;
+    if(dr*dr+dg*dg+db*db<t2){ xs.push(x); ys.push(y); } } }
+  const m=xs.length; if(m<4) return {L:null,R:null};
+  let mx=0; for(const x of xs) mx+=x; mx/=m;
+  let sLx=0,sLy=0,nL=0,sRx=0,sRy=0,nR=0;
+  for(let k=0;k<m;k++){ if(xs[k]<=mx){ sLx+=xs[k]; sLy+=ys[k]; nL++; } else { sRx+=xs[k]; sRy+=ys[k]; nR++; } }
+  const L=nL>3?{x:(sLx/nL)/dw,y:(sLy/nL)/dh}:null;
+  const R=nR>3?{x:(sRx/nR)/dw,y:(sRy/nR)/dh}:null;
+  return {L,R};
+}
+function handleTips(now){
+  const tips=detectTips(); lastTips=tips;
+  if(tips.L) strike(tipState,"L",tips.L.x,tips.L.y,now,sensHands());
+  if(tips.R) strike(tipState,"R",tips.R.x,tips.R.y,now,sensHands());
+}
+
 function handleLegs(res,now){
   if(!res||!res.landmarks||!res.landmarks[0]) return;
   const lms=res.landmarks[0], kL=lms[25], kR=lms[26];
@@ -262,8 +315,8 @@ function handleLegs(res,now){
     let dt=(now-legState.prevT)/1000; if(dt<=0) dt=.016;
     const vL=kL&&legState.lY!=null?Math.abs((kL.y-legState.lY)/dt):0;
     const vR=kR&&legState.rY!=null?Math.abs((kR.y-legState.rY)/dt):0;
-    if(Math.max(vL,vR)>sensLeg() && now-legState.lastKick>200){
-      const kp=pads.find(p=>p.role==="kick"); if(kp){ triggerPad(kp); if(triggersEnabled()) kickFlash=1; } legState.lastKick=now;
+    if(Math.max(vL,vR)>sensLeg() && now-legState.lastKick>180){
+      const kp=pads.find(p=>p.role==="kick"); if(kp){ triggerPad(kp); if(canTrigger(kp)) kickFlash=1; } legState.lastKick=now;
     }
   }
   if(kL){ legState.lY=kL.y; legState.dL={x:(1-kL.x)*canvas.width,y:kL.y*canvas.height}; }
@@ -271,18 +324,28 @@ function handleLegs(res,now){
   legState.prevT=now;
 }
 
+/* ---------- LOOP ---------- */
 function loop(){
   if(!running) return; frameCount++; const now=performance.now();
   if(video.currentTime!==lastVideoTime){ lastVideoTime=video.currentTime;
-    try{ handleHands(handLandmarker.detectForVideo(video,now),now);
-      if(frameCount%2===0) handleLegs(poseLandmarker.detectForVideo(video,now+.5),now); }catch(e){} }
+    try{
+      if(stickMode && stickColor) handleTips(now);
+      else { handleHands(handLandmarker.detectForVideo(video,now),now); lastTips={L:null,R:null}; }
+      if(frameCount%2===0) handleLegs(poseLandmarker.detectForVideo(video,now+.5),now);
+    }catch(e){}
+  }
   draw(); requestAnimationFrame(loop);
+}
+function padVisible(p){
+  if(wiz.state==="play"||wiz.state==="done") return p.cal;
+  return p.cal || p.id===curId();
 }
 function draw(){
   const w=canvas.width,h=canvas.height;
   ctx.save(); ctx.scale(-1,1); ctx.drawImage(video,-w,0,w,h); ctx.restore();
   ctx.fillStyle="rgba(14,36,57,.18)"; ctx.fillRect(0,0,w,h);
-  for(const p of pads){ if(p.hidden) continue;
+  // tambores de mano
+  for(const p of pads){ if(p.role==="kick") continue; if(!padVisible(p)) continue;
     const cx=p.x*w,cy=p.y*h,r=p.r*w;
     ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
     ctx.lineWidth=p.id===selectedPadId?5:3; ctx.strokeStyle=p.color; ctx.globalAlpha=.9; ctx.stroke();
@@ -290,31 +353,56 @@ function draw(){
     ctx.globalAlpha=1; ctx.fillStyle="#F5EDDC"; ctx.font="600 15px Helvetica,sans-serif"; ctx.textAlign="center";
     ctx.fillText(p.name,cx,cy-r-8);
   }
-  for(const k in handState){ const d=handState[k]._draw; if(!d) continue;
-    ctx.beginPath(); ctx.arc(d.x,d.y,10,0,Math.PI*2); ctx.fillStyle="#F5EDDC"; ctx.fill();
-    ctx.lineWidth=2; ctx.strokeStyle="#B67B3A"; ctx.stroke(); }
+  // kick: círculo sobre las rodillas
+  const kp=pads.find(p=>p.role==="kick");
+  if(padVisible(kp)){
+    let kx=null,ky=null;
+    if(legState.dL&&legState.dR){ kx=(legState.dL.x+legState.dR.x)/2; ky=(legState.dL.y+legState.dR.y)/2; }
+    else if(legState.dL){ kx=legState.dL.x; ky=legState.dL.y; }
+    else if(legState.dR){ kx=legState.dR.x; ky=legState.dR.y; }
+    if(kx!=null){ const r=kp.r*w;
+      ctx.beginPath(); ctx.arc(kx,ky,r,0,Math.PI*2); ctx.lineWidth=4; ctx.strokeStyle=kp.color; ctx.globalAlpha=.9; ctx.stroke();
+      if(kp.flash>0){ ctx.globalAlpha=kp.flash*.5; ctx.fillStyle=kp.color; ctx.fill(); kp.flash*=.82; }
+      ctx.globalAlpha=1; ctx.fillStyle="#F5EDDC"; ctx.font="600 15px Helvetica,sans-serif"; ctx.textAlign="center";
+      ctx.fillText("Kick",kx,ky-r-8);
+    } else {
+      ctx.fillStyle="#e0863c"; ctx.font="600 15px Helvetica,sans-serif"; ctx.textAlign="center";
+      ctx.fillText("No veo las rodillas — encuádrate para que se vean",w/2,h*.5);
+    }
+  }
+  // rodillas
   for(const d of [legState.dL,legState.dR]){ if(!d) continue;
-    ctx.beginPath(); ctx.arc(d.x,d.y,9,0,Math.PI*2); ctx.globalAlpha=.85; ctx.fillStyle="#e0863c"; ctx.fill(); ctx.globalAlpha=1; }
-  if(kickFlash>0){ ctx.globalAlpha=kickFlash*.55; ctx.fillStyle="#e0863c";
-    ctx.beginPath(); ctx.arc(w/2,h-34,24+(1-kickFlash)*30,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; kickFlash*=.85; }
+    ctx.beginPath(); ctx.arc(d.x,d.y,8,0,Math.PI*2); ctx.globalAlpha=.85; ctx.fillStyle="#e0863c"; ctx.fill(); ctx.globalAlpha=1; }
+  // punteros
+  if(stickMode && stickColor){
+    const col=`rgb(${stickColor.r},${stickColor.g},${stickColor.b})`;
+    for(const t of [lastTips.L,lastTips.R]){ if(!t) continue;
+      ctx.beginPath(); ctx.arc(t.x*w,t.y*h,12,0,Math.PI*2); ctx.fillStyle=col; ctx.fill();
+      ctx.lineWidth=3; ctx.strokeStyle="#0E2439"; ctx.stroke(); }
+  } else {
+    for(const k in handState){ const d=handState[k]._draw; if(!d) continue;
+      ctx.beginPath(); ctx.arc(d.x,d.y,10,0,Math.PI*2); ctx.fillStyle="#F5EDDC"; ctx.fill();
+      ctx.lineWidth=2; ctx.strokeStyle="#B67B3A"; ctx.stroke(); }
+  }
+  if(kickFlash>0){ ctx.globalAlpha=kickFlash*.5; ctx.fillStyle="#e0863c";
+    ctx.beginPath(); ctx.arc(w/2,h-30,22+(1-kickFlash)*26,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; kickFlash*=.85; }
 }
 
+/* ---------- WIZARD ---------- */
 const wiz={ order:["kick","snare","hh","tom","floor"], idx:0, state:"camera", loading:false, count:3, timer:null, captureEnd:0 };
 const curId=()=>wiz.order[wiz.idx];
 function clearTimer(){ if(wiz.timer){ clearInterval(wiz.timer); wiz.timer=null; } }
-
 function goPrep(){ clearTimer(); wiz.state="prep"; selectedPadId=curId(); renderPadList(); renderWizard(); }
 function beginCountdown(){
   clearTimer(); wiz.state="countdown"; wiz.count=3; renderWizard();
-  wiz.timer=setInterval(()=>{ wiz.count--;
-    if(wiz.count<=0){ clearTimer(); startCapture(); } else renderWizard(); },1000);
+  wiz.timer=setInterval(()=>{ wiz.count--; if(wiz.count<=0){ clearTimer(); startCapture(); } else renderWizard(); },1000);
 }
 function startCapture(){
   clearTimer(); wiz.state="capture";
   const d=DRUMS[curId()]; if(d.type==="hand") learnPadId=curId();
   wiz.captureEnd=performance.now()+4000; renderWizard();
   wiz.timer=setInterval(()=>{ const rem=wiz.captureEnd-performance.now();
-    if(rem<=0){ clearTimer(); learnPadId=null; wiz.state="adjust"; renderWizard(); }
+    if(rem<=0){ clearTimer(); learnPadId=null; const cp=pads.find(p=>p.id===curId()); if(cp) cp.cal=true; wiz.state="adjust"; renderWizard(); }
     else{ const el=document.getElementById("wizbarFill"); if(el) el.style.width=(rem/4000*100)+"%"; } },40);
 }
 function nextDrum(){ clearTimer(); wiz.idx++; if(wiz.idx>=wiz.order.length){ wiz.state="done"; renderWizard(); } else goPrep(); }
@@ -326,13 +414,11 @@ function renderWizard(){
   const d=DRUMS[curId()]; const isLeg=d&&d.type==="leg";
   let html="";
   if(wiz.state==="camera"){
-    html=`<div class="wiz-step">Paso 1</div>
-      <div class="wiz-big">Activa la cámara</div>
+    html=`<div class="wiz-step">Paso 1</div><div class="wiz-big">Activa la cámara</div>
       <div class="wiz-sub">Presiona el botón y luego <b>Permitir</b> el acceso a la cámara.</div>
       <div class="wiz-actions"><button class="amber" id="wCam" ${wiz.loading?"disabled":""}>${wiz.loading?"Cargando…":"Iniciar cámara"}</button></div>`;
   } else if(wiz.state==="prep"){
-    html=`<div class="wiz-step">Paso 2 · ${d.name}</div>
-      <div class="wiz-big">Configura el ${d.name}</div>
+    html=`<div class="wiz-step">Paso 2 · ${d.name}</div><div class="wiz-big">Configura el ${d.name}</div>
       <div class="wiz-sub">${d.hint}<br>Cuando estés listo, presiona <b>Empezar</b>: cuenta 3 y tienes 4 segundos.</div>
       <div class="wiz-actions"><button class="amber" id="wGo">Empezar</button></div>`;
   } else if(wiz.state==="countdown"){
@@ -343,13 +429,11 @@ function renderWizard(){
       <div class="wiz-sub">${isLeg?"Marca el pulso; escucha que el kick suene bien.":"Fija el lugar y escucha el golpe."}</div>
       <div class="wizbar"><div class="wizbar-fill" id="wizbarFill"></div></div>`;
   } else if(wiz.state==="adjust"){
-    const last=wiz.idx===wiz.order.length-1;
-    const nextName=last?"":DRUMS[wiz.order[wiz.idx+1]].name;
+    const last=wiz.idx===wiz.order.length-1, nextName=last?"":DRUMS[wiz.order[wiz.idx+1]].name;
     const sl=isLeg
-      ? `<div class="lab">Sensibilidad pierna (kick)</div><input type="range" id="wizSens" min="0.2" max="2" step="0.02" value="${sensLeg()}">`
-      : `<div class="lab">Sensibilidad manos</div><input type="range" id="wizSens" min="0.6" max="3.5" step="0.05" value="${sensHands()}">`;
-    html=`<div class="wiz-step">Paso 3 · ${d.name}</div>
-      <div class="wiz-big">¿Suena bien?</div>
+      ? `<div class="lab">Sensibilidad pierna (kick)</div><input type="range" id="wizSens" min="0.15" max="2" step="0.02" value="${sensLeg()}">`
+      : `<div class="lab">Sensibilidad manos / baqueta</div><input type="range" id="wizSens" min="0.6" max="3.5" step="0.05" value="${sensHands()}">`;
+    html=`<div class="wiz-step">Paso 3 · ${d.name}</div><div class="wiz-big">¿Suena bien?</div>
       <div class="wiz-sub">${isLeg?"Rebota la rodilla":"Golpea el "+d.name} y ajusta hasta quedar conforme.</div>
       <div class="wiz-slider">${sl}</div>
       <div class="wiz-actions">
@@ -357,13 +441,9 @@ function renderWizard(){
         <button class="amber" id="wNext">${last?"Terminar":"Continuar con "+nextName}</button>
       </div>`;
   } else if(wiz.state==="done"){
-    html=`<div class="wiz-step">Listo</div>
-      <div class="wiz-big">¡A tocar!</div>
+    html=`<div class="wiz-step">Listo</div><div class="wiz-big">¡A tocar!</div>
       <div class="wiz-sub">Ya está todo calibrado. Usa el metrónomo o carga tu pista base y toca encima.</div>
-      <div class="wiz-actions">
-        <button class="ghost" id="wReAll">Calibrar de nuevo</button>
-        <button class="amber" id="wClose">Cerrar</button>
-      </div>`;
+      <div class="wiz-actions"><button class="ghost" id="wReAll">Calibrar de nuevo</button><button class="amber" id="wClose">Cerrar</button></div>`;
   }
   el.innerHTML=html;
   const b=id=>document.getElementById(id);
@@ -375,9 +455,28 @@ function renderWizard(){
   if(b("wClose")) b("wClose").onclick=()=>{ wiz.state="play"; renderWizard(); };
   if(b("wizSens")) b("wizSens").oninput=e=>{ (isLeg?$("sensFeet"):$("sensHands")).value=e.target.value; };
 }
-
 $("btnRecalib").onclick=()=>{ wiz.idx=0; if(running) goPrep(); else { wiz.state="camera"; renderWizard(); } };
 
+/* ---------- BAQUETA ---------- */
+function updateStickUI(){
+  $("btnStick").textContent="Modo baqueta: "+(stickMode?"ON":"OFF");
+  $("btnStick").classList.toggle("amber",stickMode);
+  $("stickSwatch").style.background = stickColor?`rgb(${stickColor.r},${stickColor.g},${stickColor.b})`:"transparent";
+}
+$("btnStick").onclick=()=>{ if(!stickColor && !stickMode){ setStatus("Primero calibra el color de la baqueta.","err"); return; }
+  stickMode=!stickMode; updateStickUI(); };
+$("btnStickCal").onclick=()=>{ if(!running){ setStatus("Inicia la cámara primero.","err"); return; }
+  sampling=true; canvas.style.cursor="crosshair"; setStatus("Haz clic sobre la punta pintada dentro del video.","ok"); };
+$("stickTol").oninput=e=>{ stickTol=parseInt(e.target.value); };
+canvas.addEventListener("click",e=>{
+  if(!sampling||!dctx) return;
+  const rect=canvas.getBoundingClientRect();
+  const nx=(e.clientX-rect.left)/rect.width, ny=(e.clientY-rect.top)/rect.height;
+  stickColor=sampleColorAt(nx,ny); sampling=false; stickMode=true; canvas.style.cursor="";
+  updateStickUI(); setStatus("Color de baqueta calibrado. Modo baqueta ON.","ok");
+});
+
+/* ---------- METRÓNOMO + PISTA ---------- */
 let metroTimer=null, metroNext=0, metroBeat=0;
 function playClick(t,accent){
   const o=audioCtx.createOscillator(),g=audioCtx.createGain();
@@ -406,6 +505,7 @@ $("btnPlay").onclick=()=>{
 };
 $("btnStop").onclick=()=>{ if(backingSource){ try{backingSource.stop()}catch(e){} backingSource=null; } };
 
+/* ---------- GRABAR ---------- */
 let recorder=null, recChunks=[];
 $("btnRec").onclick=()=>{
   initAudio(); if(recorder&&recorder.state==="recording"){ recorder.stop(); return; }

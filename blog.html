@@ -1,108 +1,134 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog — Tobal Blu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root {
+      --papel: #f4efe6;
+      --tinta: #2b2721;
+      --tinta-suave: #6f675b;
+      --tinta-tenue: #a89f90;
+      --linea: #ddd4c4;
+    }
+
     body {
-      background: #080808;
-      font-family: 'Courier New', monospace;
-      color: #eee;
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
       min-height: 100vh;
-      line-height: 1.85;
+      line-height: 1.9;
+      -webkit-font-smoothing: antialiased;
     }
 
     .home-link {
-      position: fixed; top: 1.5rem; left: 1.5rem;
-      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: #333; text-decoration: none; transition: color 0.3s; z-index: 10;
+      position: fixed; top: 1.6rem; left: 1.6rem;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tinta-tenue); text-decoration: none;
+      transition: color 0.3s; z-index: 10;
+      font-family: 'Libre Baskerville', serif;
     }
-    .home-link:hover { color: #888; }
+    .home-link:hover { color: var(--tinta); }
 
-    .wrap { max-width: 680px; margin: 0 auto; padding: 5rem 1.5rem 4rem; }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 6rem 1.5rem 5rem; }
 
     .blog-titulo {
-      font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
-      color: #666; margin-bottom: 3rem;
+      font-size: 12px; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--tinta-suave); margin-bottom: 3.5rem; text-align: center;
+      font-weight: 400;
     }
 
-    /* ===== LISTA ===== */
     .lista { display: block; }
     .lista.oculto { display: none; }
 
     .post-item {
-      padding: 1.5rem 0; border-top: 0.5px solid #1a1a1a;
-      cursor: pointer; transition: color 0.3s ease;
+      padding: 1.8rem 0; border-top: 1px solid var(--linea);
+      cursor: pointer; text-align: center;
     }
-    .post-item:last-child { border-bottom: 0.5px solid #1a1a1a; }
+    .post-item:last-child { border-bottom: 1px solid var(--linea); }
 
     .post-item-titulo {
-      font-size: 15px; color: #cfcfcf; letter-spacing: 0.03em;
-      transition: color 0.3s ease;
+      font-size: 19px; color: var(--tinta); letter-spacing: 0.01em;
+      transition: opacity 0.3s ease;
     }
-    .post-item:hover .post-item-titulo { color: #fff; }
+    .post-item:hover .post-item-titulo { opacity: 0.6; }
     .post-item-sub {
-      font-size: 11px; color: #555; letter-spacing: 0.05em; margin-top: 0.3rem;
+      font-size: 13px; color: var(--tinta-suave); font-style: italic;
+      margin-top: 0.4rem;
     }
 
-    .vacio { font-size: 11px; letter-spacing: 0.15em; color: #444; padding: 2rem 0; }
+    .vacio { font-size: 14px; color: var(--tinta-suave); padding: 2rem 0; text-align: center; }
 
-    /* ===== POST ===== */
     .post-vista { display: none; }
     .post-vista.activo { display: block; }
 
     .volver {
-      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: #444; cursor: pointer; transition: color 0.3s;
-      margin-bottom: 2.5rem; display: inline-block;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tinta-tenue); cursor: pointer; transition: color 0.3s;
+      margin-bottom: 3.5rem; display: inline-block;
     }
-    .volver:hover { color: #aaa; }
+    .volver:hover { color: var(--tinta); }
 
     .post-titulo {
-      font-size: 22px; color: #eee; letter-spacing: 0.02em;
-      margin-bottom: 0.5rem; line-height: 1.35;
+      font-size: 30px; color: var(--tinta); line-height: 1.3;
+      text-align: center; margin-bottom: 0.8rem; font-weight: 700;
+      letter-spacing: 0.01em;
     }
     .post-sub {
-      font-size: 12px; color: #777; letter-spacing: 0.05em;
-      margin-bottom: 2.5rem; font-style: italic;
+      font-size: 14px; color: var(--tinta-suave); font-style: italic;
+      text-align: center; margin-bottom: 3.5rem;
     }
-    .post-sub.vacio-sub { margin-bottom: 2.5rem; }
 
-    .post-cuerpo { font-size: 14px; color: #cfcfcf; letter-spacing: 0.02em; }
-    .post-cuerpo p { margin-bottom: 1.6rem; }
+    .ornamento {
+      text-align: center; color: var(--tinta-tenue);
+      font-size: 14px; letter-spacing: 0.5em; margin-bottom: 3rem;
+    }
+
+    .post-cuerpo { font-size: 17px; color: var(--tinta); }
+    .post-cuerpo p { margin-bottom: 1.7rem; text-align: left; }
     .post-cuerpo p:last-child { margin-bottom: 0; }
 
-    /* ===== OJO / LEÍDO ===== */
+    .post-cuerpo p.nota {
+      font-size: 13.5px; font-style: italic; color: var(--tinta-suave);
+      line-height: 1.7; margin-bottom: 0.8rem;
+    }
+    .notas-sep {
+      width: 60px; height: 1px; background: var(--linea);
+      margin: 2.5rem 0 1.8rem;
+    }
+
     .leido-zona {
-      display: flex; justify-content: flex-end; align-items: center;
-      margin-top: 3.5rem; padding-top: 1.8rem; border-top: 0.5px solid #1a1a1a;
+      display: flex; flex-direction: column; align-items: center;
+      margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--linea);
     }
     .ojo-btn {
-      display: inline-flex; align-items: center; gap: 0.7rem;
+      display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem;
       background: none; border: none; cursor: pointer; user-select: none;
-      font-family: 'Courier New', monospace;
-      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: #555; transition: color 0.4s ease;
-      padding: 0.4rem 0;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--tinta-suave); transition: color 0.4s ease; padding: 0.4rem;
     }
-    .ojo-btn:hover { color: #888; }
-    .ojo-btn.confirmado { color: #4a9eff; cursor: default; }
+    .ojo-btn:hover { color: var(--tinta); }
+    .ojo-btn.confirmado { color: #3f7a52; cursor: default; }
 
-    .ojo-icon { width: 20px; height: 20px; display: block; }
+    .ojo-icon { width: 26px; height: 26px; display: block; }
     .ojo-icon path, .ojo-icon circle {
-      fill: none; stroke: #4a4a4a; stroke-width: 1.6;
+      fill: none; stroke: var(--tinta-suave); stroke-width: 1.4;
       transition: stroke 0.4s ease, fill 0.4s ease;
     }
-    .ojo-btn:hover .ojo-icon path, .ojo-btn:hover .ojo-icon circle { stroke: #888; }
-    .ojo-btn.confirmado .ojo-icon path { stroke: #4a9eff; }
-    .ojo-btn.confirmado .ojo-icon circle { stroke: #4a9eff; fill: #4a9eff; }
+    .ojo-btn:hover .ojo-icon path, .ojo-btn:hover .ojo-icon circle { stroke: var(--tinta); }
+    .ojo-btn.confirmado .ojo-icon path { stroke: #3f7a52; }
+    .ojo-btn.confirmado .ojo-icon circle { stroke: #3f7a52; fill: #3f7a52; }
   </style>
 
-  <!-- Cliente Supabase (solo para SUMAR un leído; no lee ni muestra el número) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -118,6 +144,7 @@
     <span class="volver" id="volver">← todos los textos</span>
     <div class="post-titulo" id="post-titulo"></div>
     <div class="post-sub" id="post-sub"></div>
+    <div class="ornamento">· · ·</div>
     <div class="post-cuerpo" id="post-cuerpo"></div>
     <div class="leido-zona">
       <button class="ojo-btn" id="ojo-btn">
@@ -132,7 +159,6 @@
 </div>
 
 <script>
-/* ===== SUPABASE ===== */
 var SUPABASE_URL = 'https://nfqriyedsyuzhkicdsee.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcXJpeWVkc3l1emhraWNkc2VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzI4MjMsImV4cCI6MjEwMTUwODgyM30.0lb8deJBgbA9Ov1B_d6EbbGAqJ61e5PI5Twvwkd26Cw';
 var sbClient = null;
@@ -142,18 +168,11 @@ try {
   }
 } catch (e) { sbClient = null; }
 
-/* ==========================================================
-   ENTRADAS DEL BLOG
-   Para publicar una nueva: pega un bloque como este arriba
-   del array. 'id' único. Sin fecha visible (a propósito).
-   El cuerpo usa comillas invertidas (`) para conservar
-   tus saltos de línea y acentos exactamente como los escribes.
-   ========================================================== */
 var posts = [
   {
     id: "control-presupuestario-2026-2027",
-    titulo: "control presupuestario 2026 2027",
-    subtitulo: "",
+    titulo: "pre-supuesto",
+    subtitulo: "miércoles 07:00 am",
     cuerpo: `Estamos en el desierto, a pasos del oasis, y numerosas señales me tiran hacia atrás.
 Me dicen vuelve, donde las cosas alguna vez funcionaron.
 Me dicen detente, unos kilometros atrás encontraste una vertiente, te puedes hidratar.
@@ -222,7 +241,6 @@ Solo pido pan, vino, y personas con quien compartirlo.
   // PEGA AQUÍ ENTRADAS NUEVAS (arriba = más reciente)
 ];
 
-/* ===== LEÍDO (localStorage por dispositivo) ===== */
 function claveLeido(id) { return 'blog-leido-' + id; }
 function estaLeido(id) {
   try { return localStorage.getItem(claveLeido(id)) === '1'; } catch (e) { return false; }
@@ -230,16 +248,13 @@ function estaLeido(id) {
 function marcarLocal(id) {
   try { localStorage.setItem(claveLeido(id), '1'); } catch (e) {}
 }
-
-/* Suma un leído en Supabase (insert). No lee ningún número. */
 function sumarLeido(id) {
-  if (!sbClient) return Promise.resolve();
-  return sbClient.from('lecturas').insert({ post_id: id })
-    .then(function () {})
-    .catch(function () {}); /* si falla la red, no rompe la experiencia */
+  if (!sbClient) return;
+  try {
+    sbClient.from('lecturas').insert({ post_id: id }).then(function(){}).catch(function(){});
+  } catch (e) {}
 }
 
-/* ===== LISTA ===== */
 function renderLista() {
   var cont = document.getElementById('lista');
   cont.innerHTML = '';
@@ -250,38 +265,41 @@ function renderLista() {
   posts.forEach(function (p) {
     var item = document.createElement('div');
     item.className = 'post-item';
-
     var tit = document.createElement('div');
     tit.className = 'post-item-titulo';
     tit.textContent = p.titulo;
     item.appendChild(tit);
-
     if (p.subtitulo) {
       var sub = document.createElement('div');
       sub.className = 'post-item-sub';
       sub.textContent = p.subtitulo;
       item.appendChild(sub);
     }
-
     item.addEventListener('click', function () { abrirPost(p); });
     cont.appendChild(item);
   });
 }
 
-/* ===== ABRIR POST ===== */
 function abrirPost(p) {
   document.getElementById('post-titulo').textContent = p.titulo;
-
   var subEl = document.getElementById('post-sub');
   if (p.subtitulo) { subEl.textContent = p.subtitulo; subEl.style.display = ''; }
-  else { subEl.textContent = ''; subEl.style.display = 'none'; }
+  else { subEl.style.display = 'none'; }
 
-  /* cuerpo: preserva saltos simples (versos) y dobles (estrofas) */
   var cont = document.getElementById('post-cuerpo');
   cont.innerHTML = '';
+  var notasEmpezaron = false;
   p.cuerpo.split('\n\n').forEach(function (bloque) {
     if (bloque.replace(/\s/g, '') === '') return;
+    var esNota = /^\s*\*/.test(bloque);
+    if (esNota && !notasEmpezaron) {
+      var sep = document.createElement('div');
+      sep.className = 'notas-sep';
+      cont.appendChild(sep);
+      notasEmpezaron = true;
+    }
     var par = document.createElement('p');
+    if (esNota) par.className = 'nota';
     bloque.split('\n').forEach(function (linea, i) {
       if (i > 0) par.appendChild(document.createElement('br'));
       par.appendChild(document.createTextNode(linea));
@@ -289,23 +307,16 @@ function abrirPost(p) {
     cont.appendChild(par);
   });
 
-  /* estado del ojo */
   var btn = document.getElementById('ojo-btn');
   var label = document.getElementById('ojo-label');
-  if (estaLeido(p.id)) {
-    btn.classList.add('confirmado');
-    label.textContent = 'leído';
-  } else {
-    btn.classList.remove('confirmado');
-    label.textContent = 'leído';
-  }
+  btn.classList.toggle('confirmado', estaLeido(p.id));
+  label.textContent = 'leído';
 
   btn.onclick = function () {
     if (estaLeido(p.id)) return;
     marcarLocal(p.id);
     btn.classList.add('confirmado');
-    label.textContent = 'leído';
-    sumarLeido(p.id); /* suma en segundo plano */
+    sumarLeido(p.id);
   };
 
   document.getElementById('lista').classList.add('oculto');

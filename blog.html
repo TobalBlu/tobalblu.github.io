@@ -1,1 +1,328 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Tobal Blu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      min-height: 100vh;
+      line-height: 1.85;
+    }
+
+    .home-link {
+      position: fixed; top: 1.5rem; left: 1.5rem;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #333; text-decoration: none; transition: color 0.3s; z-index: 10;
+    }
+    .home-link:hover { color: #888; }
+
+    .wrap { max-width: 680px; margin: 0 auto; padding: 5rem 1.5rem 4rem; }
+
+    .blog-titulo {
+      font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: #666; margin-bottom: 3rem;
+    }
+
+    /* ===== LISTA ===== */
+    .lista { display: block; }
+    .lista.oculto { display: none; }
+
+    .post-item {
+      padding: 1.5rem 0; border-top: 0.5px solid #1a1a1a;
+      cursor: pointer; transition: color 0.3s ease;
+    }
+    .post-item:last-child { border-bottom: 0.5px solid #1a1a1a; }
+
+    .post-item-titulo {
+      font-size: 15px; color: #cfcfcf; letter-spacing: 0.03em;
+      transition: color 0.3s ease;
+    }
+    .post-item:hover .post-item-titulo { color: #fff; }
+    .post-item-sub {
+      font-size: 11px; color: #555; letter-spacing: 0.05em; margin-top: 0.3rem;
+    }
+
+    .vacio { font-size: 11px; letter-spacing: 0.15em; color: #444; padding: 2rem 0; }
+
+    /* ===== POST ===== */
+    .post-vista { display: none; }
+    .post-vista.activo { display: block; }
+
+    .volver {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #444; cursor: pointer; transition: color 0.3s;
+      margin-bottom: 2.5rem; display: inline-block;
+    }
+    .volver:hover { color: #aaa; }
+
+    .post-titulo {
+      font-size: 22px; color: #eee; letter-spacing: 0.02em;
+      margin-bottom: 0.5rem; line-height: 1.35;
+    }
+    .post-sub {
+      font-size: 12px; color: #777; letter-spacing: 0.05em;
+      margin-bottom: 2.5rem; font-style: italic;
+    }
+    .post-sub.vacio-sub { margin-bottom: 2.5rem; }
+
+    .post-cuerpo { font-size: 14px; color: #cfcfcf; letter-spacing: 0.02em; }
+    .post-cuerpo p { margin-bottom: 1.6rem; }
+    .post-cuerpo p:last-child { margin-bottom: 0; }
+
+    /* ===== OJO / LEÍDO ===== */
+    .leido-zona {
+      display: flex; justify-content: flex-end; align-items: center;
+      margin-top: 3.5rem; padding-top: 1.8rem; border-top: 0.5px solid #1a1a1a;
+    }
+    .ojo-btn {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      background: none; border: none; cursor: pointer; user-select: none;
+      font-family: 'Courier New', monospace;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #555; transition: color 0.4s ease;
+      padding: 0.4rem 0;
+    }
+    .ojo-btn:hover { color: #888; }
+    .ojo-btn.confirmado { color: #4a9eff; cursor: default; }
+
+    .ojo-icon { width: 20px; height: 20px; display: block; }
+    .ojo-icon path, .ojo-icon circle {
+      fill: none; stroke: #4a4a4a; stroke-width: 1.6;
+      transition: stroke 0.4s ease, fill 0.4s ease;
+    }
+    .ojo-btn:hover .ojo-icon path, .ojo-btn:hover .ojo-icon circle { stroke: #888; }
+    .ojo-btn.confirmado .ojo-icon path { stroke: #4a9eff; }
+    .ojo-btn.confirmado .ojo-icon circle { stroke: #4a9eff; fill: #4a9eff; }
+  </style>
+
+  <!-- Cliente Supabase (solo para SUMAR un leído; no lee ni muestra el número) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<div class="wrap">
+  <div class="blog-titulo">Blog</div>
+
+  <div class="lista" id="lista"></div>
+
+  <div class="post-vista" id="post-vista">
+    <span class="volver" id="volver">← todos los textos</span>
+    <div class="post-titulo" id="post-titulo"></div>
+    <div class="post-sub" id="post-sub"></div>
+    <div class="post-cuerpo" id="post-cuerpo"></div>
+    <div class="leido-zona">
+      <button class="ojo-btn" id="ojo-btn">
+        <svg class="ojo-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span id="ojo-label">leído</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== SUPABASE ===== */
+var SUPABASE_URL = 'https://nfqriyedsyuzhkicdsee.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcXJpeWVkc3l1emhraWNkc2VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzI4MjMsImV4cCI6MjEwMTUwODgyM30.0lb8deJBgbA9Ov1B_d6EbbGAqJ61e5PI5Twvwkd26Cw';
+var sbClient = null;
+try {
+  if (window.supabase && window.supabase.createClient) {
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  }
+} catch (e) { sbClient = null; }
+
+/* ==========================================================
+   ENTRADAS DEL BLOG
+   Para publicar una nueva: pega un bloque como este arriba
+   del array. 'id' único. Sin fecha visible (a propósito).
+   El cuerpo usa comillas invertidas (`) para conservar
+   tus saltos de línea y acentos exactamente como los escribes.
+   ========================================================== */
+var posts = [
+  {
+    id: "control-presupuestario-2026-2027",
+    titulo: "control presupuestario 2026 2027",
+    subtitulo: "",
+    cuerpo: `Estamos en el desierto, a pasos del oasis, y numerosas señales me tiran hacia atrás.
+Me dicen vuelve, donde las cosas alguna vez funcionaron.
+Me dicen detente, unos kilometros atrás encontraste una vertiente, te puedes hidratar.
+Pero no quiero vivir bebiendo sorbos de agua de rodillas.
+
+Le he rezado al viento para que me empuje si me ve débil,
+y ha encontrado la forma de aparecer y actuar cada vez que me he devuelto a la vertiente.
+ya sea en mi mente, o en la realidad.
+Es que no es tan fácil decir voy a tomar este camino.
+Voy a literal sacrificar todo por lo que he trabajado 10 años, por una nueva etapa, por un nuevo nivel. Si esto fuera un juego de play, realmente tiene todo el sentido de crear juegos como dios crea humanos a imagen y semejanza.
+No puedo correr con armaduras pesadas,
+No puedo volar con los pies atados al suelo,
+Como no puedo amar con un corazón dolido.
+
+Se han tomado muchas decisiones, se ha adquirido e interpretado un rol.
+Encontré una disponible, y la usé para entrar a la fiesta de máscaras.
+Ahora, en mi cama, 7:02 de la mañana un miércoles 19-Agosto, sin máscaras, puedo ver la inseguridad, el miedo, y la incertidumbre que dibuja estos últimos.
+Veo los hechos y me comparo en la realidad, y no estoy tan lejos de lo que "quiero ser", cuando a todas luces, soy.
+
+El error de compararse con vidas ajenas y que esa comparación implique doblegar, o disminuir la pasión.
+Lo positivo de compararse con vidas ajenas y que esa comparación sirva de combustible.
+Lo sano de compararse con vidas ajenas y darse cuenta que hay cosas por las que derechamente no hay que quejarse.
+Lo duro de compararse con vidas ajenas, y darse cuenta de que hay batallas personales que no solo dejan cicatrices en la piel.
+
+Agosto,
+Nunca hice un cálculo monetario real al calcular cuánto me iba a durar el finiquito del año pasado.
+O quizás sí, pero nunca con una intención de precisión absoluta.
+Y pareciera en esta vida que no necesito calcular nada, para prever como va a salir.
+Pareciera en verdad que bastaría sólo con decirlo en voz alta, con seguridad, y con cohesión.
+Tengo plata suficiente hasta septiembre.
+Tenía un plan B, en el que aguantaba un poco más, pero creo que el Plan A, a pesar de ser más difícil, improbable, bajo las realidades que he conocido, estaba mas alineado con lo que sería mi "Leyenda personal"*
+Rezo,
+Rezo mirando al cielo
+Rezo a ojos cerrados, como aprendí de mis abuelas.
+Rezo con raciocinio a mi propio intelecto para encomendar claridad y buenas decisiones, como aprendí de mis agnósticos mas cercanos.
+Rezo a mi cerebro neuronal y eléctrico, como enseña la neurociencia.
+Rezo al universo, rezo al espejo.
+Rezo en este escrito y no imploro.
+De hecho, rezo y le pregunto a Dios**, si me diste esta pasión, estos ojos y esta visión, q tal si me ayudas un poco? Sabes bien que si tuviera un pan y 30 personas, 30 personas comerían pan.
+Lo sabes y lo sé porque llevo el nombre de tu hijo en mi nombre, y el significado era mucho más real de lo que alguna vez vi.
+
+Tengo fé en mi corazón, tengo amor. He tenido en mi vida toda la suerte que alguien podría soñar tener para cumplir sus sueños, y la capacidad de ver el vaso medio lleno incluso en los tragos más amargos que podría imaginar.
+
+Lloro un poco porque veo mi mochila llena de herramientas, un camión en mis espaldas asfaltando la carretera que he tratado de construir, para mí, y para los míos, y veo los primeros transeuntes transitar.
+Lloro un poco al pensar en las personas que me ven y piensan en sus propias carreteras, sus propios adoquines.
+Lloro abrumado a veces de tanta responsabilidad
+De orgullo también al ver que no lo hago nada mal.
+Lloro el solo pensar que quizás no he sido tan bueno con todos los que se me han cruzado en la vida,
+a pesar de haberlo intentado con todo siempre.
+
+Desnudo mi espíritu en palabras porque lo considero necesario.
+Lo hago sin ánimos de enaltecer una identidad, sino más bien de sembrar mi forma de ser y pensar, y quizás debajo del arbol que crezca aquí sirva de sombra, guía, o alimento para quien lo necesite.
+
+Cada sueño dicho en voz alta se mostrará a su debido tiempo.
+Proporcionando constancia desde mí, añorando suerte desde mi alrededor.
+Cumplir los compromisos hechos con los demás nutre de forma deliberada la energía disponible en mis palabras.
+Cumplir los compromisos conmigo mismo maximiza confianza propia.
+Entender que no todos los compromisos se pueden cumplir, y que muchas palabras terminan flotando en el éter.
+No existe bien sin mal, y en un mundo como hoy todo tiene su precio.
+Sé lo que quiero, y sé como lo voy a pagar.
+Solo pido pan, vino, y personas con quien compartirlo.
+
+*Estoy terminando de leer el alquimista, y juro que cada vez que la vida me empuja a retomar ese libro, lo que leo es claridad de agua bendita en mi presente.
+**Cielo, Cristo, Universo, Mente, Consciencia colectiva, pachamama, Inti, Sol, Yo, tu, vosotros, ellos.`
+  }
+  // PEGA AQUÍ ENTRADAS NUEVAS (arriba = más reciente)
+];
+
+/* ===== LEÍDO (localStorage por dispositivo) ===== */
+function claveLeido(id) { return 'blog-leido-' + id; }
+function estaLeido(id) {
+  try { return localStorage.getItem(claveLeido(id)) === '1'; } catch (e) { return false; }
+}
+function marcarLocal(id) {
+  try { localStorage.setItem(claveLeido(id), '1'); } catch (e) {}
+}
+
+/* Suma un leído en Supabase (insert). No lee ningún número. */
+function sumarLeido(id) {
+  if (!sbClient) return Promise.resolve();
+  return sbClient.from('lecturas').insert({ post_id: id })
+    .then(function () {})
+    .catch(function () {}); /* si falla la red, no rompe la experiencia */
+}
+
+/* ===== LISTA ===== */
+function renderLista() {
+  var cont = document.getElementById('lista');
+  cont.innerHTML = '';
+  if (!posts.length) {
+    cont.innerHTML = '<div class="vacio">Aún no hay textos publicados.</div>';
+    return;
+  }
+  posts.forEach(function (p) {
+    var item = document.createElement('div');
+    item.className = 'post-item';
+
+    var tit = document.createElement('div');
+    tit.className = 'post-item-titulo';
+    tit.textContent = p.titulo;
+    item.appendChild(tit);
+
+    if (p.subtitulo) {
+      var sub = document.createElement('div');
+      sub.className = 'post-item-sub';
+      sub.textContent = p.subtitulo;
+      item.appendChild(sub);
+    }
+
+    item.addEventListener('click', function () { abrirPost(p); });
+    cont.appendChild(item);
+  });
+}
+
+/* ===== ABRIR POST ===== */
+function abrirPost(p) {
+  document.getElementById('post-titulo').textContent = p.titulo;
+
+  var subEl = document.getElementById('post-sub');
+  if (p.subtitulo) { subEl.textContent = p.subtitulo; subEl.style.display = ''; }
+  else { subEl.textContent = ''; subEl.style.display = 'none'; }
+
+  /* cuerpo: preserva saltos simples (versos) y dobles (estrofas) */
+  var cont = document.getElementById('post-cuerpo');
+  cont.innerHTML = '';
+  p.cuerpo.split('\n\n').forEach(function (bloque) {
+    if (bloque.replace(/\s/g, '') === '') return;
+    var par = document.createElement('p');
+    bloque.split('\n').forEach(function (linea, i) {
+      if (i > 0) par.appendChild(document.createElement('br'));
+      par.appendChild(document.createTextNode(linea));
+    });
+    cont.appendChild(par);
+  });
+
+  /* estado del ojo */
+  var btn = document.getElementById('ojo-btn');
+  var label = document.getElementById('ojo-label');
+  if (estaLeido(p.id)) {
+    btn.classList.add('confirmado');
+    label.textContent = 'leído';
+  } else {
+    btn.classList.remove('confirmado');
+    label.textContent = 'leído';
+  }
+
+  btn.onclick = function () {
+    if (estaLeido(p.id)) return;
+    marcarLocal(p.id);
+    btn.classList.add('confirmado');
+    label.textContent = 'leído';
+    sumarLeido(p.id); /* suma en segundo plano */
+  };
+
+  document.getElementById('lista').classList.add('oculto');
+  document.querySelector('.blog-titulo').style.display = 'none';
+  document.getElementById('post-vista').classList.add('activo');
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('volver').addEventListener('click', function () {
+  document.getElementById('post-vista').classList.remove('activo');
+  document.getElementById('lista').classList.remove('oculto');
+  document.querySelector('.blog-titulo').style.display = '';
+  window.scrollTo(0, 0);
+});
+
+renderLista();
+</script>
+
+</body>
+</html>

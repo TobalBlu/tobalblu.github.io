@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merch — Tobal Blu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .home-link {
+      position: fixed; top: 1.5rem; left: 1.5rem;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #333; text-decoration: none; transition: color 0.3s; z-index: 100;
+    }
+    .home-link:hover { color: #888; }
+
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 5rem 1.5rem 5rem; }
+
+    .merch-titulo {
+      font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: #666; margin-bottom: 3rem;
+    }
+
+    /* ===== GRID DE PRODUCTOS (una sola hoja, sin filtros) ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2.5rem 2rem;
+    }
+
+    .producto { cursor: pointer; }
+    .producto-img {
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block;
+      background: #111; border: 0.5px solid #1a1a1a;
+      filter: brightness(0.92); transition: filter 0.4s ease;
+    }
+    .producto:hover .producto-img { filter: brightness(1.05); }
+
+    .producto-nombre {
+      font-size: 13px; color: #ccc; letter-spacing: 0.03em;
+      margin-top: 1rem; transition: color 0.3s ease;
+    }
+    .producto:hover .producto-nombre { color: #fff; }
+    .producto-precio {
+      font-size: 11px; letter-spacing: 0.1em; color: #666; margin-top: 0.3rem;
+    }
+    .producto-formato {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #444; margin-top: 0.2rem;
+    }
+
+    /* ===== DETALLE DE PRODUCTO (overlay) ===== */
+    .detalle {
+      display: none; position: fixed; inset: 0; background: #080808;
+      z-index: 200; overflow-y: auto;
+    }
+    .detalle.activo { display: block; }
+
+    .detalle-wrap {
+      max-width: 960px; margin: 0 auto; padding: 5rem 1.5rem 4rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+      align-items: start;
+    }
+
+    .cerrar {
+      position: fixed; top: 1.5rem; right: 1.5rem;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #555; cursor: pointer; transition: color 0.3s; z-index: 210;
+    }
+    .cerrar:hover { color: #fff; }
+
+    /* galería de imágenes del producto */
+    .det-galeria { display: flex; flex-direction: column; gap: 1rem; }
+    .det-galeria img {
+      width: 100%; object-fit: cover; display: block;
+      border: 0.5px solid #1a1a1a; background: #111;
+    }
+
+    .det-nombre {
+      font-size: 18px; color: #eee; letter-spacing: 0.02em; margin-bottom: 0.4rem;
+    }
+    .det-formato {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #555; margin-bottom: 1.2rem;
+    }
+    .det-precio {
+      font-size: 16px; color: #d89a4a; letter-spacing: 0.05em; margin-bottom: 1.5rem;
+    }
+    .det-desc {
+      font-size: 12px; color: #999; letter-spacing: 0.02em;
+      line-height: 1.8; margin-bottom: 2.5rem;
+    }
+
+    /* ===== FORMULARIO ===== */
+    .form-label {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #555; margin-bottom: 0.5rem; display: block; margin-top: 1.2rem;
+    }
+    .form-label:first-of-type { margin-top: 0; }
+
+    input, select {
+      width: 100%; background: #0d0d0d; border: 0.5px solid #222;
+      color: #ddd; font-family: 'Courier New', monospace; font-size: 13px;
+      padding: 0.8rem 0.9rem; transition: border-color 0.3s ease;
+      letter-spacing: 0.02em;
+    }
+    input:focus, select:focus { outline: none; border-color: #4a4a4a; }
+    select { cursor: pointer; }
+
+    /* opciones de entrega */
+    .entrega-ops { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.3rem; }
+    .entrega-op {
+      display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.9rem;
+      border: 0.5px solid #1e1e1e; cursor: pointer; transition: border-color 0.3s, background 0.3s;
+      font-size: 12px; color: #aaa; letter-spacing: 0.02em;
+    }
+    .entrega-op:hover { border-color: #333; }
+    .entrega-op.sel { border-color: #B67B3A; background: rgba(182,123,58,0.06); color: #ddd; }
+    .entrega-op input { width: auto; }
+    .entrega-op .extra { margin-left: auto; font-size: 10px; color: #666; }
+
+    .campo-despacho { display: none; }
+    .campo-despacho.activo { display: block; }
+
+    .total {
+      margin-top: 1.8rem; padding-top: 1.2rem; border-top: 0.5px solid #1a1a1a;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .total-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #666; }
+    .total-monto { font-size: 20px; color: #eee; letter-spacing: 0.03em; }
+
+    .btn-wsp {
+      display: block; width: 100%; text-align: center; margin-top: 1.8rem;
+      background: rgba(37,211,102,0.08); border: 0.5px solid #25D366; color: #4fe088;
+      font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.15em;
+      text-transform: uppercase; padding: 1.1rem; cursor: pointer;
+      text-decoration: none; transition: background 0.3s, color 0.3s;
+    }
+    .btn-wsp:hover { background: rgba(37,211,102,0.18); color: #7ff0a8; }
+
+    .form-nota {
+      font-size: 8px; letter-spacing: 0.1em; color: #333; margin-top: 1rem;
+      text-transform: uppercase; line-height: 1.8;
+    }
+
+    @media (max-width: 760px) {
+      .detalle-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<div class="wrap">
+  <div class="merch-titulo">Merch</div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- DETALLE -->
+<div class="detalle" id="detalle">
+  <span class="cerrar" id="cerrar">cerrar ✕</span>
+  <div class="detalle-wrap">
+    <div class="det-galeria" id="det-galeria"></div>
+    <div class="det-info">
+      <div class="det-nombre" id="det-nombre"></div>
+      <div class="det-formato" id="det-formato"></div>
+      <div class="det-precio" id="det-precio"></div>
+      <div class="det-desc" id="det-desc"></div>
+
+      <label class="form-label">Nombre</label>
+      <input type="text" id="f-nombre" placeholder="Tu nombre">
+
+      <label class="form-label">Correo</label>
+      <input type="email" id="f-correo" placeholder="tu@correo.com">
+
+      <label class="form-label">Teléfono</label>
+      <input type="tel" id="f-telefono" placeholder="+56 9 ...">
+
+      <label class="form-label">Entrega</label>
+      <div class="entrega-ops" id="entrega-ops"></div>
+
+      <div class="campo-despacho" id="campo-despacho">
+        <label class="form-label">Dirección de despacho</label>
+        <input type="text" id="f-direccion" placeholder="Calle, número, comuna">
+        <label class="form-label">Código postal</label>
+        <input type="text" id="f-postal" placeholder="Código postal">
+      </div>
+
+      <div class="total">
+        <span class="total-label">Total</span>
+        <span class="total-monto" id="total-monto"></span>
+      </div>
+
+      <a class="btn-wsp" id="btn-wsp" href="#" target="_blank" rel="noopener">
+        Pedir por WhatsApp
+      </a>
+      <div class="form-nota">
+        Se abrirá WhatsApp con tu pedido listo. Solo aprieta enviar.
+        Te responderé con los datos de transferencia y la confirmación de envío.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   PRODUCTOS
+   Para agregar un producto nuevo: pega un bloque como el
+   ejemplo en este array. La página arma sola el grid y el
+   detalle. 'entregas' define las opciones de ese producto.
+   ========================================================== */
+var WSP = "56963725631"; /* WhatsApp destino, sin + ni espacios */
+
+var productos = [
+  {
+    id: "imaginacion-cd",
+    nombre: "Imaginación y Pausa",
+    formato: "CD físico",
+    precio: 12990,
+    imgs: ["img/merch-imaginacion-cd-1.jpg", "img/merch-imaginacion-cd-2.jpg"],
+    desc: "CD físico del EP Imaginación y Pausa. Edición en caja con arte impreso. Tóbal Blu, 2025.",
+    entregas: [
+      { label: "Retiro · Metro Plaza de Maipú", costo: 0 },
+      { label: "Retiro · Santiago Centro", costo: 0 },
+      { label: "Despacho a domicilio", costo: 3990, despacho: true }
+    ]
+  }
+  // PEGA AQUÍ PRODUCTOS NUEVOS
+];
+
+/* ===== helpers ===== */
+function clp(n) {
+  return "$" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+var actual = null;         /* producto abierto */
+var entregaSel = 0;        /* índice de entrega elegida */
+
+/* ===== GRID ===== */
+function renderGrid() {
+  var g = document.getElementById('grid');
+  g.innerHTML = '';
+  productos.forEach(function(p) {
+    var card = document.createElement('div');
+    card.className = 'producto';
+
+    var img = document.createElement('img');
+    img.className = 'producto-img';
+    img.src = p.imgs[0];
+    img.alt = p.nombre;
+    img.loading = 'lazy';
+
+    var nom = document.createElement('div');
+    nom.className = 'producto-nombre';
+    nom.textContent = p.nombre;
+
+    var fmt = document.createElement('div');
+    fmt.className = 'producto-formato';
+    fmt.textContent = p.formato;
+
+    var pre = document.createElement('div');
+    pre.className = 'producto-precio';
+    pre.textContent = clp(p.precio);
+
+    card.appendChild(img);
+    card.appendChild(nom);
+    card.appendChild(fmt);
+    card.appendChild(pre);
+    card.addEventListener('click', function() { abrir(p); });
+    g.appendChild(card);
+  });
+}
+
+/* ===== DETALLE ===== */
+function abrir(p) {
+  actual = p;
+  entregaSel = 0;
+
+  document.getElementById('det-nombre').textContent = p.nombre;
+  document.getElementById('det-formato').textContent = p.formato;
+  document.getElementById('det-precio').textContent = clp(p.precio);
+  document.getElementById('det-desc').textContent = p.desc;
+
+  var gal = document.getElementById('det-galeria');
+  gal.innerHTML = '';
+  p.imgs.forEach(function(src) {
+    var im = document.createElement('img');
+    im.src = src; im.alt = p.nombre; im.loading = 'lazy';
+    gal.appendChild(im);
+  });
+
+  /* opciones de entrega */
+  var ops = document.getElementById('entrega-ops');
+  ops.innerHTML = '';
+  p.entregas.forEach(function(e, i) {
+    var op = document.createElement('label');
+    op.className = 'entrega-op' + (i === 0 ? ' sel' : '');
+
+    var radio = document.createElement('input');
+    radio.type = 'radio'; radio.name = 'entrega'; radio.checked = (i === 0);
+
+    var txt = document.createElement('span');
+    txt.textContent = e.label;
+
+    var extra = document.createElement('span');
+    extra.className = 'extra';
+    extra.textContent = e.costo > 0 ? '+' + clp(e.costo) : 'gratis';
+
+    op.appendChild(radio);
+    op.appendChild(txt);
+    op.appendChild(extra);
+    op.addEventListener('click', function() { elegirEntrega(i); });
+    ops.appendChild(op);
+  });
+
+  actualizar();
+  document.getElementById('detalle').classList.add('activo');
+  window.scrollTo(0, 0);
+}
+
+function elegirEntrega(i) {
+  entregaSel = i;
+  var ops = document.querySelectorAll('.entrega-op');
+  ops.forEach(function(o, idx) {
+    o.classList.toggle('sel', idx === i);
+    o.querySelector('input').checked = (idx === i);
+  });
+  actualizar();
+}
+
+function actualizar() {
+  var e = actual.entregas[entregaSel];
+  var total = actual.precio + (e.costo || 0);
+  document.getElementById('total-monto').textContent = clp(total);
+
+  /* mostrar campos de dirección solo si es despacho */
+  document.getElementById('campo-despacho').classList.toggle('activo', !!e.despacho);
+
+  /* actualizar link de WhatsApp */
+  actualizarWsp();
+}
+
+function actualizarWsp() {
+  var e = actual.entregas[entregaSel];
+  var total = actual.precio + (e.costo || 0);
+
+  var nombre = document.getElementById('f-nombre').value.trim();
+  var correo = document.getElementById('f-correo').value.trim();
+  var tel = document.getElementById('f-telefono').value.trim();
+  var dir = document.getElementById('f-direccion').value.trim();
+  var postal = document.getElementById('f-postal').value.trim();
+
+  var lineas = [];
+  lineas.push("Hola Tóbal, quiero el " + actual.formato + " \"" + actual.nombre + "\" (" + clp(actual.precio) + ").");
+  lineas.push("");
+  lineas.push("Entrega: " + e.label + (e.costo > 0 ? " (+" + clp(e.costo) + ")" : "") + " — Total " + clp(total));
+  lineas.push("Nombre: " + (nombre || "—"));
+  lineas.push("Correo: " + (correo || "—"));
+  lineas.push("Teléfono: " + (tel || "—"));
+  if (e.despacho) {
+    lineas.push("Dirección: " + (dir || "—"));
+    lineas.push("Código postal: " + (postal || "—"));
+  }
+  lineas.push("");
+  lineas.push("Quedo atento a los datos de transferencia.");
+
+  var msg = encodeURIComponent(lineas.join("\n"));
+  document.getElementById('btn-wsp').href = "https://wa.me/" + WSP + "?text=" + msg;
+}
+
+/* recalcular el mensaje cada vez que el usuario escribe */
+['f-nombre', 'f-correo', 'f-telefono', 'f-direccion', 'f-postal'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', actualizarWsp);
+});
+
+/* validación mínima antes de abrir WhatsApp */
+document.getElementById('btn-wsp').addEventListener('click', function(ev) {
+  var correo = document.getElementById('f-correo').value.trim();
+  var tel = document.getElementById('f-telefono').value.trim();
+  var e = actual.entregas[entregaSel];
+  var falta = [];
+  if (!correo) falta.push('correo');
+  if (!tel) falta.push('teléfono');
+  if (e.despacho && !document.getElementById('f-direccion').value.trim()) falta.push('dirección');
+  if (falta.length) {
+    ev.preventDefault();
+    alert('Falta completar: ' + falta.join(', ') + '.');
+  }
+});
+
+document.getElementById('cerrar').addEventListener('click', function() {
+  document.getElementById('detalle').classList.remove('activo');
+});
+
+renderGrid();
+</script>
+
+</body>
+</html>

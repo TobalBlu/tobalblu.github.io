@@ -11,7 +11,7 @@
   <meta property="og:title" content="Ciclos — Tobal Blu">
   <meta property="og:description" content="Ciclos, nueva música de Tobal Blu.">
   <meta property="og:image" content="https://tobalblu.com/img/ciclos-ojo.jpg">
-  <meta property="og:url" content="https://tobalblu.com/ciclos.html">
+  <meta property="og:url" content="https://tobalblu.com/ciclos">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ciclos — Tobal Blu">
   <meta name="twitter:description" content="Ciclos, nueva música de Tobal Blu.">
@@ -51,88 +51,102 @@
     .home-link:hover { color: var(--tinta); }
 
     .wrap {
-      max-width: 720px; margin: 0 auto;
-      padding: 6rem 1.5rem 4rem;
-      display: flex; flex-direction: column; align-items: center;
+      max-width: 980px; margin: 0 auto;
+      min-height: 100vh; min-height: 100dvh;
+      padding: 5rem 1.5rem 3rem;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
     }
 
-    /* ===== OJO + CICLOS cruzando la imagen ===== */
+    .frase {
+      font-size: 16px; line-height: 1.65; color: var(--tinta);
+      max-width: 400px; text-align: center; margin-bottom: 3rem;
+    }
+
+    /* ===== EJE: un solo grid; filas compartidas alinean todo entre columnas ===== */
+    .eje {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-rows: auto auto auto auto;
+      column-gap: 2.6rem;
+      align-items: center;
+      justify-items: center;
+      width: 100%;
+    }
+
+    /* la portada ocupa las 4 filas de la columna central */
     .portada {
       position: relative;
-      width: 100%;
-      max-width: 460px;
-      margin-bottom: 2.8rem;
+      grid-column: 2; grid-row: 1 / 5;
+      width: 340px; height: 340px;
+      align-self: center;
+    }
+
+    /* columna izquierda (pre-save) en filas 1-4 de la col 1 */
+    .izq-nota    { grid-column: 1; grid-row: 1; }
+    .izq-control { grid-column: 1; grid-row: 2; }
+    .izq-boton   { grid-column: 1; grid-row: 3; }
+    .izq-pie     { grid-column: 1; grid-row: 4; }
+
+    /* columna derecha (número) en filas 1-4 de la col 3 */
+    .der-nota    { grid-column: 3; grid-row: 1; }
+    .der-control { grid-column: 3; grid-row: 2; }
+    .der-boton   { grid-column: 3; grid-row: 3; }
+    .der-pie     { grid-column: 3; grid-row: 4; }
+
+    /* cada celda centra su contenido */
+    .celda { width: 100%; max-width: 250px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+
+    /* ---- portada cuadrada con CICLOS cruzando ---- */
+    .portada {
+      position: relative;
+      width: 340px; height: 340px;
+      flex-shrink: 0;
     }
     .portada-img {
-      width: 100%;
-      display: block;
-      /* lámina sobre papel: leve marco cálido, sin sombra dura */
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
       border: 1px solid var(--linea);
     }
     .portada-titulo {
-      position: absolute;
-      top: 50%; left: 50%;
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      font-size: clamp(34px, 8vw, 50px);
-      letter-spacing: 0.1em;
-      color: #f4efe6;
-      font-weight: 400;
-      margin-right: -0.1em; /* compensa tracking para centrar */
-      pointer-events: none;
-      white-space: nowrap;
+      font-size: clamp(34px, 4.5vw, 46px);
+      letter-spacing: 0.1em; margin-right: -0.1em;
+      color: rgba(244, 239, 230, 0.7);          /* crema al 70% */
+      font-weight: 400; white-space: nowrap; pointer-events: none;
+      -webkit-text-stroke: 0.4px rgba(244,239,230,0.6);  /* contorno beige finito */
+      text-shadow: 0 2px 10px rgba(0,0,0,0.45);          /* sombra para separar de la foto */
     }
 
-    /* ===== FRASE puente ===== */
-    .frase {
-      font-size: 16px;
-      line-height: 1.65;
-      color: var(--tinta);
-      max-width: 390px;
-      text-align: center;
-      margin-bottom: 3.5rem;
+    /* ---- columnas de acción ---- */
+    .col-nota {
+      font-size: 14px; line-height: 1.65; color: var(--tinta-suave);
+      margin-bottom: 1.3rem; max-width: 250px;
     }
 
-    /* ===== DÍPTICO: pre-save | número ===== */
-    .diptico {
-      width: 100%;
-      max-width: 620px;
-      display: grid;
-      grid-template-columns: 1fr 1px 1fr;
-      gap: 2.4rem;
-      align-items: start;
-    }
-    .diptico-linea { background: var(--linea); width: 1px; align-self: stretch; }
-
-    .col { display: flex; flex-direction: column; align-items: center; text-align: center; }
-
-    /* ambas acciones con el MISMO peso visual */
+    /* botón: mismo peso en ambos lados */
     .accion-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 100%;
+      width: 100%; max-width: 250px;
       font-family: 'Libre Baskerville', serif;
       font-size: 13px; letter-spacing: 0.1em;
       color: var(--tinta); background: transparent;
       border: 1px solid var(--tinta);
-      padding: 0.95rem 1rem; cursor: pointer;
-      text-decoration: none;
+      padding: 0.95rem 1rem; cursor: pointer; text-decoration: none;
       transition: background 0.3s ease, color 0.3s ease;
     }
     .accion-btn:hover { background: var(--tinta); color: var(--papel); }
 
-    /* columna pre-save */
-    .col-nota {
-      font-size: 14px; line-height: 1.65; color: var(--tinta-suave);
-      margin-bottom: 1.3rem; max-width: 240px;
-    }
+    /* control izquierdo: hueco del mismo alto que el input de la derecha,
+       para que el botón de pre-save caiga a la altura del "avísame" */
+    .control-hueco { height: 0; margin-bottom: 0.7rem; }
+    .fila-control .avisos-input { margin-bottom: 0.7rem; }
 
-    /* columna número */
-    .avisos-form { display: flex; flex-direction: column; gap: 0.7rem; width: 100%; }
+    .avisos-form { display: flex; flex-direction: column; width: 100%; max-width: 250px; }
     .avisos-input {
-      width: 100%;
-      background: #fbf8f2;
-      border: 1px solid var(--linea);
-      color: var(--tinta);
-      font-family: 'Libre Baskerville', serif;
+      width: 100%; background: #fbf8f2; border: 1px solid var(--linea);
+      color: var(--tinta); font-family: 'Libre Baskerville', serif;
       font-size: 15px; letter-spacing: 0.02em;
       padding: 0.85rem 0.9rem; text-align: center;
       transition: border-color 0.3s ease;
@@ -141,37 +155,53 @@
     .avisos-input::placeholder { color: var(--tinta-tenue); }
 
     .avisos-legal {
-      font-size: 10px; line-height: 1.65; color: var(--tinta-tenue);
-      margin-top: 1rem; max-width: 240px;
+      font-size: 10px; line-height: 1.6; color: var(--tinta-tenue);
+      margin-top: 1rem; max-width: 250px;
     }
-
     .avisos-ok {
-      display: none;
-      font-size: 14px; line-height: 1.6; color: #3f7a52;
-      padding: 0.5rem 0;
+      display: none; font-size: 14px; line-height: 1.6; color: #3f7a52; padding: 0.5rem 0;
     }
-    .col.enviado .avisos-form,
-    .col.enviado .avisos-legal { display: none; }
-    .col.enviado .avisos-ok { display: block; }
-
+    .col.enviado .fila-control,
+    .col.enviado .avisos-legal { visibility: hidden; }
+    .der-pie.enviado .avisos-legal { display: none; }
+    .der-pie.enviado .avisos-ok { display: block; }
     .avisos-error {
-      font-size: 11px; color: #a5563f; margin-top: 0.6rem;
-      min-height: 1em; display: none;
+      font-size: 11px; color: #a5563f; margin-top: 0.6rem; min-height: 1em; display: none;
     }
     .avisos-error.visible { display: block; }
 
-    /* ===== MÓVIL: apilado, línea horizontal ===== */
-    @media (max-width: 600px) {
-      .wrap { padding: 4.5rem 1.3rem 3.5rem; }
-      .diptico {
+    .col-pie {
+      font-size: 10px; line-height: 1.6; color: var(--tinta-tenue);
+      margin-top: 1rem; max-width: 250px;
+    }
+
+    /* ===== MÓVIL: pre-save → ojo → número ===== */
+    @media (max-width: 720px) {
+      .wrap { padding: 4.5rem 1.3rem 3.5rem; justify-content: flex-start; }
+      .frase { margin-bottom: 2.5rem; font-size: 15px; }
+      .eje {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        grid-template-rows: none;
+        row-gap: 1rem;
         max-width: 340px;
       }
-      .diptico-linea { width: 100%; height: 1px; }
-      .col-nota, .avisos-legal { max-width: 100%; }
-      .portada { margin-bottom: 2.4rem; }
-      .frase { margin-bottom: 3rem; font-size: 15px; }
+      /* todo a una columna; usar 'order' para el flujo pre-save / ojo / número */
+      .izq-nota, .izq-control, .izq-boton, .izq-pie,
+      .portada,
+      .der-nota, .der-control, .der-boton, .der-pie {
+        grid-column: 1; grid-row: auto;
+      }
+      .izq-nota    { order: 1; }
+      .izq-control { order: 2; display: none; } /* hueco no hace falta en móvil */
+      .izq-boton   { order: 3; margin-bottom: 0.5rem; }
+      .izq-pie     { order: 4; margin-bottom: 1.5rem; }
+      .portada     { order: 5; width: 100%; height: auto; aspect-ratio: 1/1; margin-bottom: 1.5rem; }
+      .der-nota    { order: 6; }
+      .der-control { order: 7; margin-top: 0.6rem; }
+      .der-boton   { order: 8; margin-top: 0.7rem; }
+      .der-pie     { order: 9; }
+      .celda { max-width: 100%; }
+      .portada-titulo { font-size: clamp(32px, 9vw, 44px); }
     }
   </style>
 </head>
@@ -181,38 +211,41 @@
 
 <div class="wrap">
 
-  <div class="portada">
-    <img class="portada-img" src="img/ciclos-ojo.jpg" alt="Ciclos — Tobal Blu">
-    <h1 class="portada-titulo">CICLOS</h1>
-  </div>
-
   <p class="frase">Hay cosas que repetimos incluso cuando sabemos que nos hacen daño.</p>
 
-  <div class="diptico">
+  <div class="eje">
 
-    <!-- IZQUIERDA: pre-save -->
-    <div class="col">
-      <p class="col-nota">La canción ya viene en camino.</p>
+    <!-- IZQUIERDA: pre-save (filas 1-4, columna 1) -->
+    <div class="celda izq-nota"><div class="col-nota">La canción ya viene en camino.</div></div>
+    <div class="celda izq-control"><div class="control-hueco"></div></div>
+    <div class="celda izq-boton">
       <a class="accion-btn" id="btn-presave"
          href="https://offstep.link/251054202172" target="_blank" rel="noopener">
         pre-guardar Ciclos
       </a>
     </div>
+    <div class="celda izq-pie"><div class="col-pie">Se abrirá tu app de música para dejarla lista.</div></div>
 
-    <div class="diptico-linea"></div>
+    <!-- CENTRO: ojo + CICLOS -->
+    <div class="portada">
+      <img class="portada-img" src="/img/ciclos-ojo.jpg" alt="Ciclos — Tobal Blu">
+      <h1 class="portada-titulo">CICLOS</h1>
+    </div>
 
-    <!-- DERECHA: número -->
-    <div class="col" id="col-avisos">
-      <p class="col-nota">Si me dejas tu número, te aviso personalmente cada vez que tenga un lanzamiento.</p>
-      <div class="avisos-form">
-        <input class="avisos-input" id="avisos-input" type="tel"
-               inputmode="tel" placeholder="+56 9 ..." autocomplete="tel">
-        <button class="accion-btn" id="avisos-btn">avísame</button>
-      </div>
+    <!-- DERECHA: número (filas 1-4, columna 3) -->
+    <div class="celda der-nota"><div class="col-nota">Si me dejas tu número, te aviso personalmente cada vez que tenga un lanzamiento.</div></div>
+    <div class="celda der-control" id="col-avisos-control">
+      <input class="avisos-input" id="avisos-input" type="tel"
+             inputmode="tel" placeholder="+56 9 ..." autocomplete="tel">
+    </div>
+    <div class="celda der-boton">
+      <button class="accion-btn" id="avisos-btn">avísame</button>
+    </div>
+    <div class="celda der-pie" id="col-avisos">
       <div class="avisos-error" id="avisos-error"></div>
-      <p class="avisos-legal">
+      <div class="avisos-legal">
         Tu número se usa solo para avisarte de nuevos lanzamientos. Puedes pedir dejar de recibirlos cuando quieras.
-      </p>
+      </div>
       <div class="avisos-ok">listo — te aviso cuando salga ♥</div>
     </div>
 
@@ -252,6 +285,7 @@ function normalizarTelefono(raw) {
 }
 
 var col = document.getElementById('col-avisos');
+var colControl = document.getElementById('col-avisos-control');
 var input = document.getElementById('avisos-input');
 var btn = document.getElementById('avisos-btn');
 var errorEl = document.getElementById('avisos-error');
@@ -263,12 +297,13 @@ input.addEventListener('input', limpiarError);
 function enviarTelefono() {
   var tel = normalizarTelefono(input.value);
   if (!tel) { mostrarError('Revisa el número. Ej: +56 9 1234 5678'); return; }
-
   track('ciclos_phone_submit');
   btn.disabled = true;
-
-  var terminar = function () { col.classList.add('enviado'); };
-
+  var terminar = function () {
+    col.classList.add('enviado');
+    colControl.style.visibility = 'hidden';
+    btn.style.visibility = 'hidden';
+  };
   if (sbClient) {
     sbClient.from('avisos').insert({ telefono: tel, origen: 'ciclos' })
       .then(function (res) {
@@ -277,7 +312,7 @@ function enviarTelefono() {
       })
       .catch(function () { btn.disabled = false; mostrarError('Sin conexión, intenta de nuevo.'); });
   } else {
-    /* TODO: conectar almacenamiento de teléfonos (si Supabase no cargó) */
+    /* TODO: conectar almacenamiento de teléfonos */
     terminar();
   }
 }

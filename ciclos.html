@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ciclos — Tobal Blu</title>
+  <meta name="description" content="Ciclos, nueva música de Tobal Blu.">
+
+  <meta property="og:type" content="music.song">
+  <meta property="og:title" content="Ciclos — Tobal Blu">
+  <meta property="og:description" content="Ciclos, nueva música de Tobal Blu.">
+  <meta property="og:image" content="https://tobalblu.com/img/ciclos-ojo.jpg">
+  <meta property="og:url" content="https://tobalblu.com/ciclos.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ciclos — Tobal Blu">
+  <meta name="twitter:description" content="Ciclos, nueva música de Tobal Blu.">
+  <meta name="twitter:image" content="https://tobalblu.com/img/ciclos-ojo.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --papel: #f4efe6;
+      --tinta: #2b2721;
+      --tinta-suave: #6f675b;
+      --tinta-tenue: #a89f90;
+      --linea: #ddd4c4;
+    }
+
+    body {
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+      min-height: 100vh; min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .home-link {
+      position: fixed; top: 1.6rem; left: 1.6rem;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tinta-tenue); text-decoration: none;
+      transition: color 0.3s; z-index: 20;
+      font-family: 'Libre Baskerville', serif;
+    }
+    .home-link:hover { color: var(--tinta); }
+
+    .wrap {
+      max-width: 720px; margin: 0 auto;
+      padding: 6rem 1.5rem 4rem;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* ===== OJO + CICLOS cruzando la imagen ===== */
+    .portada {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      margin-bottom: 2.8rem;
+    }
+    .portada-img {
+      width: 100%;
+      display: block;
+      /* lámina sobre papel: leve marco cálido, sin sombra dura */
+      border: 1px solid var(--linea);
+    }
+    .portada-titulo {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(34px, 8vw, 50px);
+      letter-spacing: 0.1em;
+      color: #f4efe6;
+      font-weight: 400;
+      margin-right: -0.1em; /* compensa tracking para centrar */
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ===== FRASE puente ===== */
+    .frase {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--tinta);
+      max-width: 390px;
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ===== DÍPTICO: pre-save | número ===== */
+    .diptico {
+      width: 100%;
+      max-width: 620px;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 2.4rem;
+      align-items: start;
+    }
+    .diptico-linea { background: var(--linea); width: 1px; align-self: stretch; }
+
+    .col { display: flex; flex-direction: column; align-items: center; text-align: center; }
+
+    /* ambas acciones con el MISMO peso visual */
+    .accion-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 100%;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 13px; letter-spacing: 0.1em;
+      color: var(--tinta); background: transparent;
+      border: 1px solid var(--tinta);
+      padding: 0.95rem 1rem; cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .accion-btn:hover { background: var(--tinta); color: var(--papel); }
+
+    /* columna pre-save */
+    .col-nota {
+      font-size: 14px; line-height: 1.65; color: var(--tinta-suave);
+      margin-bottom: 1.3rem; max-width: 240px;
+    }
+
+    /* columna número */
+    .avisos-form { display: flex; flex-direction: column; gap: 0.7rem; width: 100%; }
+    .avisos-input {
+      width: 100%;
+      background: #fbf8f2;
+      border: 1px solid var(--linea);
+      color: var(--tinta);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 15px; letter-spacing: 0.02em;
+      padding: 0.85rem 0.9rem; text-align: center;
+      transition: border-color 0.3s ease;
+    }
+    .avisos-input:focus { outline: none; border-color: var(--tinta-suave); }
+    .avisos-input::placeholder { color: var(--tinta-tenue); }
+
+    .avisos-legal {
+      font-size: 10px; line-height: 1.65; color: var(--tinta-tenue);
+      margin-top: 1rem; max-width: 240px;
+    }
+
+    .avisos-ok {
+      display: none;
+      font-size: 14px; line-height: 1.6; color: #3f7a52;
+      padding: 0.5rem 0;
+    }
+    .col.enviado .avisos-form,
+    .col.enviado .avisos-legal { display: none; }
+    .col.enviado .avisos-ok { display: block; }
+
+    .avisos-error {
+      font-size: 11px; color: #a5563f; margin-top: 0.6rem;
+      min-height: 1em; display: none;
+    }
+    .avisos-error.visible { display: block; }
+
+    /* ===== MÓVIL: apilado, línea horizontal ===== */
+    @media (max-width: 600px) {
+      .wrap { padding: 4.5rem 1.3rem 3.5rem; }
+      .diptico {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        max-width: 340px;
+      }
+      .diptico-linea { width: 100%; height: 1px; }
+      .col-nota, .avisos-legal { max-width: 100%; }
+      .portada { margin-bottom: 2.4rem; }
+      .frase { margin-bottom: 3rem; font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<div class="wrap">
+
+  <div class="portada">
+    <img class="portada-img" src="img/ciclos-ojo.jpg" alt="Ciclos — Tobal Blu">
+    <h1 class="portada-titulo">CICLOS</h1>
+  </div>
+
+  <p class="frase">Hay cosas que repetimos incluso cuando sabemos que nos hacen daño.</p>
+
+  <div class="diptico">
+
+    <!-- IZQUIERDA: pre-save -->
+    <div class="col">
+      <p class="col-nota">La canción ya viene en camino.</p>
+      <a class="accion-btn" id="btn-presave"
+         href="https://offstep.link/251054202172" target="_blank" rel="noopener">
+        pre-guardar Ciclos
+      </a>
+    </div>
+
+    <div class="diptico-linea"></div>
+
+    <!-- DERECHA: número -->
+    <div class="col" id="col-avisos">
+      <p class="col-nota">Si me dejas tu número, te aviso personalmente cada vez que tenga un lanzamiento.</p>
+      <div class="avisos-form">
+        <input class="avisos-input" id="avisos-input" type="tel"
+               inputmode="tel" placeholder="+56 9 ..." autocomplete="tel">
+        <button class="accion-btn" id="avisos-btn">avísame</button>
+      </div>
+      <div class="avisos-error" id="avisos-error"></div>
+      <p class="avisos-legal">
+        Tu número se usa solo para avisarte de nuevos lanzamientos. Puedes pedir dejar de recibirlos cuando quieras.
+      </p>
+      <div class="avisos-ok">listo — te aviso cuando salga ♥</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = 'https://nfqriyedsyuzhkicdsee.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcXJpeWVkc3l1emhraWNkc2VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzI4MjMsImV4cCI6MjEwMTUwODgyM30.0lb8deJBgbA9Ov1B_d6EbbGAqJ61e5PI5Twvwkd26Cw';
+var sbClient = null;
+try {
+  if (window.supabase && window.supabase.createClient) {
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  }
+} catch (e) { sbClient = null; }
+
+function track(evento) {
+  try {
+    if (window.dataLayer) window.dataLayer.push({ event: evento });
+    if (window.plausible) window.plausible(evento);
+  } catch (e) {}
+}
+
+document.getElementById('btn-presave').addEventListener('click', function () {
+  track('ciclos_presave_click');
+});
+
+function normalizarTelefono(raw) {
+  var t = (raw || '').replace(/[\s\-().]/g, '');
+  if (/^\+569\d{8}$/.test(t)) return t;
+  if (/^569\d{8}$/.test(t)) return '+' + t;
+  if (/^9\d{8}$/.test(t)) return '+56' + t;
+  if (/^\+\d{8,15}$/.test(t)) return t;
+  return null;
+}
+
+var col = document.getElementById('col-avisos');
+var input = document.getElementById('avisos-input');
+var btn = document.getElementById('avisos-btn');
+var errorEl = document.getElementById('avisos-error');
+
+function mostrarError(msg) { errorEl.textContent = msg; errorEl.classList.add('visible'); }
+function limpiarError() { errorEl.textContent = ''; errorEl.classList.remove('visible'); }
+input.addEventListener('input', limpiarError);
+
+function enviarTelefono() {
+  var tel = normalizarTelefono(input.value);
+  if (!tel) { mostrarError('Revisa el número. Ej: +56 9 1234 5678'); return; }
+
+  track('ciclos_phone_submit');
+  btn.disabled = true;
+
+  var terminar = function () { col.classList.add('enviado'); };
+
+  if (sbClient) {
+    sbClient.from('avisos').insert({ telefono: tel, origen: 'ciclos' })
+      .then(function (res) {
+        if (res && res.error) { btn.disabled = false; mostrarError('No se pudo guardar, intenta de nuevo.'); }
+        else { terminar(); }
+      })
+      .catch(function () { btn.disabled = false; mostrarError('Sin conexión, intenta de nuevo.'); });
+  } else {
+    /* TODO: conectar almacenamiento de teléfonos (si Supabase no cargó) */
+    terminar();
+  }
+}
+
+btn.addEventListener('click', enviarTelefono);
+input.addEventListener('keydown', function (e) { if (e.key === 'Enter') enviarTelefono(); });
+</script>
+
+</body>
+</html>

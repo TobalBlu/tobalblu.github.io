@@ -25,184 +25,147 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --papel: #f4efe6;
-      --tinta: #2b2721;
-      --tinta-suave: #6f675b;
-      --tinta-tenue: #a89f90;
-      --linea: #ddd4c4;
+      /* colores del iris */
+      --verde: #4a5c3a;
+      --azul: #2e4a52;
+      --ambar: #b6863a;
+      --naranja: #c8702a;
+      --crema: #f4efe6;
+      --crema-tenue: rgba(244, 239, 230, 0.6);
     }
 
+    html, body { height: 100%; }
     body {
-      background: var(--papel);
-      color: var(--tinta);
-      font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+      background: #0a0b0a;
+      color: var(--crema);
+      font-family: 'Libre Baskerville', Georgia, serif;
       min-height: 100vh; min-height: 100dvh;
-      -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
     .home-link {
-      position: fixed; top: 1.6rem; left: 1.6rem;
-      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--tinta-tenue); text-decoration: none;
-      transition: color 0.3s; z-index: 20;
-      font-family: 'Libre Baskerville', serif;
+      position: fixed; top: 1.4rem; left: 1.4rem;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(244,239,230,0.4); text-decoration: none;
+      transition: color 0.3s; z-index: 30;
     }
-    .home-link:hover { color: var(--tinta); }
+    .home-link:hover { color: var(--crema); }
 
+    /* ===== FONDO: ojo + espiral que retorna ===== */
+    .fondo { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #0a0b0a; }
+    .fondo-ojo {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 130vmax; height: 130vmax;
+      transform: translate(-50%, -50%);
+      background-image: url('/img/ciclos-ojo.jpg');
+      background-size: cover; background-position: center;
+      /* el ciclo: giro-zoom lentísimo que vuelve EXACTO al inicio (20s) */
+      animation: ciclo 20s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes ciclo {
+      0%   { transform: translate(-50%, -50%) rotate(0deg)   scale(1); }
+      50%  { transform: translate(-50%, -50%) rotate(6deg)   scale(1.08); }
+      100% { transform: translate(-50%, -50%) rotate(0deg)   scale(1); }
+    }
+    /* velo oscuro para que las ventanas y el texto respiren sobre la foto */
+    .fondo-velo {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(10,11,10,0.35) 0%, rgba(10,11,10,0.72) 65%, rgba(10,11,10,0.9) 100%);
+    }
+
+    /* canvas de partículas del iris */
+    #particulas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+    /* ===== CONTENIDO ===== */
     .wrap {
-      max-width: 980px; margin: 0 auto;
+      position: relative; z-index: 2;
       min-height: 100vh; min-height: 100dvh;
-      padding: 5rem 1.5rem 3rem;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
+      padding: 5rem 1.3rem 3rem;
+      gap: 2.2rem;
     }
 
+    .titulo {
+      font-size: clamp(40px, 11vw, 68px);
+      letter-spacing: 0.14em; margin-right: -0.14em;
+      color: var(--crema-tenue);
+      font-weight: 400; text-align: center;
+      -webkit-text-stroke: 0.5px rgba(244,239,230,0.35);
+      text-shadow: 0 2px 30px rgba(0,0,0,0.6);
+    }
     .frase {
-      font-size: 16px; line-height: 1.65; color: var(--tinta);
-      max-width: 400px; text-align: center; margin-bottom: 3rem;
+      font-size: 15px; line-height: 1.7; color: rgba(244,239,230,0.85);
+      max-width: 360px; text-align: center; margin-top: -1rem;
+      text-shadow: 0 1px 16px rgba(0,0,0,0.8);
     }
 
-    /* ===== EJE: un solo grid; filas compartidas alinean todo entre columnas ===== */
-    .eje {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      grid-template-rows: auto auto auto auto;
-      column-gap: 2.6rem;
-      align-items: center;
-      justify-items: center;
-      width: 100%;
+    /* ===== DOS VENTANAS ===== */
+    .ventanas {
+      display: flex; gap: 1.1rem;
+      width: 100%; max-width: 640px;
+      align-items: stretch;
     }
-
-    /* la portada ocupa las 4 filas de la columna central */
-    .portada {
-      position: relative;
-      grid-column: 2; grid-row: 1 / 5;
-      width: 340px; height: 340px;
-      align-self: center;
+    .ventana {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      background: rgba(16, 18, 17, 0.5);
+      -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px);
+      border: 0.5px solid rgba(244,239,230,0.18);
+      padding: 1.8rem 1.4rem;
     }
-
-    /* columna izquierda (pre-save) en filas 1-4 de la col 1 */
-    .izq-nota    { grid-column: 1; grid-row: 1; }
-    .izq-control { grid-column: 1; grid-row: 2; }
-    .izq-boton   { grid-column: 1; grid-row: 3; }
-    .izq-pie     { grid-column: 1; grid-row: 4; }
-
-    /* columna derecha (número) en filas 1-4 de la col 3 */
-    .der-nota    { grid-column: 3; grid-row: 1; }
-    .der-control { grid-column: 3; grid-row: 2; }
-    .der-boton   { grid-column: 3; grid-row: 3; }
-    .der-pie     { grid-column: 3; grid-row: 4; }
-
-    /* cada celda centra su contenido */
-    .celda { width: 100%; max-width: 250px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-
-    /* ---- portada cuadrada con CICLOS cruzando ---- */
-    .portada {
-      position: relative;
-      width: 340px; height: 340px;
-      flex-shrink: 0;
+    .ventana-nota {
+      font-size: 12.5px; line-height: 1.6; color: rgba(244,239,230,0.7);
+      margin-bottom: 1.3rem; min-height: 3.2em;
+      display: flex; align-items: center; justify-content: center;
     }
-    .portada-img {
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      border: 1px solid var(--linea);
-    }
-    .portada-titulo {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: clamp(34px, 4.5vw, 46px);
-      letter-spacing: 0.1em; margin-right: -0.1em;
-      color: rgba(244, 239, 230, 0.7);          /* crema al 70% */
-      font-weight: 400; white-space: nowrap; pointer-events: none;
-      -webkit-text-stroke: 0.4px rgba(244,239,230,0.6);  /* contorno beige finito */
-      text-shadow: 0 2px 10px rgba(0,0,0,0.45);          /* sombra para separar de la foto */
-    }
+    .ventana-cuerpo { margin-top: auto; width: 100%; }
 
-    /* ---- columnas de acción ---- */
-    .col-nota {
-      font-size: 14px; line-height: 1.65; color: var(--tinta-suave);
-      margin-bottom: 1.3rem; max-width: 250px;
-    }
-
-    /* botón: mismo peso en ambos lados */
     .accion-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 100%; max-width: 250px;
+      width: 100%;
       font-family: 'Libre Baskerville', serif;
-      font-size: 13px; letter-spacing: 0.1em;
-      color: var(--tinta); background: transparent;
-      border: 1px solid var(--tinta);
-      padding: 0.95rem 1rem; cursor: pointer; text-decoration: none;
-      transition: background 0.3s ease, color 0.3s ease;
+      font-size: 12px; letter-spacing: 0.1em;
+      color: var(--crema); background: transparent;
+      border: 1px solid rgba(244,239,230,0.55);
+      padding: 0.9rem 1rem; cursor: pointer; text-decoration: none;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
-    .accion-btn:hover { background: var(--tinta); color: var(--papel); }
+    .accion-btn:hover { background: var(--crema); color: #14140f; border-color: var(--crema); }
 
-    /* control izquierdo: hueco del mismo alto que el input de la derecha,
-       para que el botón de pre-save caiga a la altura del "avísame" */
-    .control-hueco { height: 0; margin-bottom: 0.7rem; }
-    #col-avisos-control { gap: 0.6rem; }
-    #col-avisos-control .avisos-input { margin: 0; }
-
-    .avisos-form { display: flex; flex-direction: column; width: 100%; max-width: 250px; }
     .avisos-input {
-      width: 100%; background: #fbf8f2; border: 1px solid var(--linea);
-      color: var(--tinta); font-family: 'Libre Baskerville', serif;
-      font-size: 15px; letter-spacing: 0.02em;
-      padding: 0.85rem 0.9rem; text-align: center;
+      width: 100%; background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(244,239,230,0.25);
+      color: var(--crema); font-family: 'Libre Baskerville', serif;
+      font-size: 14px; text-align: center;
+      padding: 0.75rem 0.7rem; margin-bottom: 0.6rem;
       transition: border-color 0.3s ease;
     }
-    .avisos-input:focus { outline: none; border-color: var(--tinta-suave); }
-    .avisos-input::placeholder { color: var(--tinta-tenue); }
+    .avisos-input:focus { outline: none; border-color: rgba(244,239,230,0.6); }
+    .avisos-input::placeholder { color: rgba(244,239,230,0.4); }
 
-    .avisos-legal {
-      font-size: 10px; line-height: 1.6; color: var(--tinta-tenue);
-      margin-top: 1rem; max-width: 250px;
-    }
-    .avisos-ok {
-      display: none; font-size: 14px; line-height: 1.6; color: #3f7a52; padding: 0.5rem 0;
-    }
-    .col.enviado .fila-control,
-    .col.enviado .avisos-legal { visibility: hidden; }
-    .der-pie.enviado .avisos-legal { display: none; }
-    .der-pie.enviado .avisos-ok { display: block; }
-    .avisos-error {
-      font-size: 11px; color: #a5563f; margin-top: 0.6rem; min-height: 1em; display: none;
-    }
+    .avisos-legal { font-size: 9px; line-height: 1.6; color: rgba(244,239,230,0.4); margin-top: 0.9rem; }
+    .avisos-error { font-size: 10px; color: #e6a08a; margin-top: 0.5rem; min-height: 1em; display: none; }
     .avisos-error.visible { display: block; }
+    .avisos-ok { display: none; font-size: 13px; color: #9fd4a8; padding: 0.4rem 0; }
+    .ventana.enviado .avisos-form, .ventana.enviado .avisos-legal { display: none; }
+    .ventana.enviado .avisos-ok { display: block; }
 
-    .col-pie {
-      font-size: 10px; line-height: 1.6; color: var(--tinta-tenue);
-      margin-top: 1rem; max-width: 250px;
+    .footer { position: relative; z-index: 2; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,239,230,0.3); text-align: center; padding-bottom: 1.5rem; }
+
+    /* ===== MÓVIL: ventanas apiladas ===== */
+    @media (max-width: 640px) {
+      .ventanas { flex-direction: column; max-width: 360px; }
+      .ventana-nota { min-height: 0; }
     }
 
-    /* ===== MÓVIL: pre-save → ojo → número ===== */
-    @media (max-width: 720px) {
-      .wrap { padding: 4.5rem 1.3rem 3.5rem; justify-content: flex-start; }
-      .frase { margin-bottom: 2.5rem; font-size: 15px; }
-      .eje {
-        grid-template-columns: 1fr;
-        grid-template-rows: none;
-        row-gap: 1rem;
-        max-width: 340px;
-      }
-      /* todo a una columna; usar 'order' para el flujo pre-save / ojo / número */
-      .izq-nota, .izq-control, .izq-boton, .izq-pie,
-      .portada,
-      .der-nota, .der-control, .der-boton, .der-pie {
-        grid-column: 1; grid-row: auto;
-      }
-      .izq-nota    { order: 1; }
-      .izq-control { order: 2; display: none; } /* hueco no hace falta en móvil */
-      .izq-boton   { order: 3; margin-bottom: 0.5rem; }
-      .izq-pie     { order: 4; margin-bottom: 1.5rem; }
-      .portada     { order: 5; width: 100%; height: auto; aspect-ratio: 1/1; margin-bottom: 1.5rem; }
-      .der-nota    { order: 6; }
-      .der-control { order: 7; margin-top: 0.6rem; }
-      .der-boton   { order: 8; margin-top: 0.7rem; }
-      .der-pie     { order: 9; }
-      .celda { max-width: 100%; }
-      .portada-titulo { font-size: clamp(32px, 9vw, 44px); }
+    /* respeta a quien pидió menos movimiento */
+    @media (prefers-reduced-motion: reduce) {
+      .fondo-ojo { animation: none; }
     }
   </style>
 </head>
@@ -210,73 +173,116 @@
 
 <a class="home-link" href="index.html">← inicio</a>
 
-<div class="wrap">
+<div class="fondo">
+  <div class="fondo-ojo"></div>
+  <div class="fondo-velo"></div>
+</div>
+<canvas id="particulas"></canvas>
 
+<div class="wrap">
+  <h1 class="titulo">CICLOS</h1>
   <p class="frase">Hay cosas que repetimos incluso cuando sabemos que nos hacen daño.</p>
 
-  <div class="eje">
+  <div class="ventanas">
 
-    <!-- IZQUIERDA: pre-save (filas 1-4, columna 1) -->
-    <div class="celda izq-nota"><div class="col-nota">La canción ya viene en camino.</div></div>
-    <div class="celda izq-control"><div class="control-hueco"></div></div>
-    <div class="celda izq-boton">
-      <a class="accion-btn" id="btn-presave"
-         href="https://offstep.link/251054202172" target="_blank" rel="noopener">
-        pre-guardar Ciclos
-      </a>
-    </div>
-    <div class="celda izq-pie"><div class="col-pie">Se abrirá tu app de música para dejarla lista.</div></div>
-
-    <!-- CENTRO: ojo + CICLOS -->
-    <div class="portada">
-      <img class="portada-img" src="/img/ciclos-ojo.jpg" alt="Ciclos — Tobal Blu">
-      <h1 class="portada-titulo">CICLOS</h1>
-    </div>
-
-    <!-- DERECHA: número (filas 1-4, columna 3) -->
-    <div class="celda der-nota"><div class="col-nota">Déjame tu WhatsApp o tu Instagram (o los dos) y te aviso personalmente cada vez que tenga un lanzamiento.</div></div>
-    <div class="celda der-control" id="col-avisos-control">
-      <input class="avisos-input" id="avisos-tel" type="tel"
-             inputmode="tel" placeholder="+56 9 ... (WhatsApp)" autocomplete="tel">
-      <input class="avisos-input" id="avisos-ig" type="text"
-             inputmode="text" placeholder="@ tu instagram" autocapitalize="none" autocorrect="off" spellcheck="false">
-    </div>
-    <div class="celda der-boton">
-      <button class="accion-btn" id="avisos-btn">avísame</button>
-    </div>
-    <div class="celda der-pie" id="col-avisos">
-      <div class="avisos-error" id="avisos-error"></div>
-      <div class="avisos-legal">
-        Basta con uno de los dos. Se usan solo para avisarte de nuevos lanzamientos. Puedes pedir dejar de recibirlos cuando quieras.
+    <!-- VENTANA 1: pre-save -->
+    <div class="ventana">
+      <div class="ventana-nota">La canción ya viene en camino.</div>
+      <div class="ventana-cuerpo">
+        <a class="accion-btn" id="btn-presave"
+           href="https://offstep.link/251054202172" target="_blank" rel="noopener">
+          pre-guardar Ciclos
+        </a>
       </div>
-      <div class="avisos-ok">listo — te aviso cuando salga ♥</div>
+    </div>
+
+    <!-- VENTANA 2: número (compuerta O) -->
+    <div class="ventana" id="ventana-avisos">
+      <div class="ventana-nota">Déjame tu WhatsApp o tu Instagram y te aviso cuando salga algo nuevo.</div>
+      <div class="ventana-cuerpo">
+        <div class="avisos-form">
+          <input class="avisos-input" id="avisos-tel" type="tel"
+                 inputmode="tel" placeholder="+56 9 ... (WhatsApp)" autocomplete="tel">
+          <input class="avisos-input" id="avisos-ig" type="text"
+                 placeholder="@ tu instagram" autocapitalize="none" autocorrect="off" spellcheck="false">
+          <button class="accion-btn" id="avisos-btn">avísame</button>
+        </div>
+        <div class="avisos-error" id="avisos-error"></div>
+        <div class="avisos-legal">Basta con uno. Solo para avisarte de lanzamientos; puedes salir cuando quieras.</div>
+        <div class="avisos-ok">listo — te aviso cuando salga ♥</div>
+      </div>
     </div>
 
   </div>
-
 </div>
+
+<div class="footer">Tobal Blu</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ===== PARTÍCULAS del iris (vanilla, ligeras) ===== */
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('particulas');
+  var ctx = canvas.getContext('2d');
+  var colores = ['74,92,58', '46,74,82', '182,134,58', '200,112,42']; /* verde, azul, ámbar, naranja */
+  var particulas = [];
+  var w, h, dpr;
+
+  function dims() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.width = innerWidth * dpr;
+    h = canvas.height = innerHeight * dpr;
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+  }
+
+  function crear() {
+    /* densidad baja: escala con el área pero con tope, para no fundir móviles */
+    var n = Math.min(46, Math.round((innerWidth * innerHeight) / 26000));
+    particulas = [];
+    for (var i = 0; i < n; i++) {
+      particulas.push({
+        x: Math.random() * w, y: Math.random() * h,
+        r: (Math.random() * 1.6 + 0.5) * dpr,
+        vx: (Math.random() - 0.5) * 0.12 * dpr,
+        vy: (Math.random() * 0.18 + 0.04) * dpr,  /* deriva suave hacia abajo, como gotas/polvo */
+        a: Math.random() * 0.4 + 0.1,
+        c: colores[Math.floor(Math.random() * colores.length)]
+      });
+    }
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < particulas.length; i++) {
+      var p = particulas[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.y - p.r > h) { p.y = -p.r; p.x = Math.random() * w; }
+      if (p.x < -p.r) p.x = w + p.r; else if (p.x > w + p.r) p.x = -p.r;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+      ctx.fillStyle = 'rgba(' + p.c + ',' + p.a + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  dims(); crear();
+  if (!reduce) frame();
+  addEventListener('resize', function () { dims(); crear(); });
+})();
+
+/* ===== SUPABASE ===== */
 var SUPABASE_URL = 'https://nfqriyedsyuzhkicdsee.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcXJpeWVkc3l1emhraWNkc2VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzI4MjMsImV4cCI6MjEwMTUwODgyM30.0lb8deJBgbA9Ov1B_d6EbbGAqJ61e5PI5Twvwkd26Cw';
 var sbClient = null;
-try {
-  if (window.supabase && window.supabase.createClient) {
-    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  }
-} catch (e) { sbClient = null; }
+try { if (window.supabase && window.supabase.createClient) sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON); } catch (e) { sbClient = null; }
 
 function track(evento) {
-  try {
-    if (window.dataLayer) window.dataLayer.push({ event: evento });
-    if (window.plausible) window.plausible(evento);
-  } catch (e) {}
+  try { if (window.dataLayer) window.dataLayer.push({ event: evento }); if (window.plausible) window.plausible(evento); } catch (e) {}
 }
-
-document.getElementById('btn-presave').addEventListener('click', function () {
-  track('ciclos_presave_click');
-});
+document.getElementById('btn-presave').addEventListener('click', function () { track('ciclos_presave_click'); });
 
 function normalizarTelefono(raw) {
   var t = (raw || '').replace(/[\s\-().]/g, '');
@@ -286,73 +292,50 @@ function normalizarTelefono(raw) {
   if (/^\+\d{8,15}$/.test(t)) return t;
   return null;
 }
-
 function normalizarInstagram(raw) {
   var s = (raw || '').trim();
   if (!s) return null;
-  s = s.replace(/\s+/g, '');                                  /* espacios */
-  s = s.replace(/^https?:\/\//i, '');                         /* protocolo */
-  s = s.replace(/^(www\.)?instagram\.com\//i, '');            /* dominio */
-  s = s.replace(/[?#].*$/, '');                               /* querystring */
-  s = s.replace(/\/+$/, '');                                  /* barra final */
-  s = s.replace(/^@+/, '');                                   /* arroba inicial */
+  s = s.replace(/\s+/g, '');
+  s = s.replace(/^https?:\/\//i, '');
+  s = s.replace(/^(www\.)?instagram\.com\//i, '');
+  s = s.replace(/[?#].*$/, '');
+  s = s.replace(/\/+$/, '');
+  s = s.replace(/^@+/, '');
   if (!s) return null;
-  if (!/^[A-Za-z0-9._]{1,30}$/.test(s)) return null;          /* handle válido */
+  if (!/^[A-Za-z0-9._]{1,30}$/.test(s)) return null;
   return '@' + s;
 }
 
-var col = document.getElementById('col-avisos');
-var colControl = document.getElementById('col-avisos-control');
+var ventana = document.getElementById('ventana-avisos');
 var telInput = document.getElementById('avisos-tel');
 var igInput = document.getElementById('avisos-ig');
 var btn = document.getElementById('avisos-btn');
 var errorEl = document.getElementById('avisos-error');
-
-function mostrarError(msg) { errorEl.textContent = msg; errorEl.classList.add('visible'); }
+function mostrarError(m) { errorEl.textContent = m; errorEl.classList.add('visible'); }
 function limpiarError() { errorEl.textContent = ''; errorEl.classList.remove('visible'); }
 telInput.addEventListener('input', limpiarError);
 igInput.addEventListener('input', limpiarError);
 
 function enviarAviso() {
-  var telRaw = telInput.value.trim();
-  var igRaw = igInput.value.trim();
-
-  /* si escribió algo en un campo, ese campo debe ser válido */
+  var telRaw = telInput.value.trim(), igRaw = igInput.value.trim();
   var tel = telRaw ? normalizarTelefono(telRaw) : null;
   var ig = igRaw ? normalizarInstagram(igRaw) : null;
-
   if (telRaw && !tel) { mostrarError('Revisa el WhatsApp. Ej: +56 9 1234 5678'); return; }
   if (igRaw && !ig)  { mostrarError('Revisa el Instagram. Ej: @tobal.blu'); return; }
-
-  /* compuerta O: al menos uno */
   if (!tel && !ig) { mostrarError('Déjame tu WhatsApp o tu Instagram 🙂'); return; }
 
   track('ciclos_phone_submit');
   btn.disabled = true;
-
   var payload = { origen: 'ciclos' };
   if (tel) payload.telefono = tel;
   if (ig) payload.instagram = ig;
-
-  var terminar = function () {
-    col.classList.add('enviado');
-    colControl.style.visibility = 'hidden';
-    btn.style.visibility = 'hidden';
-  };
-
+  var terminar = function () { ventana.classList.add('enviado'); };
   if (sbClient) {
     sbClient.from('avisos').insert(payload)
-      .then(function (res) {
-        if (res && res.error) { btn.disabled = false; mostrarError('No se pudo guardar, intenta de nuevo.'); }
-        else { terminar(); }
-      })
+      .then(function (res) { if (res && res.error) { btn.disabled = false; mostrarError('No se pudo guardar, intenta de nuevo.'); } else terminar(); })
       .catch(function () { btn.disabled = false; mostrarError('Sin conexión, intenta de nuevo.'); });
-  } else {
-    /* TODO: conectar almacenamiento (si Supabase no cargó) */
-    terminar();
-  }
+  } else { /* TODO: conectar almacenamiento */ terminar(); }
 }
-
 btn.addEventListener('click', enviarAviso);
 function enterEnvia(e) { if (e.key === 'Enter') enviarAviso(); }
 telInput.addEventListener('keydown', enterEnvia);

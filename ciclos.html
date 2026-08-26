@@ -141,7 +141,8 @@
     /* control izquierdo: hueco del mismo alto que el input de la derecha,
        para que el botón de pre-save caiga a la altura del "avísame" */
     .control-hueco { height: 0; margin-bottom: 0.7rem; }
-    .fila-control .avisos-input { margin-bottom: 0.7rem; }
+    #col-avisos-control { gap: 0.6rem; }
+    #col-avisos-control .avisos-input { margin: 0; }
 
     .avisos-form { display: flex; flex-direction: column; width: 100%; max-width: 250px; }
     .avisos-input {
@@ -178,7 +179,7 @@
     /* ===== MÓVIL: pre-save → ojo → número ===== */
     @media (max-width: 720px) {
       .wrap { padding: 4.5rem 1.3rem 3.5rem; justify-content: flex-start; }
-      .frase { margin-bottom: 2.5rem; font-size: 15px;  font-style: italic;}
+      .frase { margin-bottom: 2.5rem; font-size: 15px; }
       .eje {
         grid-template-columns: 1fr;
         grid-template-rows: none;
@@ -216,7 +217,7 @@
   <div class="eje">
 
     <!-- IZQUIERDA: pre-save (filas 1-4, columna 1) -->
-    <div class="celda izq-nota"><div class="col-nota"></div></div>
+    <div class="celda izq-nota"><div class="col-nota">La canción ya viene en camino.</div></div>
     <div class="celda izq-control"><div class="control-hueco"></div></div>
     <div class="celda izq-boton">
       <a class="accion-btn" id="btn-presave"
@@ -224,7 +225,7 @@
         pre-guardar Ciclos
       </a>
     </div>
-    <div class="celda izq-pie"><div class="col-pie"></div></div>
+    <div class="celda izq-pie"><div class="col-pie">Se abrirá tu app de música para dejarla lista.</div></div>
 
     <!-- CENTRO: ojo + CICLOS -->
     <div class="portada">
@@ -233,10 +234,12 @@
     </div>
 
     <!-- DERECHA: número (filas 1-4, columna 3) -->
-    <div class="celda der-nota"><div class="col-nota">Si me dejas tu número, te avisaré personalmente por SMS cada vez que tenga un lanzamiento =) </div></div>
+    <div class="celda der-nota"><div class="col-nota">Déjame tu WhatsApp o tu Instagram (o los dos) y te aviso personalmente cada vez que tenga un lanzamiento.</div></div>
     <div class="celda der-control" id="col-avisos-control">
-      <input class="avisos-input" id="avisos-input" type="tel"
-             inputmode="tel" placeholder="+56 9 ..." autocomplete="tel">
+      <input class="avisos-input" id="avisos-tel" type="tel"
+             inputmode="tel" placeholder="+56 9 ... (WhatsApp)" autocomplete="tel">
+      <input class="avisos-input" id="avisos-ig" type="text"
+             inputmode="text" placeholder="@ tu instagram" autocapitalize="none" autocorrect="off" spellcheck="false">
     </div>
     <div class="celda der-boton">
       <button class="accion-btn" id="avisos-btn">avísame</button>
@@ -244,7 +247,7 @@
     <div class="celda der-pie" id="col-avisos">
       <div class="avisos-error" id="avisos-error"></div>
       <div class="avisos-legal">
-        Tu número se usa solo para avisarte de nuevos lanzamientos. Puedes pedir dejar de recibirlos cuando quieras.
+        Basta con uno de los dos. Se usan solo para avisarte de nuevos lanzamientos. Puedes pedir dejar de recibirlos cuando quieras.
       </div>
       <div class="avisos-ok">listo — te aviso cuando salga ♥</div>
     </div>
@@ -284,41 +287,76 @@ function normalizarTelefono(raw) {
   return null;
 }
 
+function normalizarInstagram(raw) {
+  var s = (raw || '').trim();
+  if (!s) return null;
+  s = s.replace(/\s+/g, '');                                  /* espacios */
+  s = s.replace(/^https?:\/\//i, '');                         /* protocolo */
+  s = s.replace(/^(www\.)?instagram\.com\//i, '');            /* dominio */
+  s = s.replace(/[?#].*$/, '');                               /* querystring */
+  s = s.replace(/\/+$/, '');                                  /* barra final */
+  s = s.replace(/^@+/, '');                                   /* arroba inicial */
+  if (!s) return null;
+  if (!/^[A-Za-z0-9._]{1,30}$/.test(s)) return null;          /* handle válido */
+  return '@' + s;
+}
+
 var col = document.getElementById('col-avisos');
 var colControl = document.getElementById('col-avisos-control');
-var input = document.getElementById('avisos-input');
+var telInput = document.getElementById('avisos-tel');
+var igInput = document.getElementById('avisos-ig');
 var btn = document.getElementById('avisos-btn');
 var errorEl = document.getElementById('avisos-error');
 
 function mostrarError(msg) { errorEl.textContent = msg; errorEl.classList.add('visible'); }
 function limpiarError() { errorEl.textContent = ''; errorEl.classList.remove('visible'); }
-input.addEventListener('input', limpiarError);
+telInput.addEventListener('input', limpiarError);
+igInput.addEventListener('input', limpiarError);
 
-function enviarTelefono() {
-  var tel = normalizarTelefono(input.value);
-  if (!tel) { mostrarError('Revisa el número. Ej: +56 9 1234 5678'); return; }
+function enviarAviso() {
+  var telRaw = telInput.value.trim();
+  var igRaw = igInput.value.trim();
+
+  /* si escribió algo en un campo, ese campo debe ser válido */
+  var tel = telRaw ? normalizarTelefono(telRaw) : null;
+  var ig = igRaw ? normalizarInstagram(igRaw) : null;
+
+  if (telRaw && !tel) { mostrarError('Revisa el WhatsApp. Ej: +56 9 1234 5678'); return; }
+  if (igRaw && !ig)  { mostrarError('Revisa el Instagram. Ej: @tobal.blu'); return; }
+
+  /* compuerta O: al menos uno */
+  if (!tel && !ig) { mostrarError('Déjame tu WhatsApp o tu Instagram 🙂'); return; }
+
   track('ciclos_phone_submit');
   btn.disabled = true;
+
+  var payload = { origen: 'ciclos' };
+  if (tel) payload.telefono = tel;
+  if (ig) payload.instagram = ig;
+
   var terminar = function () {
     col.classList.add('enviado');
     colControl.style.visibility = 'hidden';
     btn.style.visibility = 'hidden';
   };
+
   if (sbClient) {
-    sbClient.from('avisos').insert({ telefono: tel, origen: 'ciclos' })
+    sbClient.from('avisos').insert(payload)
       .then(function (res) {
         if (res && res.error) { btn.disabled = false; mostrarError('No se pudo guardar, intenta de nuevo.'); }
         else { terminar(); }
       })
       .catch(function () { btn.disabled = false; mostrarError('Sin conexión, intenta de nuevo.'); });
   } else {
-    /* TODO: conectar almacenamiento de teléfonos */
+    /* TODO: conectar almacenamiento (si Supabase no cargó) */
     terminar();
   }
 }
 
-btn.addEventListener('click', enviarTelefono);
-input.addEventListener('keydown', function (e) { if (e.key === 'Enter') enviarTelefono(); });
+btn.addEventListener('click', enviarAviso);
+function enterEnvia(e) { if (e.key === 'Enter') enviarAviso(); }
+telInput.addEventListener('keydown', enterEnvia);
+igInput.addEventListener('keydown', enterEnvia);
 </script>
 
 </body>

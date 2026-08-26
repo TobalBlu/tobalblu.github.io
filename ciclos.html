@@ -45,7 +45,7 @@
 
     .home-link {
       position: fixed; top: 1.4rem; left: 1.4rem;
-      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      font-size: 10px; letter-spacing: 0.05em;
       color: rgba(244,239,230,0.4); text-decoration: none;
       transition: color 0.3s; z-index: 30;
     }
@@ -86,19 +86,19 @@
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 5rem 1.3rem 3rem;
-      gap: 2.2rem;
+      gap: 1.7rem;
     }
 
     .titulo {
       font-size: clamp(40px, 11vw, 68px);
-      letter-spacing: 0.14em; margin-right: -0.14em;
+      letter-spacing: 0.09em; margin-right: -0.09em;
       color: var(--crema-tenue);
       font-weight: 400; text-align: center;
-      -webkit-text-stroke: 0.5px rgba(244,239,230,0.35);
       text-shadow: 0 2px 30px rgba(0,0,0,0.6);
     }
     .frase {
-      font-size: 15px; line-height: 1.7; color: rgba(244,239,230,0.85);
+      font-size: 16px; line-height: 1.65; font-style: italic;
+      color: rgba(244,239,230,0.92);
       max-width: 360px; text-align: center; margin-top: -1rem;
       text-shadow: 0 1px 16px rgba(0,0,0,0.8);
     }
@@ -114,12 +114,12 @@
       display: flex; flex-direction: column; align-items: center;
       text-align: center;
       background: rgba(16, 18, 17, 0.5);
-      -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px);
-      border: 0.5px solid rgba(244,239,230,0.18);
+      -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+      border: 0.5px solid rgba(244,239,230,0.12);
       padding: 1.8rem 1.4rem;
     }
     .ventana-nota {
-      font-size: 12.5px; line-height: 1.6; color: rgba(244,239,230,0.7);
+      font-size: 14px; line-height: 1.65; color: rgba(244,239,230,0.7);
       margin-bottom: 1.3rem; min-height: 3.2em;
       display: flex; align-items: center; justify-content: center;
     }
@@ -129,7 +129,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       width: 100%;
       font-family: 'Libre Baskerville', serif;
-      font-size: 12px; letter-spacing: 0.1em;
+      font-size: 13px; letter-spacing: 0.04em;
       color: var(--crema); background: transparent;
       border: 1px solid rgba(244,239,230,0.55);
       padding: 0.9rem 1rem; cursor: pointer; text-decoration: none;
@@ -141,14 +141,14 @@
       width: 100%; background: rgba(0,0,0,0.25);
       border: 1px solid rgba(244,239,230,0.25);
       color: var(--crema); font-family: 'Libre Baskerville', serif;
-      font-size: 14px; text-align: center;
+      font-size: 14px; text-align: left;
       padding: 0.75rem 0.7rem; margin-bottom: 0.6rem;
       transition: border-color 0.3s ease;
     }
     .avisos-input:focus { outline: none; border-color: rgba(244,239,230,0.6); }
     .avisos-input::placeholder { color: rgba(244,239,230,0.4); }
 
-    .avisos-legal { font-size: 9px; line-height: 1.6; color: rgba(244,239,230,0.4); margin-top: 0.9rem; }
+    .avisos-legal { font-size: 10px; line-height: 1.6; color: rgba(244,239,230,0.4); margin-top: 0.9rem; }
     .avisos-error { font-size: 10px; color: #e6a08a; margin-top: 0.5rem; min-height: 1em; display: none; }
     .avisos-error.visible { display: block; }
     .avisos-ok { display: none; font-size: 13px; color: #9fd4a8; padding: 0.4rem 0; }
@@ -198,7 +198,7 @@
 
     <!-- VENTANA 2: número (compuerta O) -->
     <div class="ventana" id="ventana-avisos">
-      <div class="ventana-nota">Déjame tu WhatsApp o tu Instagram y te aviso cuando salga algo nuevo.</div>
+      <div class="ventana-nota">si me dejas tu WhatsApp o Instagram, te aviso personalmente cuando saque algo nuevo :)</div>
       <div class="ventana-cuerpo">
         <div class="avisos-form">
           <input class="avisos-input" id="avisos-tel" type="tel"
@@ -334,7 +334,11 @@ function enviarAviso() {
     sbClient.from('avisos').insert(payload)
       .then(function (res) { if (res && res.error) { btn.disabled = false; mostrarError('No se pudo guardar, intenta de nuevo.'); } else terminar(); })
       .catch(function () { btn.disabled = false; mostrarError('Sin conexión, intenta de nuevo.'); });
-  } else { /* TODO: conectar almacenamiento */ terminar(); }
+  } else {
+    /* Supabase no cargó: NO confirmar falsamente. Mostrar error real. */
+    btn.disabled = false;
+    mostrarError('No se pudo conectar. Revisa tu conexión e intenta de nuevo.');
+  }
 }
 btn.addEventListener('click', enviarAviso);
 function enterEnvia(e) { if (e.key === 'Enter') enviarAviso(); }

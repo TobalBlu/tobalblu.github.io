@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Tobal Blu</title>
+  <meta name="description" content="Tobal Blu — escucha Ciclos y todos los enlaces.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tobal Blu">
+  <meta property="og:description" content="Escucha Ciclos y todos los enlaces.">
+  <meta property="og:image" content="https://tobalblu.com/img/firma.png">
+  <meta property="og:url" content="https://tobalblu.com/links">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      font-family: 'Courier New', monospace;
+      color: #eee;
+      min-height: 100vh; min-height: 100dvh;
+    }
+
+    .home-link {
+      position: fixed; top: 1.5rem; left: 1.5rem;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #333; text-decoration: none; transition: color 0.3s; z-index: 10;
+    }
+    .home-link:hover { color: #888; }
+
+    .wrap {
+      max-width: 430px; margin: 0 auto;
+      padding: 4.5rem 1.5rem 4rem;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .firma {
+      width: min(210px, 58vw); margin-bottom: 0.8rem;
+      opacity: 0; animation: aparece 1.1s ease forwards 0.15s;
+    }
+    .sub {
+      font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: #555; margin-bottom: 2.8rem;
+      opacity: 0; animation: aparece 1s ease forwards 0.45s;
+    }
+    @keyframes aparece { to { opacity: 1; } }
+
+    .grupo { width: 100%; margin-bottom: 1.9rem; }
+    .grupo:last-child { margin-bottom: 0; }
+    .grupo-label {
+      font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: #3a3a3a; margin-bottom: 0.9rem; text-align: center;
+    }
+
+    .link {
+      display: flex; align-items: center; gap: 0.6rem;
+      width: 100%;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #cfcfcf; text-decoration: none;
+      border: 0.5px solid #232323; background: #0c0c0c;
+      padding: 1rem 1.2rem; margin-bottom: 0.7rem;
+      transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+    }
+    .link:last-child { margin-bottom: 0; }
+    .link:hover { border-color: #555; color: #fff; background: #111; }
+    .link-nombre { text-align: left; }
+    .link-flecha { margin-left: auto; color: #444; font-size: 12px; transition: color 0.3s ease, transform 0.3s ease; }
+    .link:hover .link-flecha { color: #888; transform: translateX(3px); }
+
+    /* Ciclos destacado */
+    .grupo-ciclos .grupo-label { color: #B67B3A; }
+    .grupo-ciclos .link {
+      border-color: rgba(182,123,58,0.45);
+      background: rgba(182,123,58,0.06);
+      color: #e8cfa6;
+    }
+    .grupo-ciclos .link:hover {
+      border-color: #B67B3A; background: rgba(182,123,58,0.15); color: #f4e3c6;
+    }
+    .grupo-ciclos .link-flecha { color: #8a6224; }
+    .grupo-ciclos .link:hover .link-flecha { color: #d89a4a; }
+
+    .footer { margin-top: 3.2rem; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: #2a2a2a; }
+  </style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">← inicio</a>
+
+<div class="wrap">
+  <img class="firma" src="/img/firma.png" alt="Tobal Blu">
+  <div class="sub">enlaces</div>
+
+  <div id="grupos"></div>
+
+  <div class="footer">Tobal Blu</div>
+</div>
+
+<script>
+/* ==========================================================
+   ENLACES — agregar uno: pega { nombre, url } en el grupo.
+   Grupo nuevo: { label, links: [...] }  o  { label, destacado:true, ... }
+   ========================================================== */
+var grupos = [
+  {
+    label: "Nuevo single",
+    destacado: true,
+    links: [
+      { nombre: "Ciclos · Spotify",     url: "https://open.spotify.com/track/1QdMyEK6qawXYcmqB7cSym" },
+      { nombre: "Ciclos · Apple Music", url: "https://music.apple.com/cl/album/ciclos/6804953582?i=6804953584" },
+      { nombre: "Ciclos · Tidal",       url: "https://tidal.com/track/555349010" }
+    ]
+  },
+  {
+    label: "Música",
+    links: [
+      { nombre: "Spotify",     url: "https://open.spotify.com/intl-es/artist/7yn8ZILVwbXPJGReR802LM" },
+      { nombre: "Apple Music", url: "https://music.apple.com/cl/artist/tobal-blu/1723087834" },
+      { nombre: "YouTube",     url: "https://www.youtube.com/@TobalBlu" }
+      /* Tidal artista: pendiente de URL */
+    ]
+  },
+  {
+    label: "Redes",
+    links: [
+      { nombre: "Instagram", url: "https://instagram.com/tobal.blu" },
+      { nombre: "TikTok",    url: "https://www.tiktok.com/@tobal.blu" }
+    ]
+  },
+  {
+    label: "Más",
+    links: [
+      { nombre: "Sitio web", url: "https://tobalblu.com" },
+      { nombre: "Merch",     url: "/merch.html" },
+      { nombre: "Blog",      url: "/blog.html" }
+    ]
+  }
+];
+
+function esInterno(url) { return url.charAt(0) === '/' || url.indexOf('tobalblu.com') !== -1; }
+
+var cont = document.getElementById('grupos');
+grupos.forEach(function (g) {
+  var wrap = document.createElement('div');
+  wrap.className = 'grupo' + (g.destacado ? ' grupo-ciclos' : '');
+  if (g.label) {
+    var lab = document.createElement('div');
+    lab.className = 'grupo-label';
+    lab.textContent = g.label;
+    wrap.appendChild(lab);
+  }
+  g.links.forEach(function (l) {
+    var a = document.createElement('a');
+    a.className = 'link';
+    a.href = l.url;
+    if (!esInterno(l.url)) { a.target = '_blank'; a.rel = 'noopener'; }
+    var nombre = document.createElement('span');
+    nombre.className = 'link-nombre';
+    nombre.textContent = l.nombre;
+    var flecha = document.createElement('span');
+    flecha.className = 'link-flecha';
+    flecha.textContent = '→';
+    a.appendChild(nombre); a.appendChild(flecha);
+    wrap.appendChild(a);
+  });
+  cont.appendChild(wrap);
+});
+</script>
+
+</body>
+</html>

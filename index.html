@@ -72,16 +72,19 @@
       animation: fadeUp 1s ease forwards 1s;
     }
 
-    nav a {
-      font-size: 9px; 
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: #888;
-      text-decoration: none;
-      transition: color 0.4s ease;
-    }
+   nav a {
+  font-size: 13px;              /* antes ~10px — más grande */
+  letter-spacing: 0.18em;
+  color: #cfcfcf;              /* antes gris oscuro — más claro/visible */
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+nav a:hover { color: #fff; }
 
-    nav a:hover { color: #fff; }
+@media (max-width: 600px) {
+  nav a { font-size: 11px; }   /* en celular, legible sin desbordar */
+}
 
     .scroll-hint {
       position: absolute;

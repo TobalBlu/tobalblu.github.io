@@ -18,6 +18,7 @@
       --tinta-suave: #6f675b;
       --tinta-tenue: #a89f90;
       --linea: #ddd4c4;
+      --carta: #fbf7ee;
     }
 
     body {
@@ -31,48 +32,98 @@
 
     .home-link {
       position: fixed; top: 1.6rem; left: 1.6rem;
-      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--tinta-tenue); text-decoration: none;
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--tinta-suave); text-decoration: none;
       transition: color 0.3s; z-index: 10;
-      font-family: 'Libre Baskerville', serif;
     }
     .home-link:hover { color: var(--tinta); }
 
     .wrap { max-width: 640px; margin: 0 auto; padding: 6rem 1.5rem 5rem; }
 
     .blog-titulo {
-      font-size: 12px; letter-spacing: 0.35em; text-transform: uppercase;
-      color: var(--tinta-suave); margin-bottom: 3.5rem; text-align: center;
+      font-size: 13px; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--tinta-suave); margin-bottom: 0.6rem; text-align: center;
       font-weight: 400;
     }
-
-    .lista { display: block; }
-    .lista.oculto { display: none; }
-
-    .post-item {
-      padding: 1.8rem 0; border-top: 1px solid var(--linea);
-      cursor: pointer; text-align: center;
+    .blog-intro {
+      font-size: 13px; font-style: italic; color: var(--tinta-tenue);
+      text-align: center; margin-bottom: 3.5rem;
     }
-    .post-item:last-child { border-bottom: 1px solid var(--linea); }
 
-    .post-item-titulo {
-      font-size: 19px; color: var(--tinta); letter-spacing: 0.01em;
-      transition: opacity 0.3s ease;
+    /* ===== CARTAS (lista) ===== */
+    .cartas { display: flex; flex-direction: column; gap: 1.4rem; }
+    .cartas.oculto { display: none; }
+
+    .carta {
+      position: relative;
+      background: var(--carta);
+      border: 1px solid var(--linea);
+      padding: 1.6rem 1.7rem;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02);
     }
-    .post-item:hover .post-item-titulo { opacity: 0.6; }
-    .post-item-sub {
-      font-size: 13px; color: var(--tinta-suave); font-style: italic;
-      margin-top: 0.4rem;
+    /* solapa de sobre: una línea diagonal sutil arriba, como carta doblada */
+    .carta::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 44px;
+      background: linear-gradient(180deg, rgba(221,212,196,0.35), transparent);
+      pointer-events: none;
+      opacity: 0.8;
+      transition: opacity 0.35s ease;
     }
+    .carta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 34px rgba(43,39,33,0.13);
+      border-color: var(--tinta-tenue);
+    }
+    .carta:hover::before { opacity: 0; }
+
+    .carta-titulo {
+      font-size: 20px; color: var(--tinta); letter-spacing: 0.01em;
+      line-height: 1.35; margin-bottom: 0.25rem;
+      transition: color 0.3s ease;
+    }
+    .carta-fecha {
+      font-size: 12px; font-style: italic; color: var(--tinta-suave);
+    }
+
+    /* el cuerpo que se despliega al pasar el mouse */
+    .carta-despliegue {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.4s ease, margin-top 0.4s ease;
+      margin-top: 0;
+    }
+    .carta:hover .carta-despliegue,
+    .carta.abierta-preview .carta-despliegue {
+      max-height: 160px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    .carta-extracto {
+      font-size: 14px; line-height: 1.7; color: var(--tinta-suave);
+    }
+    .carta-leer {
+      display: inline-block; margin-top: 0.9rem;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--tinta);
+    }
+    .carta-leer .flecha { transition: transform 0.3s ease; display: inline-block; }
+    .carta:hover .carta-leer .flecha { transform: translateX(4px); }
 
     .vacio { font-size: 14px; color: var(--tinta-suave); padding: 2rem 0; text-align: center; }
 
+    /* ===== POST (lectura) ===== */
     .post-vista { display: none; }
     .post-vista.activo { display: block; }
 
     .volver {
-      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--tinta-tenue); cursor: pointer; transition: color 0.3s;
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--tinta-suave); cursor: pointer; transition: color 0.3s;
       margin-bottom: 3.5rem; display: inline-block;
     }
     .volver:hover { color: var(--tinta); }
@@ -86,61 +137,40 @@
       font-size: 14px; color: var(--tinta-suave); font-style: italic;
       text-align: center; margin-bottom: 3.5rem;
     }
-
     .ornamento {
       text-align: center; color: var(--tinta-tenue);
       font-size: 14px; letter-spacing: 0.5em; margin-bottom: 3rem;
     }
-
     .post-cuerpo { font-size: 17px; color: var(--tinta); }
     .post-cuerpo p { margin-bottom: 1.7rem; text-align: left; }
     .post-cuerpo p:last-child { margin-bottom: 0; }
-
     .post-cuerpo p.nota {
       font-size: 13.5px; font-style: italic; color: var(--tinta-suave);
       line-height: 1.7; margin-bottom: 0.8rem;
     }
-    .notas-sep {
-      width: 60px; height: 1px; background: var(--linea);
-      margin: 2.5rem 0 1.8rem;
-    }
+    .notas-sep { width: 60px; height: 1px; background: var(--linea); margin: 2.5rem 0 1.8rem; }
 
+    /* ===== OJO / LEÍDO ===== */
     .leido-zona {
       display: flex; flex-direction: column; align-items: center;
       margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--linea);
       position: relative;
     }
-
-    /* ===== GLOBITO DE GRACIAS (estética burbuja WhatsApp) ===== */
     .gracias-pop {
-      position: absolute;
-      top: 0.6rem;                 /* justo encima del ojo */
-      left: 50%;
+      position: absolute; top: 0.6rem; left: 50%;
       transform: translate(-50%, 0);
       display: inline-flex; align-items: center; gap: 0.45rem;
-      background: #dcf8c6;         /* verde burbuja WhatsApp saliente */
-      color: #3a5a3f;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 12px; letter-spacing: 0.06em;
-      padding: 0.5rem 0.85rem;
-      border-radius: 14px 14px 14px 4px;   /* colita tipo burbuja */
+      background: #dcf8c6; color: #3a5a3f;
+      font-family: 'Libre Baskerville', serif; font-size: 12px; letter-spacing: 0.06em;
+      padding: 0.5rem 0.85rem; border-radius: 14px 14px 14px 4px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.10);
-      opacity: 0;                  /* oculto por defecto */
-      pointer-events: none;
-      white-space: nowrap;
+      opacity: 0; pointer-events: none; white-space: nowrap;
     }
-    /* aparición y desvanecimiento QUIETOS (solo opacidad, sin desplazamiento) */
     .gracias-pop.mostrar { animation: graciasFade 4s ease forwards; }
-
-    @keyframes graciasFade {
-      0%   { opacity: 0; }
-      12%  { opacity: 1; }   /* aparece suave (~0.5s) */
-      80%  { opacity: 1; }   /* se queda quieto */
-      100% { opacity: 0; }   /* se desvanece suave */
-    }
-
+    @keyframes graciasFade { 0%{opacity:0;} 12%{opacity:1;} 80%{opacity:1;} 100%{opacity:0;} }
     .gracias-corazon { width: 14px; height: 14px; display: block; }
-    .gracias-corazon path { fill: #4caf50; }   /* corazón verde */
+    .gracias-corazon path { fill: #4caf50; }
+
     .ojo-btn {
       display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem;
       background: none; border: none; cursor: pointer; user-select: none;
@@ -150,7 +180,6 @@
     }
     .ojo-btn:hover { color: var(--tinta); }
     .ojo-btn.confirmado { color: #3f7a52; cursor: default; }
-
     .ojo-icon { width: 26px; height: 26px; display: block; }
     .ojo-icon path, .ojo-icon circle {
       fill: none; stroke: var(--tinta-suave); stroke-width: 1.4;
@@ -159,6 +188,12 @@
     .ojo-btn:hover .ojo-icon path, .ojo-btn:hover .ojo-icon circle { stroke: var(--tinta); }
     .ojo-btn.confirmado .ojo-icon path { stroke: #3f7a52; }
     .ojo-btn.confirmado .ojo-icon circle { stroke: #3f7a52; fill: #3f7a52; }
+
+    /* En móvil no hay hover: el despliegue se muestra siempre, para que se vea que hay más */
+    @media (hover: none) {
+      .carta-despliegue { max-height: 160px; opacity: 1; margin-top: 1rem; }
+      .carta::before { opacity: 0; }
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -169,11 +204,12 @@
 
 <div class="wrap">
   <div class="blog-titulo">Blog</div>
+  <div class="blog-intro">cartas guardadas</div>
 
-  <div class="lista" id="lista"></div>
+  <div class="cartas" id="cartas"></div>
 
   <div class="post-vista" id="post-vista">
-    <span class="volver" id="volver">← todos los textos</span>
+    <span class="volver" id="volver">← todas las cartas</span>
     <div class="post-titulo" id="post-titulo"></div>
     <div class="post-sub" id="post-sub"></div>
     <div class="ornamento">· · ·</div>
@@ -200,15 +236,16 @@
 var SUPABASE_URL = 'https://nfqriyedsyuzhkicdsee.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcXJpeWVkc3l1emhraWNkc2VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzI4MjMsImV4cCI6MjEwMTUwODgyM30.0lb8deJBgbA9Ov1B_d6EbbGAqJ61e5PI5Twvwkd26Cw';
 var sbClient = null;
-try {
-  if (window.supabase && window.supabase.createClient) {
-    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  }
-} catch (e) { sbClient = null; }
+try { if (window.supabase && window.supabase.createClient) sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON); } catch (e) { sbClient = null; }
 
+/* ==========================================================
+   ENTRADAS DEL BLOG (cartas)
+   Nueva entrada: pega un bloque arriba del array.
+   Las líneas que empiezan con * son notas al pie.
+   ========================================================== */
 var posts = [
   {
-    id: "blog1",
+    id: "control-presupuestario-2026-2027",
     titulo: "pre-supuesto",
     subtitulo: "miércoles 07:00 am",
     cuerpo: `Estamos en el desierto, a pasos del oasis, y numerosas señales me tiran hacia atrás.
@@ -220,14 +257,14 @@ Le he rezado al viento para que me empuje si me ve débil,
 y ha encontrado la forma de aparecer y actuar cada vez que me he devuelto a la vertiente.
 ya sea en mi mente, o en la realidad.
 Es que no es tan fácil decir voy a tomar este camino.
-Voy a literal sacrificar todo por lo que he trabajado 10 años, por una nueva etapa, por un nuevo nivel. Si esto fuera un juego de play, realmente tendría todo el sentido del mundo el crear juegos y consolas, como dios crea humanos a imagen y semejanza.
+Voy a literal sacrificar todo por lo que he trabajado 10 años, por una nueva etapa, por un nuevo nivel. Si esto fuera un juego de play, realmente tiene todo el sentido de crear juegos como dios crea humanos a imagen y semejanza.
 No puedo correr con armaduras pesadas,
 No puedo volar con los pies atados al suelo,
 Como no puedo amar con un corazón dolido.
 
 Se han tomado muchas decisiones, se ha adquirido e interpretado un rol.
 Encontré una disponible, y la usé para entrar a la fiesta de máscaras.
-Ahora, en mi cama, 7:02 de la mañana un miércoles 19-Agosto, sin máscaras, puedo ver la inseguridad, el miedo, y la incertidumbre que dibujan estos últimos.
+Ahora, en mi cama, 7:02 de la mañana un miércoles 19-Agosto, sin máscaras, puedo ver la inseguridad, el miedo, y la incertidumbre que dibuja estos últimos.
 Veo los hechos y me comparo en la realidad, y no estoy tan lejos de lo que "quiero ser", cuando a todas luces, soy.
 
 El error de compararse con vidas ajenas y que esa comparación implique doblegar, o disminuir la pasión.
@@ -236,11 +273,11 @@ Lo sano de compararse con vidas ajenas y darse cuenta que hay cosas por las que 
 Lo duro de compararse con vidas ajenas, y darse cuenta de que hay batallas personales que no solo dejan cicatrices en la piel.
 
 Agosto,
-Nunca hice un cálculo real al calcular cuánto tiempo, o paciencia, iba a necesitar. 
+Nunca hice un cálculo monetario real al calcular cuánto me iba a durar el finiquito del año pasado.
 O quizás sí, pero nunca con una intención de precisión absoluta.
 Y pareciera en esta vida que no necesito calcular nada, para prever como va a salir.
 Pareciera en verdad que bastaría sólo con decirlo en voz alta, con seguridad, y con cohesión.
-Tengo suficiente hasta septiembre.
+Tengo plata suficiente hasta septiembre.
 Tenía un plan B, en el que aguantaba un poco más, pero creo que el Plan A, a pesar de ser más difícil, improbable, bajo las realidades que he conocido, estaba mas alineado con lo que sería mi "Leyenda personal"*
 Rezo,
 Rezo mirando al cielo
@@ -249,8 +286,8 @@ Rezo con raciocinio a mi propio intelecto para encomendar claridad y buenas deci
 Rezo a mi cerebro neuronal y eléctrico, como enseña la neurociencia.
 Rezo al universo, rezo al espejo.
 Rezo en este escrito y no imploro.
-De hecho, rezo y le pregunto a Dios**, si me diste esta pasión, estos ojos y esta visión, q tal si me ayudas un poco? Sabes bien que si tuviera un pan y 30 personas, 30 personas comerían en la mesa.
-Lo sabes y lo sé porque llevo el nombre de tu hijo en mi nombre, y el significado ha sido mucho más real de lo que alguna vez pensé.
+De hecho, rezo y le pregunto a Dios**, si me diste esta pasión, estos ojos y esta visión, q tal si me ayudas un poco? Sabes bien que si tuviera un pan y 30 personas, 30 personas comerían pan.
+Lo sabes y lo sé porque llevo el nombre de tu hijo en mi nombre, y el significado era mucho más real de lo que alguna vez vi.
 
 Tengo fé en mi corazón, tengo amor. He tenido en mi vida toda la suerte que alguien podría soñar tener para cumplir sus sueños, y la capacidad de ver el vaso medio lleno incluso en los tragos más amargos que podría imaginar.
 
@@ -262,7 +299,7 @@ Lloro el solo pensar que quizás no he sido tan bueno con todos los que se me ha
 a pesar de haberlo intentado con todo siempre.
 
 Desnudo mi espíritu en palabras porque lo considero necesario.
-Lo hago sin ánimos de enaltecer una identidad, sino más bien de sembrar mi forma de ser y pensar, y quizás debajo del arbol que crezca aquí, habite sombra, guía, o alimento para quien lo necesite.
+Lo hago sin ánimos de enaltecer una identidad, sino más bien de sembrar mi forma de ser y pensar, y quizás debajo del arbol que crezca aquí sirva de sombra, guía, o alimento para quien lo necesite.
 
 Cada sueño dicho en voz alta se mostrará a su debido tiempo.
 Proporcionando constancia desde mí, añorando suerte desde mi alrededor.
@@ -279,109 +316,93 @@ Solo pido pan, vino, y personas con quien compartirlo.
   // PEGA AQUÍ ENTRADAS NUEVAS (arriba = más reciente)
 ];
 
-function claveLeido(id) { return 'blog-leido-' + id; }
-function estaLeido(id) {
-  try { return localStorage.getItem(claveLeido(id)) === '1'; } catch (e) { return false; }
-}
-function marcarLocal(id) {
-  try { localStorage.setItem(claveLeido(id), '1'); } catch (e) {}
-}
-function sumarLeido(id) {
-  if (!sbClient) return;
-  try {
-    sbClient.from('lecturas').insert({ post_id: id }).then(function(){}).catch(function(){});
-  } catch (e) {}
+/* ===== leído ===== */
+function claveLeido(id){ return 'blog-leido-'+id; }
+function estaLeido(id){ try { return localStorage.getItem(claveLeido(id))==='1'; } catch(e){ return false; } }
+function marcarLocal(id){ try { localStorage.setItem(claveLeido(id),'1'); } catch(e){} }
+function sumarLeido(id){ if(!sbClient) return; try { sbClient.from('lecturas').insert({post_id:id}).then(function(){}).catch(function(){}); } catch(e){} }
+
+/* extracto para la carta: primeras palabras del cuerpo, sin notas */
+function extracto(texto, max){
+  var limpio = texto.split('\n').filter(function(l){ return l.trim() && l.trim().charAt(0)!=='*'; }).join(' ');
+  limpio = limpio.replace(/\s+/g,' ').trim();
+  if (limpio.length <= max) return limpio;
+  return limpio.slice(0, max).replace(/\s+\S*$/,'') + '…';
 }
 
-/* Muestra el globito "gracias" ~4s y lo desvanece, sin moverse */
-function mostrarGracias() {
-  var pop = document.getElementById('gracias-pop');
-  if (!pop) return;
-  pop.classList.remove('mostrar');
-  void pop.offsetWidth;          /* reinicia la animación si se repite */
-  pop.classList.add('mostrar');
-  setTimeout(function () { pop.classList.remove('mostrar'); }, 4100);
-}
-
-function renderLista() {
-  var cont = document.getElementById('lista');
+/* ===== render cartas ===== */
+function renderCartas(){
+  var cont = document.getElementById('cartas');
   cont.innerHTML = '';
-  if (!posts.length) {
-    cont.innerHTML = '<div class="vacio">Aún no hay textos publicados.</div>';
-    return;
-  }
-  posts.forEach(function (p) {
-    var item = document.createElement('div');
-    item.className = 'post-item';
+  if(!posts.length){ cont.innerHTML = '<div class="vacio">Aún no hay cartas.</div>'; return; }
+  posts.forEach(function(p){
+    var carta = document.createElement('div');
+    carta.className = 'carta';
+
     var tit = document.createElement('div');
-    tit.className = 'post-item-titulo';
-    tit.textContent = p.titulo;
-    item.appendChild(tit);
-    if (p.subtitulo) {
-      var sub = document.createElement('div');
-      sub.className = 'post-item-sub';
-      sub.textContent = p.subtitulo;
-      item.appendChild(sub);
-    }
-    item.addEventListener('click', function () { abrirPost(p); });
-    cont.appendChild(item);
+    tit.className = 'carta-titulo'; tit.textContent = p.titulo;
+
+    var fec = document.createElement('div');
+    fec.className = 'carta-fecha'; fec.textContent = p.subtitulo || '';
+
+    var desp = document.createElement('div');
+    desp.className = 'carta-despliegue';
+    var ext = document.createElement('div');
+    ext.className = 'carta-extracto'; ext.textContent = extracto(p.cuerpo, 130);
+    var leer = document.createElement('span');
+    leer.className = 'carta-leer';
+    leer.innerHTML = 'leer carta <span class="flecha">→</span>';
+    desp.appendChild(ext); desp.appendChild(leer);
+
+    carta.appendChild(tit); carta.appendChild(fec); carta.appendChild(desp);
+    carta.addEventListener('click', function(){ abrirPost(p); });
+    cont.appendChild(carta);
   });
 }
 
-function abrirPost(p) {
+/* ===== abrir post ===== */
+function abrirPost(p){
   document.getElementById('post-titulo').textContent = p.titulo;
   var subEl = document.getElementById('post-sub');
-  if (p.subtitulo) { subEl.textContent = p.subtitulo; subEl.style.display = ''; }
-  else { subEl.style.display = 'none'; }
+  if(p.subtitulo){ subEl.textContent = p.subtitulo; subEl.style.display=''; } else { subEl.style.display='none'; }
 
-  var cont = document.getElementById('post-cuerpo');
-  cont.innerHTML = '';
-  var notasEmpezaron = false;
-  p.cuerpo.split('\n\n').forEach(function (bloque) {
-    if (bloque.replace(/\s/g, '') === '') return;
+  var cont = document.getElementById('post-cuerpo'); cont.innerHTML='';
+  var notasEmp = false;
+  p.cuerpo.split('\n\n').forEach(function(bloque){
+    if(bloque.replace(/\s/g,'')==='') return;
     var esNota = /^\s*\*/.test(bloque);
-    if (esNota && !notasEmpezaron) {
-      var sep = document.createElement('div');
-      sep.className = 'notas-sep';
-      cont.appendChild(sep);
-      notasEmpezaron = true;
-    }
-    var par = document.createElement('p');
-    if (esNota) par.className = 'nota';
-    bloque.split('\n').forEach(function (linea, i) {
-      if (i > 0) par.appendChild(document.createElement('br'));
-      par.appendChild(document.createTextNode(linea));
-    });
+    if(esNota && !notasEmp){ var s=document.createElement('div'); s.className='notas-sep'; cont.appendChild(s); notasEmp=true; }
+    var par=document.createElement('p'); if(esNota) par.className='nota';
+    bloque.split('\n').forEach(function(l,i){ if(i>0) par.appendChild(document.createElement('br')); par.appendChild(document.createTextNode(l)); });
     cont.appendChild(par);
   });
 
-  var btn = document.getElementById('ojo-btn');
-  var label = document.getElementById('ojo-label');
-  btn.classList.toggle('confirmado', estaLeido(p.id));
-  label.textContent = 'leído';
+  var btn=document.getElementById('ojo-btn'), label=document.getElementById('ojo-label');
+  btn.classList.toggle('confirmado', estaLeido(p.id)); label.textContent='leído';
+  btn.onclick=function(){ if(estaLeido(p.id)) return; marcarLocal(p.id); btn.classList.add('confirmado'); sumarLeido(p.id); mostrarGracias(); };
 
-  btn.onclick = function () {
-    if (estaLeido(p.id)) return;
-    marcarLocal(p.id);
-    btn.classList.add('confirmado');
-    sumarLeido(p.id);
-    mostrarGracias();
-  };
-
-  document.getElementById('lista').classList.add('oculto');
-  document.querySelector('.blog-titulo').style.display = 'none';
+  document.getElementById('cartas').classList.add('oculto');
+  document.querySelector('.blog-titulo').style.display='none';
+  document.querySelector('.blog-intro').style.display='none';
   document.getElementById('post-vista').classList.add('activo');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-document.getElementById('volver').addEventListener('click', function () {
+function mostrarGracias(){
+  var pop=document.getElementById('gracias-pop'); if(!pop) return;
+  pop.classList.remove('mostrar'); void pop.offsetWidth; pop.classList.add('mostrar');
+  setTimeout(function(){ pop.classList.remove('mostrar'); }, 4100);
+}
+
+document.getElementById('volver').addEventListener('click', function(){
   document.getElementById('post-vista').classList.remove('activo');
-  document.getElementById('lista').classList.remove('oculto');
-  document.querySelector('.blog-titulo').style.display = '';
-  window.scrollTo(0, 0);
+  document.getElementById('cartas').classList.remove('oculto');
+  document.querySelector('.blog-titulo').style.display='';
+  document.querySelector('.blog-intro').style.display='';
+  window.scrollTo(0,0);
 });
 
-renderLista();
+renderCartas();
 </script>
 
 </body>
